@@ -25,3 +25,4 @@ public abstract class ScoreComponent {
 	public abstract List<Range> getRanges();
 }
 //hey
+//sina
