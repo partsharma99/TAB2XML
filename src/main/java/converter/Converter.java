@@ -10,7 +10,7 @@ import utility.MusicXMLCreator;
 import utility.ValidationError;
 
 public class Converter {
-
+	//variables
 	private Score score;
 	private MusicXMLCreator mxlc;
 	private MainViewController mvc;
