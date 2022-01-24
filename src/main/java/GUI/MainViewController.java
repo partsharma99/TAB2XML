@@ -1,5 +1,5 @@
 package GUI;
-//hers rafsdhfaksdfad
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
