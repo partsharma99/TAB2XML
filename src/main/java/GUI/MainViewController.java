@@ -313,19 +313,8 @@ public class MainViewController extends Application {
 	private void previewButtonHandle() throws IOException {
 		System.out.println("Preview Button Clicked!");
 		JFrame f = new JFrame();
-		
-		JButton b = new JButton("Preview Button");
-		b.setBounds(50,120,120,30);
-		
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String[] names = {"email", "email"};
-			}
-		});
-		
-		f.add(b);
 		f.setSize(400,400);
-		//f.setLayout(null);
+		f.setLayout(null);
 		f.setVisible(true);
 		
 		// converter.getMusicXML() returns the MusicXML output as a String
