@@ -315,7 +315,7 @@ public class MainViewController extends Application {
 		JFrame f = new JFrame();
 		
 		JButton b = new JButton("Preview Button");
-		b.setBounds(50,120,120,30);
+//		b.setBounds(50,120,120,30);
 		
 		b.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -323,7 +323,7 @@ public class MainViewController extends Application {
 			}
 		});
 		
-		f.add(b);
+//		f.add(b);
 		f.setSize(400,400);
 		//f.setLayout(null);
 		f.setVisible(true);
