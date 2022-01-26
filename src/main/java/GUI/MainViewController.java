@@ -1,5 +1,7 @@
 package GUI;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+//hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,6 +16,9 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -307,6 +312,22 @@ public class MainViewController extends Application {
 	@FXML
 	private void previewButtonHandle() throws IOException {
 		System.out.println("Preview Button Clicked!");
+		JFrame f = new JFrame();
+		
+		JButton b = new JButton("Preview Button");
+		b.setBounds(50,120,120,30);
+		
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] names = {"email", "email"};
+			}
+		});
+		
+		f.add(b);
+		f.setSize(400,400);
+		//f.setLayout(null);
+		f.setVisible(true);
+		
 		// converter.getMusicXML() returns the MusicXML output as a String
 		
 	}
