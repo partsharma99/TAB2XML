@@ -328,8 +328,7 @@ public class MainViewController extends Application {
 		//f.setLayout(null);
 		f.setVisible(true);
 		
-		// converter.getMusicXML() returns the MusicXML output as a String
-		
+		// converter.getMusicXML() returns the MusicXML output as a String		
 	}
 
 	public void refresh() {
