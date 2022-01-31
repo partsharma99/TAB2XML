@@ -1,4 +1,5 @@
 package GUI;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
@@ -47,6 +48,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import utility.Range;
 import utility.Settings;
+
+
 
 public class MainViewController extends Application {
 	
@@ -329,6 +332,9 @@ public class MainViewController extends Application {
 		f.setVisible(true);
 		
 		// converter.getMusicXML() returns the MusicXML output as a String		
+
+		
+		
 	}
 
 	public void refresh() {
