@@ -10,7 +10,12 @@ This is my change (testing for conflict) - Kedi
 
 This is a document to cause a con HEre is something intrusive
 Okay //Hey
-
+<<<<<<< HEAD
+/l
+/g
+=======
+//Change to the file
+>>>>>>> branch 'Develop' of https://github.com/partsharma99/TAB2XML
 
 
 =======
@@ -25,3 +30,6 @@ dfvadsvs
 =======
 change
 >>>>>>> branch 'master' of https://github.com/partsharma99/TAB2XML
+
+making my own branch - kedi
+making my own branch 2 - kedi
