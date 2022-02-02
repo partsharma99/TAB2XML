@@ -1,5 +1,7 @@
 LOL this whole document is chaotic
 
+Here is my change on develop-greatlove, hopefully it merges into kedis
+
 This is a document to cause a con HEre is something intrusive
 
 This is a document to cause a con HEre is something intrusive ajdkjalkdjlk adfa
@@ -8,7 +10,12 @@ This is my change (testing for conflict) - Kedi
 
 This is a document to cause a con HEre is something intrusive
 Okay //Hey
+<<<<<<< HEAD
 //Change to the file
+=======
+
+/g
+>>>>>>> branch 'Feature-GL&Mohammad' of https://github.com/partsharma99/TAB2XML
 
 
 =======
@@ -23,3 +30,6 @@ dfvadsvs
 =======
 change
 >>>>>>> branch 'master' of https://github.com/partsharma99/TAB2XML
+
+making my own branch - kedi
+making my own branch 2 - kedi
