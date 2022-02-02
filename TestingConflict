@@ -11,11 +11,15 @@ This is my change (testing for conflict) - Kedi
 This is a document to cause a con HEre is something intrusive
 Okay //Hey
 <<<<<<< HEAD
-//Change to the file
-=======
 
 /g
+<<<<<<< HEAD
 >>>>>>> branch 'Feature-GL&Mohammad' of https://github.com/partsharma99/TAB2XML
+=======
+=======
+//Change to the file
+>>>>>>> branch 'Develop' of https://github.com/partsharma99/TAB2XML
+>>>>>>> branch 'Develop' of https://github.com/partsharma99/TAB2XML
 
 
 =======
