@@ -49,8 +49,6 @@ import javafx.stage.Window;
 import utility.Range;
 import utility.Settings;
 
-
-
 public class MainViewController extends Application {
 	
 	private Preferences prefs;
@@ -319,7 +317,6 @@ public class MainViewController extends Application {
 		f.setSize(400,400);
 		f.setLayout(null);
 		f.setVisible(true);
-
 	}
 
 	public void refresh() {
