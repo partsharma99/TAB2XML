@@ -70,8 +70,34 @@ public class SheetMusicConverter {
 	              Node node = measurelist.item(i);
 	              
 	              if (node.getNodeType() == Node.ELEMENT_NODE) {
+	            	  Element element = (Element) node;
 	            	  
-	              }
+	            	  NodeList noteList = element.getElementsByTagName("note");
+	            	  
+	            	  for(int j=0; j<noteList.getLength();j++) {
+	            		  Node noteNode = noteList.item(j);
+	            		  
+	            		  if (noteNode.getNodeType() == Node.ELEMENT_NODE) {
+	    	            	  Element element2 = (Element) noteNode;
+	    	            	  
+	    	            	  NodeList pitchList = element2.getElementsByTagName("pitch");
+	    	            	  
+	    	            	  Node pitch = pitchList.item(0);
+	    	            	  if (pitch.getNodeType() == Node.ELEMENT_NODE) {
+		    	            	  Element element3 = (Element) pitch;
+		    	            	  
+		    	            	  String step = element3.getElementsByTagName("Step").item(0).getTextContent();
+		    	            	  String alter = element3.getElementsByTagName("alter").item(0).getTextContent();
+		    	            	  String octave = element3.getElementsByTagName("octave").item(0).getTextContent();
+	    	            	  
+	            		  }
+	            		  
+	            	  }
+	            	  
+	            	  
+	            	  
+	            	  
+	            	
 	              
 	          }
 
