@@ -63,14 +63,18 @@ public class SheetMusicConverter {
 	          DocumentBuilder db = dbf.newDocumentBuilder();
 
 	          Document doc = db.parse(new File("my-file.xml"));
-	          NodeList measurelist = doc.getElementsByTagName("measure");
 	          
+	          //we want to extract data measure by measure so we iterate through
+	          //list of measure nodes
+	           
+	          NodeList measurelist = doc.getElementsByTagName("measure");
 	          for (int i = 0; i < measurelist.getLength(); i++) {
-
-	              Node node = measurelist.item(i);
 	              
-	              if (node.getNodeType() == Node.ELEMENT_NODE) {
-	            	  Element element = (Element) node;
+	        	  //measureNode will contain the ith measure node in the measureList
+	        	  Node measureNode = measurelist.item(i);	
+	              
+	              if (measureNode.getNodeType() == Node.ELEMENT_NODE) {
+	            	  Element element = (Element) measureNode;
 	            	  
 	            	  NodeList noteList = element.getElementsByTagName("note");
 	            	  
@@ -89,22 +93,16 @@ public class SheetMusicConverter {
 		    	            	  String step = element3.getElementsByTagName("Step").item(0).getTextContent();
 		    	            	  String alter = element3.getElementsByTagName("alter").item(0).getTextContent();
 		    	            	  String octave = element3.getElementsByTagName("octave").item(0).getTextContent();
-	    	            	  
+	    	            	  }
 	            		  }
 	            		  
 	            	  }
-	            	  
-	            	  
-	            	  
-	            	  
-	            	
-	              
+	              }
 	          }
-
 		 }
 		 catch (ParserConfigurationException | SAXException | IOException e) {
-	          e.printStackTrace();
-		  
-		}
+	          e.printStackTrace(); 
+		 }
+	}
 }
-}
+		 
