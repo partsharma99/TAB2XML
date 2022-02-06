@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
@@ -317,6 +318,7 @@ public class MainViewController extends Application {
 		f.setSize(400,400);
 		f.setLayout(null);
 		f.setVisible(true);
+
 	}
 
 	public void refresh() {
