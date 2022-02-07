@@ -64,29 +64,34 @@ public class SheetMusicConverter {
 
 	          Document doc = db.parse(new File("my-file.xml"));
 	          
-	          //we want to extract data measure by measure so we iterate through
-	          //list of measure nodes
+	          // we want to extract data measure by measure so we iterate through
+	          // list of measure nodes
 	           
 	          NodeList measurelist = doc.getElementsByTagName("measure");
 	          for (int i = 0; i < measurelist.getLength(); i++) {
 	              
-	        	  //measureNode will contain the ith measure node in the measureList
+	        	  // measureNode will contain the ith measure in the measureList
 	        	  Node measureNode = measurelist.item(i);	
 	              
 	              if (measureNode.getNodeType() == Node.ELEMENT_NODE) {
 	            	  Element element = (Element) measureNode;
 	            	  
-	            	  NodeList noteList = element.getElementsByTagName("note");
+	            	  // the noteList contains all the notes in the ith measure
+	            	  NodeList notelist = element.getElementsByTagName("note");
 	            	  
-	            	  for(int j=0; j<noteList.getLength();j++) {
-	            		  Node noteNode = noteList.item(j);
+	            	  for(int j=0; j<notelist.getLength();j++) {
+	            		  
+	            		  // the noteNode will contain the jth note in the measure
+	            		  Node noteNode = notelist.item(j);
 	            		  
 	            		  if (noteNode.getNodeType() == Node.ELEMENT_NODE) {
 	    	            	  Element element2 = (Element) noteNode;
 	    	            	  
-	    	            	  NodeList pitchList = element2.getElementsByTagName("pitch");
+	    	            	  // the pitchlist contains the pitch of each note (1 pitch per note)
+	    	            	  NodeList pitchlist = element2.getElementsByTagName("pitch");
 	    	            	  
-	    	            	  Node pitch = pitchList.item(0);
+	    	            	  Node pitch = pitchlist.item(0);
+	    	            	  
 	    	            	  if (pitch.getNodeType() == Node.ELEMENT_NODE) {
 		    	            	  Element element3 = (Element) pitch;
 		    	            	  
