@@ -335,6 +335,9 @@ public class MainViewController extends Application {
 		f.setVisible(true);
 
 	}
+	
+	
+	
 	@FXML
 	private void playTABButton() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
 		MusicXmlParser parser = new MusicXmlParser();
