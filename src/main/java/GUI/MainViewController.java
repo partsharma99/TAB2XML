@@ -16,13 +16,23 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 
 import converter.Converter;
 import converter.measure.TabMeasure;
@@ -41,10 +51,13 @@ import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
 
@@ -72,6 +85,7 @@ public class MainViewController extends Application {
 	@FXML  Button saveMXLButton;
 	@FXML  Button showMXLButton;
 	@FXML  Button previewButton;
+	@FXML  Button playTABButton;
 	@FXML  Button goToline;
 	@FXML  ComboBox<String> cmbScoreType;
 
@@ -318,6 +332,21 @@ public class MainViewController extends Application {
 		f.setVisible(true);
 		// converter.getMusicXML() returns the MusicXML output as a String
 	}
+	@FXML
+	private void playTABButton() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
+		MusicXmlParser parser = new MusicXmlParser();
+		StaccatoParserListener listener = new StaccatoParserListener();
+		parser.addParserListener(listener);
+		Converter conv = new Converter(this);
+		conv.update();
+		parser.parse(conv.getMusicXML());
+		
+		Player player = new Player();
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(400);
+		player.play(musicXMLPattern);
+		              
+	}
+	
 
 	public void refresh() {
         mainText.replaceText(new IndexRange(0, mainText.getText().length()), mainText.getText()+" ");
@@ -374,12 +403,14 @@ public class MainViewController extends Application {
                 	saveMXLButton.setDisable(true);
                 	previewButton.setDisable(true);
                 	showMXLButton.setDisable(true);
+                	playTABButton.setDisable(true);
                 }
                 else
                 {
                 	saveMXLButton.setDisable(false);
                 	previewButton.setDisable(false);
                 	showMXLButton.setDisable(false);
+                	playTABButton.setDisable(false);
                 }
                 return highlighter.computeHighlighting(text);
             }
