@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
@@ -61,8 +62,6 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
-
-
 
 public class MainViewController extends Application {
 	
