@@ -62,11 +62,6 @@ public class SheetMusicParserListener extends JPanel implements ParserListener {
 		}
 	}
 	
-	@Override
-	public void onNoteParsed(Note note) {
-		thingsToDraw.add(new NoteDrawing(note));
-		
-	}
 	public java.io.File getSheetMusic() { 
 		
 		try {
@@ -217,6 +212,12 @@ public class SheetMusicParserListener extends JPanel implements ParserListener {
 
 	@Override
 	public void onChordParsed(Chord chord) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNoteParsed(Note note) {
 		// TODO Auto-generated method stub
 		
 	}
