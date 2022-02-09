@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
@@ -17,13 +18,17 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
+import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 
 import converter.Converter;
 import converter.measure.TabMeasure;
@@ -46,10 +51,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
-
-
 
 public class MainViewController extends Application {
 	
@@ -75,7 +80,7 @@ public class MainViewController extends Application {
 	@FXML  Button saveMXLButton;
 	@FXML  Button showMXLButton;
 	@FXML  Button previewButton;
-	@FXML  Button goToline;
+	@FXML  Button playTabMusic;
 	@FXML  ComboBox<String> cmbScoreType;
 
 
@@ -321,6 +326,21 @@ public class MainViewController extends Application {
 		f.setVisible(true);
 
 	}
+	@FXML
+	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
+		StaccatoParserListener listener = new StaccatoParserListener();
+		MusicXmlParser parser = new MusicXmlParser();
+		parser.addParserListener(listener);
+		Converter conv = new Converter(this);
+		conv.update();
+		parser.parse(conv.getMusicXML());
+		
+		Player player = new Player();
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+		player.play(musicXMLPattern);
+		              
+	}
+	
 
 	public void refresh() {
         mainText.replaceText(new IndexRange(0, mainText.getText().length()), mainText.getText()+" ");
@@ -377,12 +397,14 @@ public class MainViewController extends Application {
                 	saveMXLButton.setDisable(true);
                 	previewButton.setDisable(true);
                 	showMXLButton.setDisable(true);
+                	playTabMusic.setDisable(true);
                 }
                 else
                 {
                 	saveMXLButton.setDisable(false);
                 	previewButton.setDisable(false);
                 	showMXLButton.setDisable(false);
+                	playTabMusic.setDisable(false);
                 }
                 return highlighter.computeHighlighting(text);
             }
