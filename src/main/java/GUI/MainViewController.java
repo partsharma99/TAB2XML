@@ -334,7 +334,7 @@ public class MainViewController extends Application {
 		parser.parse(conv.getMusicXML());
 		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300);
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
 		player.play(musicXMLPattern);
 		              
 	}
