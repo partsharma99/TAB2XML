@@ -1,6 +1,8 @@
 package xml.to.sheet.converter;
 
+import java.awt.Graphics;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,22 +19,55 @@ import org.jfugue.tools.GetInstrumentsUsedTool;
 
 
 public class SheetMusicParserListener extends JPanel implements ParserListener {
+	/*
+	 * The conversion from Musicxml to sheet music 
+	 * using specific methods on the parser listener
+	 * 
+	 * Jpanel will be used to section the symbols that will be drawn
+	 * in spaces called "panels"
+	 * 
+	 */
 	
 	private java.io.File musicXmlFile;
+	private List<ThingToDraw> thingsToDraw;
+	
+	private MusicXmlParser parser;
+	private MusicXmlParserListener parserListener1;
 	
 	public SheetMusicParserListener(java.io.File musicXmlFile) {
+		//super();
 		this.musicXmlFile = musicXmlFile;
+		try {
+			parser = new MusicXmlParser();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		parserListener1 = new MusicXmlParserListener();
+		parser.addParserListener(parserListener1);
 	}
 	
-	/*
-	 * The conversion from Musicxml to sheet music will be done
-	 * using the MusicXmlParser class in particular
-	 */
-
-	public java.io.File getSheetMusic() throws ParserConfigurationException {
-		MusicXmlParser parser = new MusicXmlParser();
-		MusicXmlParserListener parserParserListener1 = new MusicXmlParserListener();
-		parser.addParserListener(parserParserListener1); 
+	public SheetMusicParserListener(String fileLocation) {
+		//work in progress	
+	}
+	
+	public void draw(Graphics g) {
+		//define what "drawing" is for a single parsed object
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		for (ThingToDraw thingToDraw : thingsToDraw) {
+			thingToDraw.draw(g);
+		}
+	}
+	
+	@Override
+	public void onNoteParsed(Note note) {
+		thingsToDraw.add(new NoteDrawing(note));
+		
+	}
+	public java.io.File getSheetMusic() { 
 		
 		try {
 			parser.parse(musicXmlFile);
@@ -42,6 +77,10 @@ public class SheetMusicParserListener extends JPanel implements ParserListener {
 
 		}
 		return musicXmlFile;
+	}
+	
+	public String getMusicXmlAsString() {
+		return parserListener1.getMusicXMLString();
 	}
 
 	@Override
@@ -172,12 +211,6 @@ public class SheetMusicParserListener extends JPanel implements ParserListener {
 
 	@Override
 	public void onNoteReleased(Note note) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onNoteParsed(Note note) {
 		// TODO Auto-generated method stub
 		
 	}
