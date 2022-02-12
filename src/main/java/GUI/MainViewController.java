@@ -1,8 +1,11 @@
 package GUI;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-
+import xml.to.sheet.converter.*;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 //hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
@@ -324,10 +327,38 @@ public class MainViewController extends Application {
 		f.setSize(400,400);
 		f.setLayout(null);
 		f.setVisible(true);
-
+		
+		//JFrame g = null;
+		Drawer d = new Drawer();
+		Graphics g = f.getGraphics(); 
+		g =	g.create(20, 20, 50, 100);
+				//g1= g.getGraphics();
+		d.drawLines(g);
 	}
 	
+//	  public void paint(Graphics g) {
+//	       // super.paint(g);  // fixes the immediate problem.
+//	        Graphics2D g2 = (Graphics2D) g;
+//	        Line2D lin = new Line2D.Float(100, 100, 250, 260);
+//	        g2.draw(lin);
+//	    }
 	
+	
+	void drawLines(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+ 
+        g2d.drawLine(120, 50, 360, 50);
+ 
+        g2d.draw(new Line2D.Double(59.2d, 99.8d, 419.1d, 99.8d));
+ 
+        g2d.draw(new Line2D.Float(21.50f, 132.50f, 459.50f, 132.50f));
+ 
+    }
+	
+	public void paint(Graphics g) {
+       // super.paint(g);
+        drawLines(g);
+    }
 	
 	@FXML
 	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
@@ -343,7 +374,7 @@ public class MainViewController extends Application {
 			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
 			player.play(musicXMLPattern);
 		}
-		else if(MusicXml.contains("Drumset")){
+		else {
 			Player player = new Player();
 			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setInstrument("Flute");
 			player.play(musicXMLPattern);
