@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
@@ -327,39 +329,13 @@ public class MainViewController extends Application {
 		f.setSize(400,400);
 		f.setLayout(null);
 		f.setVisible(true);
+		f.setContentPane(new DrawPane());
 		
-		//JFrame g = null;
-		Drawer d = new Drawer();
-		Graphics g = f.getGraphics(); 
-		g =	g.create(20, 20, 50, 100);
-				//g1= g.getGraphics();
-		d.drawLines(g);
 	}
+
+	 
 	
-//	  public void paint(Graphics g) {
-//	       // super.paint(g);  // fixes the immediate problem.
-//	        Graphics2D g2 = (Graphics2D) g;
-//	        Line2D lin = new Line2D.Float(100, 100, 250, 260);
-//	        g2.draw(lin);
-//	    }
-	
-	
-	void drawLines(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
- 
-        g2d.drawLine(120, 50, 360, 50);
- 
-        g2d.draw(new Line2D.Double(59.2d, 99.8d, 419.1d, 99.8d));
- 
-        g2d.draw(new Line2D.Float(21.50f, 132.50f, 459.50f, 132.50f));
- 
-    }
-	
-	public void paint(Graphics g) {
-       // super.paint(g);
-        drawLines(g);
-    }
-	
+
 	@FXML
 	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
 		StaccatoParserListener listener = new StaccatoParserListener();
