@@ -337,10 +337,17 @@ public class MainViewController extends Application {
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
-		
-		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
-		player.play(musicXMLPattern);
+		String MusicXml = conv.getMusicXML();
+		if(MusicXml.contains("Guitar")) {
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+			player.play(musicXMLPattern);
+		}
+		else if(MusicXml.contains("Drumset")){
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setInstrument("Flute");
+			player.play(musicXMLPattern);
+		}
 		              
 	}
 	
