@@ -20,13 +20,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
@@ -53,7 +47,6 @@ import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -87,8 +80,7 @@ public class MainViewController extends Application {
 	@FXML  Button saveMXLButton;
 	@FXML  Button showMXLButton;
 	@FXML  Button previewButton;
-	@FXML  Button playTABButton;
-	@FXML  Button goToline;
+	@FXML  Button playTabMusic;
 	@FXML  ComboBox<String> cmbScoreType;
 
 
@@ -338,16 +330,16 @@ public class MainViewController extends Application {
 	
 	
 	@FXML
-	private void playTABButton() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-		MusicXmlParser parser = new MusicXmlParser();
+	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
 		StaccatoParserListener listener = new StaccatoParserListener();
+		MusicXmlParser parser = new MusicXmlParser();
 		parser.addParserListener(listener);
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
 		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(400);
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
 		player.play(musicXMLPattern);
 		              
 	}
@@ -408,14 +400,14 @@ public class MainViewController extends Application {
                 	saveMXLButton.setDisable(true);
                 	previewButton.setDisable(true);
                 	showMXLButton.setDisable(true);
-                	playTABButton.setDisable(true);
+                	playTabMusic.setDisable(true);
                 }
                 else
                 {
                 	saveMXLButton.setDisable(false);
                 	previewButton.setDisable(false);
                 	showMXLButton.setDisable(false);
-                	playTABButton.setDisable(false);
+                	playTabMusic.setDisable(false);
                 }
                 return highlighter.computeHighlighting(text);
             }
