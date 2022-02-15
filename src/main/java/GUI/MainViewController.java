@@ -319,13 +319,21 @@ public class MainViewController extends Application {
 
 	@FXML
 	private void previewButtonHandle() throws IOException {
-		System.out.println("Preview Button Clicked!");
-		JFrame f = new JFrame();
-		f.setSize(400,400);
-		f.setLayout(null);
-		f.setVisible(true);
-
+		Parent root;
+ 		try {
+ 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
+ 			root = loader.load();
+ 			PreviewMXLController controller = loader.getController();
+ 			controller.setMainViewController(this);
+ 			//Implement update method later
+ 			//controller.update();
+ 			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
+ 		} catch (IOException e) {
+ 			Logger logger = Logger.getLogger(getClass().getName());
+ 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+ 		}
 	}
+	
 	@FXML
 	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
 		StaccatoParserListener listener = new StaccatoParserListener();

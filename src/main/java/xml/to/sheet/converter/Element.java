@@ -7,7 +7,7 @@ import org.jfugue.theory.Note;
 public class Element {
 
 	/*
-	 * To describe a given note as mentioned in a music xml file
+	 * To describe a given note (or other element) as mentioned in a music xml file
 	 */
 	
 	private Note note;
