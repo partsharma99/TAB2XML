@@ -1,8 +1,12 @@
 package GUI;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-
+import xml.to.sheet.converter.*;
 import java.awt.event.ActionListener;
+import java.awt.geom.Line2D;
 //hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
@@ -21,6 +25,7 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
@@ -324,8 +329,13 @@ public class MainViewController extends Application {
 		f.setSize(400,400);
 		f.setLayout(null);
 		f.setVisible(true);
-
+		f.setContentPane(new DrawPane());
+		
 	}
+
+	 
+	
+
 	@FXML
 	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
 		StaccatoParserListener listener = new StaccatoParserListener();
@@ -334,10 +344,17 @@ public class MainViewController extends Application {
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
-		
-		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
-		player.play(musicXMLPattern);
+		String MusicXml = conv.getMusicXML();
+		if(MusicXml.contains("Guitar")) {
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+			player.play(musicXMLPattern);
+		}
+		else {
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setInstrument("Flute");
+			player.play(musicXMLPattern);
+		}
 		              
 	}
 	
