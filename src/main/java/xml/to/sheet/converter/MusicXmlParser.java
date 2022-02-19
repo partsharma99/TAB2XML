@@ -1,24 +1,24 @@
-package xml.to.sheet.converter;
-
-//package parser;
-import xml.to.sheet.converter.*;
-import java.io.IOException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
-//implementation 'org.jsoup:jsoup:1.14.3';
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by Dorien Herremans on 02/02/15.
- */
-public class MusicXmlParser {
-	
-	
+//package xml.to.sheet.converter;
+//
+////package parser;
+//import xml.to.sheet.converter.*;
+//import java.io.IOException;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Element;
+//import org.jsoup.parser.Parser;
+////implementation 'org.jsoup:jsoup:1.14.3';
+//import java.io.*;
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.HashMap;
+//import java.util.Map;
+//
+///**
+// * Created by Dorien Herremans on 02/02/15.
+// */
+//public class MusicXmlParser {
+//	
+//	
 	
 
 //    public org.jsoup.nodes.Document doc;
@@ -1691,5 +1691,5 @@ public class MusicXmlParser {
 //        htmlWriter.close();
 //    }
 //
-
-}
+//
+//}

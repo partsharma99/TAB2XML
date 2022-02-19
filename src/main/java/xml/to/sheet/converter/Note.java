@@ -1,65 +1,65 @@
-package xml.to.sheet.converter;
-
-//package music;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
-/**
- * Created by dorien on 10/11/14.
- */
-
-
-
-public class Note {
-
-	private int duration;
-	private int voice;
-	private String type;
-	private Pitch pitch;
-	private Technical technical;
-	
-	public int getDuration() {
-		return duration;
-	}
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-	public int getVoice() {
-		return voice;
-	}
-	public void setVoice(int voice) {
-		this.voice = voice;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public Pitch getPitch() {
-		return pitch;
-	}
-	public void setPitch(Pitch pitch) {
-		this.pitch = pitch;
-	}
-	public Technical getTechnical() {
-		return technical;
-	}
-	public void setTechnical(Technical technical) {
-		this.technical = technical;
-	}
-
-	public int getString() {
-		return this.technical.getString();
-	}
-
-
-
-
-
-}
+//package xml.to.sheet.converter;
+//
+////package music;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.Random;
+//
+///**
+// * Created by dorien on 10/11/14.
+// */
+//
+//
+//
+//public class Note {
+//
+//	private int duration;
+//	private int voice;
+//	private String type;
+//	private Pitch pitch;
+//	private Technical technical;
+//	
+//	public int getDuration() {
+//		return duration;
+//	}
+//	public void setDuration(int duration) {
+//		this.duration = duration;
+//	}
+//	public int getVoice() {
+//		return voice;
+//	}
+//	public void setVoice(int voice) {
+//		this.voice = voice;
+//	}
+//	public String getType() {
+//		return type;
+//	}
+//	public void setType(String type) {
+//		this.type = type;
+//	}
+//	public Pitch getPitch() {
+//		return pitch;
+//	}
+//	public void setPitch(Pitch pitch) {
+//		this.pitch = pitch;
+//	}
+//	public Technical getTechnical() {
+//		return technical;
+//	}
+//	public void setTechnical(Technical technical) {
+//		this.technical = technical;
+//	}
+//
+//	public int getString() {
+//		return this.technical.getString();
+//	}
+//
+//
+//
+//
+//
+//}
 //    //we don't need an id I believe
 //
 //    //type note, chord
