@@ -318,20 +318,17 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void previewButtonHandle() throws IOException {
+	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
- 		try {
- 			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
- 			root = loader.load();
- 			PreviewMXLController controller = loader.getController();
- 			controller.setMainViewController(this);
- 			//Implement update method later
- 			//controller.update();
- 			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
- 		} catch (IOException e) {
- 			Logger logger = Logger.getLogger(getClass().getName());
- 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
- 		}
+ 		
+ 			StaccatoParserListener listener = new StaccatoParserListener();
+ 			MusicXmlParser parser = new MusicXmlParser();
+ 			parser.addParserListener(listener);
+ 			Converter conv = new Converter(this);
+ 			conv.update();
+			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
+
+ 		
 	}
 	
 	@FXML
@@ -342,9 +339,8 @@ public class MainViewController extends Application {
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
-		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument(InstrumentType.getInstrumentType(conv.getMusicXML()));
 		player.play(musicXMLPattern);
 		              
 	}
