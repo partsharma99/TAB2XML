@@ -7,18 +7,21 @@ import javafx.fxml.Initializable;
 
 import javafx.scene.*;
 import javafx.scene.canvas.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.scene.canvas.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
-
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import converter.Converter;
 /*
 Sample tab
 |-----------0-----|-0---------------|
@@ -29,18 +32,35 @@ Sample tab
 |-0---------------|-0---------------|
 
 */
-public class PreviewMXLController extends Application {
+public class PreviewMXLController extends Application implements Initializable  {
 	
 	@FXML public Canvas canvas;
-	public GraphicsContext gc;
-	public Parent root;
+	//@FXML public CodeArea mxlText;
+	@FXML TextField gotoMeasureField;
+	@FXML Button gotoMeasureButton;
+	@FXML Button savePDF;
+	private GraphicsContext gc;
+	public FXMLLoader loader;
 	
-	public void setRoot(Parent root) {
-		this.root =root;
+	public PreviewMXLController() {
+		//canvas = new Canvas(300,300);
 	}
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        System.out.println("color set to black");
+        gc.fillRect(50, 50, 100, 100);
+        System.out.println("draw rectangle");
+	}
+	public FXMLLoader getLoader() {
+		return this.loader;
+	}
+	
+	@FXML
 	public void savePDF() {
 	}
-	
+	@FXML
 	public void handleGotoMeasure() {
 	}
 	// paint the canvas

@@ -339,18 +339,14 @@ public class MainViewController extends Application {
 
 	@FXML
 	private void previewButtonHandle() throws IOException {
-		VirtualizedScrollPane root;
+		Parent root;
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
- 			root = (VirtualizedScrollPane) FXMLLoader.load(getClass().getResource("GUI/previewMXL.fxml"));
+ 			root = loader.load();
  			
  			PreviewMXLController controller = loader.getController();
- 			Canvas canvas = controller.canvas;
- 			controller.setRoot(root);
- 	        GraphicsContext gc = canvas.getGraphicsContext2D();
- 	        
  	     
- 			convertWindow = this.openNewCanvasWindow(root, canvas, "Preview Sheet Music");
+ 			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
