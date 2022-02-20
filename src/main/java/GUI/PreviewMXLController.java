@@ -35,16 +35,12 @@ Sample tab
 public class PreviewMXLController extends Application implements Initializable  {
 	
 	@FXML public Canvas canvas;
-	//@FXML public CodeArea mxlText;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
 	private GraphicsContext gc;
 	public FXMLLoader loader;
 	
-	public PreviewMXLController() {
-		//canvas = new Canvas(300,300);
-	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		gc = canvas.getGraphicsContext2D();
@@ -52,9 +48,6 @@ public class PreviewMXLController extends Application implements Initializable  
         System.out.println("color set to black");
         gc.fillRect(50, 50, 100, 100);
         System.out.println("draw rectangle");
-	}
-	public FXMLLoader getLoader() {
-		return this.loader;
 	}
 	
 	@FXML
