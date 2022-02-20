@@ -1,12 +1,16 @@
 package GUI;
 
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+
 
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -21,6 +25,9 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
@@ -55,6 +62,7 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
+import xml.to.sheet.converter.DrawPane;
 
 public class MainViewController extends Application {
 	
@@ -320,15 +328,16 @@ public class MainViewController extends Application {
 	@FXML
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
- 		
- 			StaccatoParserListener listener = new StaccatoParserListener();
- 			MusicXmlParser parser = new MusicXmlParser();
- 			parser.addParserListener(listener);
- 			Converter conv = new Converter(this);
- 			conv.update();
+			Converter conv = new Converter(this);
+			conv.update();
+		
+ 			//StaccatoParserListener listener = new StaccatoParserListener();
+ 			//MusicXmlParser parser = new MusicXmlParser();
+ 			//parser.addParserListener(listener);
+ 			
 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
-
- 		
+			
+			
 	}
 	
 	@FXML

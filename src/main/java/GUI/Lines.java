@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class Lines {
 
-	private static int lines;
+	 private static int lines;
 	 static int max=0;
 	
 	
