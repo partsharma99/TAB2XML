@@ -21,8 +21,10 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.swing.text.AbstractDocument.Content;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -36,8 +38,12 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -46,6 +52,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -270,6 +277,19 @@ public class MainViewController extends Application {
 		stage.show();
 		return scene.getWindow();
 	}
+	
+	//for the preview sheet section
+	private Window openNewCanvasWindow(Parent root, Canvas canvas, String windowName) {
+		Stage stage = new Stage();
+		stage.setTitle(windowName);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(MainApp.STAGE);
+		stage.setResizable(false);
+		Scene scene = new Scene(root, 300, 400);
+		stage.setScene(scene);
+		stage.show();
+		return scene.getWindow();
+	}
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -319,15 +339,18 @@ public class MainViewController extends Application {
 
 	@FXML
 	private void previewButtonHandle() throws IOException {
-		Parent root;
+		VirtualizedScrollPane root;
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
- 			root = loader.load();
+ 			root = (VirtualizedScrollPane) FXMLLoader.load(getClass().getResource("GUI/previewMXL.fxml"));
+ 			
  			PreviewMXLController controller = loader.getController();
- 			controller.setMainViewController(this);
- 			//Implement update method later
- 			//controller.update();
- 			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
+ 			Canvas canvas = controller.canvas;
+ 			controller.setRoot(root);
+ 	        GraphicsContext gc = canvas.getGraphicsContext2D();
+ 	        
+ 	     
+ 			convertWindow = this.openNewCanvasWindow(root, canvas, "Preview Sheet Music");
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -344,7 +367,7 @@ public class MainViewController extends Application {
 		parser.parse(conv.getMusicXML());
 		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(500).setInstrument("Guitar");
 		player.play(musicXMLPattern);
 		              
 	}
