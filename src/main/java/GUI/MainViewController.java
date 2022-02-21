@@ -326,6 +326,7 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
+//<<<<<<< HEAD
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
 			Converter conv = new Converter(this);
@@ -338,6 +339,15 @@ public class MainViewController extends Application {
 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
 			
 			
+//=======
+//	private void previewButtonHandle() throws IOException {
+//		System.out.println("Preview Button Clicked!");
+//		JFrame f = new JFrame();
+//		f.setSize(400,400);
+//		f.setLayout(null);
+//		f.setVisible(true);
+//
+//>>>>>>> branch 'master' of https://github.com/partsharma99/TAB2XML
 	}
 	
 	@FXML
