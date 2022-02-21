@@ -343,6 +343,8 @@ public class MainViewController extends Application {
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
  			root = loader.load();
+ 			PreviewMXLController controller = loader.getController();
+ 			controller.drawLines();
  	     
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
  		} catch (IOException e) {

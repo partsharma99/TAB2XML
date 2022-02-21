@@ -32,7 +32,7 @@ Sample tab
 |-0---------------|-0---------------|
 
 */
-public class PreviewMXLController extends Application implements Initializable  {
+public class PreviewMXLController extends Application {
 	
 	@FXML public Canvas canvas;
 	@FXML TextField gotoMeasureField;
@@ -41,20 +41,33 @@ public class PreviewMXLController extends Application implements Initializable  
 	private GraphicsContext gc;
 	public FXMLLoader loader;
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        System.out.println("color set to black");
-        gc.fillRect(50, 50, 100, 100);
-        System.out.println("draw rectangle");
-	}
-	
 	@FXML
 	public void savePDF() {
 	}
 	@FXML
 	public void handleGotoMeasure() {
+	}
+	
+	public void drawLines() {
+		gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        System.out.println("color set to white and background rectangle drawn");
+        
+        gc.strokeLine(10, 100, 200, 100);
+        gc.strokeLine(10, 110, 200, 110);
+        gc.strokeLine(10, 120, 200, 120);
+        gc.strokeLine(10, 130, 200, 130);
+        gc.strokeLine(10, 140, 200, 140);
+        System.out.println("drawn lines");
+	}
+	
+	public void drawTestRectangle() {
+		gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        System.out.println("color set to black");
+        gc.fillRect(50, 50, 100, 100);
+        System.out.println("draw rectangle");
 	}
 	// paint the canvas
 	public void paint(GraphicsContext g) {
@@ -65,13 +78,6 @@ public class PreviewMXLController extends Application implements Initializable  
 		// set Font
 		g.setFont(new Font("Bold", 1));
 		g.lineTo(100, 100);
-		/* draw a COMPONENT
-		g.drawLine(10, 100, 200, 100);
-		g.drawLine(10, 110, 200, 110);
-		g.drawLine(10, 120, 200, 120);
-		g.drawLine(10, 130, 200, 130);
-		g.drawLine(10, 140, 200, 140);
-		update(g);*/
 
 	}
 
