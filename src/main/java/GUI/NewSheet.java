@@ -33,7 +33,7 @@ public class NewSheet extends MainViewController {
 		int framey=420;
 		
 		public NewSheet(String xml){
-			XmlConverter nn = new XmlConverter();
+//			XmlConverter nn = new XmlConverter();
 //			try {
 //				JAXBContext jc = JAXBContext.newInstance(XmlConverter.class);
 //
@@ -47,14 +47,15 @@ public class NewSheet extends MainViewController {
 			
 			frame.setContentPane(new DrawPane());
 			
-			JLabel label= new JLabel(InstrumentType.getInstrumentType(xml));
+			JLabel label= new JLabel("Instrument type: " + InstrumentType.getInstrumentType(xml));
 			JLabel label2= new JLabel(String.valueOf(Lines.getLines(xml)));
+			JLabel label3 = new JLabel("These are frets specified in the notes.");
 //			JLabel label3 = new JLabel(nn.getSign());
-			JLabel label4 = new JLabel(String.valueOf(Noteamount.getSize(xml)));
+			JLabel label4 = new JLabel("Total number of notes: " + String.valueOf(Noteamount.getSize(xml)));
 			ArrayList<Integer> yaxis =NoteInfo.GgetY(xml);
 			ArrayList<Integer> xaxis =NoteInfo.GgetX(xml);
 			ArrayList<Integer> fret =NoteInfo.Ggetfret(xml);
-
+			
 			//loop will tun to the amount of notes found in xml to draw each note
 			
 			System.out.print(Noteamount.getSize(xml));
@@ -64,22 +65,20 @@ public class NewSheet extends MainViewController {
 			
 			
 			
-			label.setBounds(0,200,100,50);
+			label.setBounds(0,200,300,50);
 			label.setFont(new Font(null,Font.PLAIN,25));
-			label2.setBounds(0,240,100,50);
+			label2.setBounds(0,240,300,50);
 			label2.setFont(new Font(null,Font.PLAIN,25));
 //			label3.setBounds(0,270,100,50);
 //			label3.setFont(new Font(null,Font.PLAIN,25));
-			label4.setBounds(0,270, 100, 50);
-			label4.setFont(new Font(null, Font.PLAIN, 25));
+			label4.setBounds(0,270, 300, 50);
+			label4.setFont(new Font(null, Font.PLAIN, 20));
+			label3.setBounds(400, 270, 500, 50);
+			label3.setFont(new Font(null, Font.PLAIN, 25));
 for(int i=0;i<Noteamount.getSize(xml);i++) {
 				
 				JLabel note = new JLabel(String.valueOf(NoteInfo.Ggetfret(xml).get(i)));
 				
-				// x= note line
-				// y=note timing
-				
-
 				y=20+(yaxis.get(i)-1)*30;
 				x=20+(xaxis.get(i)-1)*30;
 				
@@ -95,7 +94,7 @@ for(int i=0;i<Noteamount.getSize(xml);i++) {
 			}
 			frame.add(label);
 //			frame.add(label2);
-//			frame.add(label3);
+			frame.add(label3);
 			frame.add(label4);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(framex,framey);
