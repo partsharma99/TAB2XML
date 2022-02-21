@@ -49,8 +49,8 @@ public class NewSheet extends MainViewController {
 			
 			JLabel label= new JLabel(InstrumentType.getInstrumentType(xml));
 			JLabel label2= new JLabel(String.valueOf(Lines.getLines(xml)));
-			JLabel label3 = new JLabel(nn.getSign());
-			
+//			JLabel label3 = new JLabel(nn.getSign());
+			JLabel label4 = new JLabel(String.valueOf(Noteamount.getSize(xml)));
 			ArrayList<Integer> yaxis =NoteInfo.GgetY(xml);
 			ArrayList<Integer> xaxis =NoteInfo.GgetX(xml);
 			ArrayList<Integer> fret =NoteInfo.Ggetfret(xml);
@@ -58,7 +58,7 @@ public class NewSheet extends MainViewController {
 			//loop will tun to the amount of notes found in xml to draw each note
 			
 			System.out.print(Noteamount.getSize(xml));
-			NoteInfo.GgetY(xml);
+			//NoteInfo.GgetY(xml);
 
 			
 			
@@ -68,8 +68,10 @@ public class NewSheet extends MainViewController {
 			label.setFont(new Font(null,Font.PLAIN,25));
 			label2.setBounds(0,240,100,50);
 			label2.setFont(new Font(null,Font.PLAIN,25));
-			label3.setBounds(0,270,100,50);
-			label3.setFont(new Font(null,Font.PLAIN,25));
+//			label3.setBounds(0,270,100,50);
+//			label3.setFont(new Font(null,Font.PLAIN,25));
+			label4.setBounds(0,270, 100, 50);
+			label4.setFont(new Font(null, Font.PLAIN, 25));
 for(int i=0;i<Noteamount.getSize(xml);i++) {
 				
 				JLabel note = new JLabel(String.valueOf(NoteInfo.Ggetfret(xml).get(i)));
@@ -82,7 +84,7 @@ for(int i=0;i<Noteamount.getSize(xml);i++) {
 				x=20+(xaxis.get(i)-1)*30;
 				
 				
-				note.setBounds(x, y, x+5, y+5);
+				note.setBounds(x, y, x, y);
 				frame.add(note);
 				
 				//extending the frame
@@ -92,8 +94,9 @@ for(int i=0;i<Noteamount.getSize(xml);i++) {
 				
 			}
 			frame.add(label);
-			frame.add(label2);
-			frame.add(label3);
+//			frame.add(label2);
+//			frame.add(label3);
+			frame.add(label4);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(framex,framey);
 			frame.setLayout(null);

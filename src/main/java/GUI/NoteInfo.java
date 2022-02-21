@@ -22,6 +22,7 @@ public class NoteInfo {
         Matcher matcher = pattern.matcher(sml);
         while (matcher.find()) {
         	//x.add(i);
+//        	()
         	y.add(Integer. parseInt(matcher.group(1)));
         	i++;
         }
