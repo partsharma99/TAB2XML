@@ -71,6 +71,7 @@ import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
 import xml.to.sheet.converter.DrawPane;
+import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Measure2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
@@ -373,6 +374,9 @@ public class MainViewController extends Application {
  		try {
  			//Method 1: Create ScorePartwise object and extract the first note info by using many dots
  			ScorePartwise2 sc = XmlToJava.unmarshal(conv.getMusicXML(), ScorePartwise2.class);
+ 			System.out.println(ListOfMeasureAndNote.getlistOfMeasures(sc).get(0).getNumber());
+ 			System.out.println(ListOfMeasureAndNote.getlistOfNotes(sc).get(0).getType());
+ 			
  			System.out.println("Method 1:	" + sc.getListOfParts().get(0).getListOfMeasures().get(0).getListOfNotes().get(0).toString());
  			
 // 			//Method 2: Create Measure object and extract the first note info by using small amount of dots 			
