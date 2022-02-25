@@ -65,11 +65,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import models.ScorePartwise;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
 import xml.to.sheet.converter.DrawPane;
+import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
+import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 public class MainViewController extends Application {
 	
@@ -363,6 +367,36 @@ public class MainViewController extends Application {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
  		}
+ 		
+ 		//Printing first "note" in first "measure" of first "part" in the xml string
+ 		
+ 		try {
+ 			//Method 1: Create ScorePartwise object and extract the first note info by using many dots
+ 			ScorePartwise2 sc = XmlToJava.unmarshal(conv.getMusicXML(), ScorePartwise2.class);
+ 			System.out.println("Method 1:	" + sc.getListOfParts().get(0).getListOfMeasures().get(0).getListOfNotes().get(0).toString());
+ 			
+// 			//Method 2: Create Measure object and extract the first note info by using small amount of dots 			
+// 			Measure2 m = XmlToJava.unmarshal(conv.getMusicXML(), Measure2.class);
+// 			System.out.println("Method 2:	" + m.getListOfNotes().get(0).toString());
+// 			
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+ 		
+ 			//StaccatoParserListener listener = new StaccatoParserListener();
+ 			//MusicXmlParser parser = new MusicXmlParser();
+ 			//parser.addParserListener(listener);
+			
+//=======
+//	private void previewButtonHandle() throws IOException {
+//		System.out.println("Preview Button Clicked!");
+//		JFrame f = new JFrame();
+//		f.setSize(400,400);
+//		f.setLayout(null);
+//		f.setVisible(true);
+//
+//>>>>>>> branch 'master' of https://github.com/partsharma99/TAB2XML
+
 	}
 	
 	@FXML
