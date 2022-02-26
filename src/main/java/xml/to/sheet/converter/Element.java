@@ -18,11 +18,13 @@ public class Element {
 	
 	public void draw(Graphics g) {
 		/* look at methods of the note to
-		 *  deduce how to draw it then do so here
+		 *  deduce how to draw it, then do so here
 		 *  eg:
 		 *  - note.getDuration()
 		 *  - note.getvalue()
 		 */
+		
+		
 
 	}
 

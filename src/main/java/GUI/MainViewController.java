@@ -15,8 +15,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+
+import javax.swing.JFrame;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.swing.text.AbstractDocument.Content;
+
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -30,8 +38,12 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -40,15 +52,24 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import models.ScorePartwise;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
+
+import xml.to.sheet.converter.DrawPane;
+import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
+import xml.to.sheet.converter.POJOClasses.XmlToJava;
+
 
 public class MainViewController extends Application {
 	
@@ -264,6 +285,19 @@ public class MainViewController extends Application {
 		stage.show();
 		return scene.getWindow();
 	}
+	
+	//for the preview sheet section
+	private Window openNewCanvasWindow(Parent root, Canvas canvas, String windowName) {
+		Stage stage = new Stage();
+		stage.setTitle(windowName);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(MainApp.STAGE);
+		stage.setResizable(false);
+		Scene scene = new Scene(root, 300, 400);
+		stage.setScene(scene);
+		stage.show();
+		return scene.getWindow();
+	}
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -314,12 +348,19 @@ public class MainViewController extends Application {
 	@FXML
 	private void previewButtonHandle() throws IOException {
 		Parent root;
+
+//		Converter conv = new Converter(this);
+//		conv.update();
+//		NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
+		
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
  			root = loader.load();
  			PreviewMXLController controller = loader.getController();
+ 			//controller.drawLines();
  			controller.setMainViewController(this);
- 			controller.update();
+			controller.update();
+
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
