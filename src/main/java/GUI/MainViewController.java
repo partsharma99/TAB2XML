@@ -1,12 +1,16 @@
 package GUI;
 
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+
 
 import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -21,8 +25,13 @@ import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.swing.text.AbstractDocument.Content;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -36,8 +45,12 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -46,15 +59,22 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import models.ScorePartwise;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
+import xml.to.sheet.converter.DrawPane;
+import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
+import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 public class MainViewController extends Application {
 	
@@ -270,6 +290,19 @@ public class MainViewController extends Application {
 		stage.show();
 		return scene.getWindow();
 	}
+	
+	//for the preview sheet section
+	private Window openNewCanvasWindow(Parent root, Canvas canvas, String windowName) {
+		Stage stage = new Stage();
+		stage.setTitle(windowName);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(MainApp.STAGE);
+		stage.setResizable(false);
+		Scene scene = new Scene(root, 300, 400);
+		stage.setScene(scene);
+		stage.show();
+		return scene.getWindow();
+	}
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -318,20 +351,77 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void previewButtonHandle() throws IOException {
+	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
+		Converter conv = new Converter(this);
+		conv.update();
+		NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
+		
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
  			root = loader.load();
  			PreviewMXLController controller = loader.getController();
- 			controller.setMainViewController(this);
- 			//Implement update method later
- 			//controller.update();
+ 			controller.drawLines();
+ 	     
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
  		}
+ 		
+ 		//testing output of parser
+ 		try {
+ 			ScorePartwise2 sc = XmlToJava.unmarshal(conv.getMusicXML(), ScorePartwise2.class);
+ 			System.out.println("Number of measures = " + ListOfMeasureAndNote.getlistOfMeasures(sc).size());
+ 			System.out.println("Number of notes = " + ListOfMeasureAndNote.getlistOfNotes(sc).size());
+ 			System.out.print("(Call to method 2) = Durations of each note in the music tab: ");
+ 			
+ 			for(int i=0; i < ListOfMeasureAndNote.getlistOfNotes(sc).size(); i++) {
+ 				if((i+1) == ListOfMeasureAndNote.getlistOfNotes(sc).size()) {
+ 					System.out.println(ListOfMeasureAndNote.getlistOfNotes(sc).get(i).getDuration());
+ 				}
+ 				else {
+ 					System.out.print(ListOfMeasureAndNote.getlistOfNotes(sc).get(i).getDuration() + ", ");
+ 				}
+ 			}
+ 			
+ 			System.out.print("(Call to method 3) = Durations of each note in the music tab: ");
+ 			
+ 			int j = 1;
+ 			for(int i=0; i < ListOfMeasureAndNote.getNotesInMeasure(sc).size(); i++) {
+ 				if(ListOfMeasureAndNote.getNotesInMeasure(sc).get(i) != null) {
+ 						System.out.print(ListOfMeasureAndNote.getNotesInMeasure(sc).get(i).getDuration() + ", ");
+ 				}
+ 				else {
+ 					if((i+1) == ListOfMeasureAndNote.getNotesInMeasure(sc).size()) {
+ 						System.out.println("measure " + (j));
+ 					}
+ 					else {
+ 						System.out.print("measure " + (j) + ", ");
+ 					}
+ 					j++;
+ 				}
+ 			}
+ 			System.out.println("(Method 1) 1st noted in 1st measure = " + sc.getListOfParts().get(0).getListOfMeasures().get(0).getListOfNotes().get(0).toString());
+ 			System.out.println("(Method 2) 1st noted in 1st measure = " + ListOfMeasureAndNote.getlistOfNotes(sc).get(0).toString()); 			
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+ 		
+ 			//StaccatoParserListener listener = new StaccatoParserListener();
+ 			//MusicXmlParser parser = new MusicXmlParser();
+ 			//parser.addParserListener(listener);
+			
+//=======
+//	private void previewButtonHandle() throws IOException {
+//		System.out.println("Preview Button Clicked!");
+//		JFrame f = new JFrame();
+//		f.setSize(400,400);
+//		f.setLayout(null);
+//		f.setVisible(true);
+//
+//>>>>>>> branch 'master' of https://github.com/partsharma99/TAB2XML
+
 	}
 	
 	@FXML
@@ -342,9 +432,8 @@ public class MainViewController extends Application {
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
-		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument(InstrumentType.getInstrumentType(conv.getMusicXML()));
 		player.play(musicXMLPattern);
 		              
 	}
