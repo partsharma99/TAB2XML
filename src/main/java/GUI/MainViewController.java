@@ -1,9 +1,5 @@
 package GUI;
 
-import java.awt.event.ActionEvent;
-
-import java.awt.event.ActionListener;
-//hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,9 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import java.util.regex.Pattern;
 
-import javax.swing.JFrame;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.richtext.CodeArea;
@@ -325,8 +319,7 @@ public class MainViewController extends Application {
  			root = loader.load();
  			PreviewMXLController controller = loader.getController();
  			controller.setMainViewController(this);
- 			//Implement update method later
- 			//controller.update();
+ 			controller.update();
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
