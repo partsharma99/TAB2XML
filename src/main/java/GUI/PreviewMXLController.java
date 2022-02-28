@@ -10,6 +10,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -80,7 +81,7 @@ public class PreviewMXLController {
 //        gc.fillRect(50, 50, 100, 100);
 //        System.out.println("draw rectangle");
 //	}
-//	// paint the canvas
+	// paint the canvas
 //	public void paint(GraphicsContext g) {
 //		// set color to red
 //		//g.setColor(Color.BLACK);
