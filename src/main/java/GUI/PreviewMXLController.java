@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Note2;
 //import javafx.scene.paint.*;
 //import javafx.scene.text.Font;
 //import javafx.stage.Stage;
@@ -23,7 +24,9 @@ import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
 //import java.net.URL;
 //import java.util.ResourceBundle;
@@ -167,6 +170,11 @@ public class PreviewMXLController {
           	pane.getChildren().add(endBar.getLine());
     	}
     }
+    
+    public void drawNotes(double x, double y) {
+    	DrawCircle circle = new DrawCircle(x, y);
+    	pane.getChildren().add(circle.getCircle());
+    }
 
     //Update the GUI
     public void update() throws IOException { 	
@@ -175,6 +183,7 @@ public class PreviewMXLController {
 		try {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
 			 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
 		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
@@ -187,7 +196,47 @@ public class PreviewMXLController {
 		        	//Draw Bar lines
 		        	barLines(450, y, instName);
 		      		y += 120;
+		      		
 		      	}
+		    	if(instName.equals("Guitar")) {
+		    		y = 0;
+		    		for(int i=0;i<notes.size();i++) {
+						int x = notes.get(i).getNotations().getTechnical().getString();
+						
+						
+						x=20+(i-1)*30;
+						y=13+(notes.get(i).getNotations().getTechnical().getString()-1)*30;
+						drawNotes(x, y);
+						
+					}
+		    	}
+		    	else if(instName.equals("Drumset")) {
+		    		int x = 0;
+		    		y = 0;
+		    		int count = 0;
+		    		int x2 = x;
+		    		for(int i = 0; i < notes.size(); i++) {
+		    		if(notes.get(i).getNotehead() != null) {
+		    			drawNotes(x, y);
+		    			count = x;
+		    			x+=20;
+		    		}
+		    		
+		    		else {
+		    			int y2 = 0;
+//		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
+		    				y2 = 42;
+//		    			}
+//		    			else {
+		    				y2 = 26;
+//		    			}
+		    			
+		    			drawNotes(count, y2);
+		    			count+=20;
+		    		}
+		    		}
+		    	}
+		    	
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

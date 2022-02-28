@@ -6,7 +6,7 @@ import javafx.scene.shape.Line;
 public class DrawLine {
 	@FXML 
  	private Line line = new Line();
-
+	
   	public DrawLine(double startX, double startY, double endX, double endY) {
       	this.line.setStartX(startX); 
       	this.line.setStartY(startY);         
