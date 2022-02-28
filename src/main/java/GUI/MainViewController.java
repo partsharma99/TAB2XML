@@ -1,8 +1,16 @@
 package GUI;
 
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+
+
+import java.awt.event.ActionListener;
+//hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -14,14 +22,13 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.swing.text.AbstractDocument.Content;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -63,13 +70,11 @@ import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
-
 import xml.to.sheet.converter.DrawPane;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Measure2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
-
 
 public class MainViewController extends Application {
 	
@@ -346,12 +351,9 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-	private void previewButtonHandle() throws IOException {
+	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
-
-//		Converter conv = new Converter(this);
-//		conv.update();
-//		NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
+		
 		
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
@@ -360,8 +362,10 @@ public class MainViewController extends Application {
  			//controller.drawLines();
  			controller.setMainViewController(this);
 			controller.update();
-
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
+// 			Converter conv = new Converter(this);
+// 			conv.update();
+// 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -376,9 +380,8 @@ public class MainViewController extends Application {
 		Converter conv = new Converter(this);
 		conv.update();
 		parser.parse(conv.getMusicXML());
-		
 		Player player = new Player();
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument(InstrumentType.getInstrumentType(conv.getMusicXML()));
 		player.play(musicXMLPattern);
 		              
 	}

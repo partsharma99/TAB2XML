@@ -75,23 +75,23 @@ public class NewSheet extends MainViewController {
 			label4.setFont(new Font(null, Font.PLAIN, 20));
 			label3.setBounds(400, 270, 500, 50);
 			label3.setFont(new Font(null, Font.PLAIN, 25));
-//for(int i=0;i<Noteamount.getSize(xml);i++) {
-//				
-//				JLabel note = new JLabel(String.valueOf(NoteInfo.Ggetfret(xml).get(i)));
-//				
-//				y=20+(yaxis.get(i)-1)*30;
-//				x=20+(xaxis.get(i)-1)*30;
-//				
-//				
-//				note.setBounds(x, y, x, y);
-//				frame.add(note);
-//				
-//				//extending the frame
-//				//framex=framex+10;
-//				//framey=framey+10;
-//				System.out.println(yaxis);
-//				
-//			}
+			for(int i=0;i<Noteamount.getSize(xml);i++) {
+				
+				JLabel note = new JLabel(String.valueOf(NoteInfo.Ggetfret(xml).get(i)));
+				
+				y=20+(yaxis.get(i)-1)*30;
+				x=20+(xaxis.get(i)-1)*30;
+				
+				
+				note.setBounds(x, y, x, y);
+				frame.add(note);
+				
+				//extending the frame
+				//framex=framex+10;
+				//framey=framey+10;
+				System.out.println(yaxis);
+				
+			}
 			frame.add(label);
 //			frame.add(label2);
 			frame.add(label3);
