@@ -150,11 +150,15 @@ public class PreviewMXLController {
     }
 
     //Change the bar line length depending on the instrument
-    private void barLines(double x, double y, String instrument) {
+    private void barLines(double x, double y, String instrument) throws JAXBException {
     	if (instrument.equalsIgnoreCase("Guitar")) {
+    		if(getlimit()!=1) {
+    			System.out.println(getlimit());
+
     		DrawLine middleBar = new DrawLine(x, y, x, y + 64);
+    		pane.getChildren().add(middleBar.getLine());
+    		}
         	DrawLine endBar = new DrawLine(x + 470, y, x + 470, y + 64);
-        	pane.getChildren().add(middleBar.getLine());
           	pane.getChildren().add(endBar.getLine());
     	}
     	else if (instrument.equalsIgnoreCase("Drumset")) {
@@ -171,42 +175,70 @@ public class PreviewMXLController {
     	}
     }
     
-    public void drawNotes(double x, double y) {
-    	DrawCircle circle = new DrawCircle(x, y);
-    	pane.getChildren().add(circle.getCircle());
+    public void drawNotes(double x, double y,String a) {
+    	String num = a;
+    	 Text t = new Text(x, y, a);
+         t.setFont(Font.font("impact", 14));
+         pane.getChildren().add(t);
+    	
+    	
+//    	DrawCircle circle = new DrawCircle(x, y);
+//    	pane.getChildren().add(circle.getCircle());
     }
 
     //Update the GUI
-    public void update() throws IOException { 	
+    
+    public double getlimit() throws JAXBException {
+    	ScorePartwise2 sc;
+		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
+
+    	 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+    	 double limit = Math.ceil(numMeasures/2);
+    			 if(limit==0) {
+ 	    			limit=1;
+ 	    		}
+
+		return limit;
     	
+    	
+    }
+    public void update() throws IOException { 	
+    	int barx = 0;
     	ScorePartwise2 sc;
 		try {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-			 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
 		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
 		      	int y = 0;
-		      	double limit = Math.ceil(numMeasures/2);
-		    	for (int i = 1; i <= limit; i++) {
-		      		instrumentMusicLines(instName, y);
-		      		//Draw TAB
-		        	drawClef(cleff, 6, 20+y);
-		        	//Draw Bar lines
-		        	barLines(450, y, instName);
-		      		y += 120;
-		      		
-		      	}
+		      	double limit = getlimit();
+	    		
 		    	if(instName.equals("Guitar")) {
 		    		y = 0;
+					int counter=1;
+
 		    		for(int i=0;i<notes.size();i++) {
-						int x = notes.get(i).getNotations().getTechnical().getString();
+						int yy = notes.get(i).getNotations().getTechnical().getString();
+						int x;
+					//	System.out.println(notes.get(i).getChord()!=null);
+					//	System.out.println(counter);
+						if(notes.get(i).getChord()!=null) {
+							if(counter==1) {
+								
+								barx=95+(i-counter-2)*30;
+							}
+
+							counter++;
+							x=80+(i-counter)*30;
+						}
+						else {
+						x=80+(i-1)*30;
+						}
+						y=0+(yy-1)*13;
 						
-						
-						x=20+(i-1)*30;
-						y=13+(notes.get(i).getNotations().getTechnical().getString()-1)*30;
-						drawNotes(x, y);
+						drawNotes(x, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 						
 					}
 		    	}
@@ -217,7 +249,7 @@ public class PreviewMXLController {
 		    		int x2 = x;
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y);
+		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count = x;
 		    			x+=20;
 		    		}
@@ -231,11 +263,26 @@ public class PreviewMXLController {
 		    				y2 = 26;
 //		    			}
 		    			
-		    			drawNotes(count, y2);
+		    			drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
 		    		}
 		    	}
+		    	for (int i = 1; i <= limit; i++) {
+		      		System.out.println("run");
+		    		y=0;
+		    		instrumentMusicLines(instName, y);
+		      		//Draw TAB
+		        	drawClef(cleff, 6, 20+y);
+		        	//Draw Bar lines
+		        	if(limit!=1) {
+		        	barLines(barx, y, instName);
+		        	}
+		        	barLines(450, y, instName);
+
+		      		y += 120;
+		      		
+		      	}
 		    	
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
