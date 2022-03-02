@@ -10,6 +10,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -83,7 +84,7 @@ public class PreviewMXLController {
 //        gc.fillRect(50, 50, 100, 100);
 //        System.out.println("draw rectangle");
 //	}
-//	// paint the canvas
+	// paint the canvas
 //	public void paint(GraphicsContext g) {
 //		// set color to red
 //		//g.setColor(Color.BLACK);
@@ -192,14 +193,11 @@ public class PreviewMXLController {
          t.setFont(Font.font("impact", 14));
          pane.getChildren().add(t);
     	
-    	
-    	
     }
-    public void drawCircle(double x, double y) {
-    	DrawCircle circle = new DrawCircle(x, y);
+         public void drawCircle(double x, double y) {
+         DrawCircle circle = new DrawCircle(x, y); 
     	pane.getChildren().add(circle.getCircle());
-    }
-
+         }
     //Update the GUI
     
     public double getlimit() throws JAXBException {
@@ -223,7 +221,6 @@ public class PreviewMXLController {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
 			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
-			 
 		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
@@ -259,11 +256,13 @@ public class PreviewMXLController {
 					}
 		    	}
 		    	else if(instName.equals("Drumset")) {
+
 		    		int x = 50;
 		    		int y2 = 0;
 //		    		y = 0;
 		    		int count = 50;
 //		    		int x2 = x;
+
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
 		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()));
@@ -272,7 +271,6 @@ public class PreviewMXLController {
 		    		}
 		    		
 		    		else {
-		    			
 		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
 		    				y2 = 42;
 		    			}
@@ -280,19 +278,30 @@ public class PreviewMXLController {
 		    				y2 = 26;
 		    			}
 		    			drawCircle(count, y2);
-//		    			drawNotes(count, y2,String.valueOf(notes.get(i)));
+		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
+		    		
 		    		}
 		    		for (int i = 1; i <= limit; i++) {
+			    		y=0;
+			    		instrumentMusicLines(instName, y);
+			      		//Draw TAB
+
 			      		instrumentMusicLines(instName, y);
 			      		//Draw Clef
 			        	drawClef(cleff, 6, 20+y);
+
 			        	//Draw Bar lines
+			        	if(limit!=1) {
+			        	barLines(barx, y, instName);
+			        	}
 			        	barLines(450, y, instName);
+
 			      		y += 120;
-//			      		double limit = Math.ceil(numMeasures/2);
-			      		}
+			      		
+			      	}
+		    		
 //		    		for (int i = 1; i <= limit; i++) {
 ////			      		System.out.println("run");
 ////			    		y2=0;
@@ -312,7 +321,11 @@ public class PreviewMXLController {
 		    	
 		    	
 		    	}
-		
+
+		    	
+		    	
+		    	
+
 		} catch (JAXBException e) {
 
 			// TODO Auto-generated catch block
