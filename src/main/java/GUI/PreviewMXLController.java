@@ -181,11 +181,11 @@ public class PreviewMXLController {
          t.setFont(Font.font("impact", 14));
          pane.getChildren().add(t);
     	
-    	
-//    	DrawCircle circle = new DrawCircle(x, y);
-//    	pane.getChildren().add(circle.getCircle());
     }
-
+         public void drawCircle(double x, double y) {
+         DrawCircle circle = new DrawCircle(x, y); 
+    	pane.getChildren().add(circle.getCircle());
+         }
     //Update the GUI
     
     public double getlimit() throws JAXBException {
@@ -249,31 +249,29 @@ public class PreviewMXLController {
 		    		int x2 = x;
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()));
 		    			count = x;
 		    			x+=20;
 		    		}
 		    		
 		    		else {
 		    			int y2 = 0;
-//		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
+		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
 		    				y2 = 42;
-//		    			}
-//		    			else {
+		    			}
+		    			else {
 		    				y2 = 26;
-//		    			}
-		    			
-		    			drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    			}
+		    			drawCircle(count, y2);
+		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
-		      		System.out.println("run");
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
-		        	drawClef(cleff, 6, 20+y);
 		        	//Draw Bar lines
 		        	if(limit!=1) {
 		        	barLines(barx, y, instName);
