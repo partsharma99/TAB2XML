@@ -140,11 +140,23 @@ public class PreviewMXLController {
 
     //TAB = guitar; (II) = bass and drum;
     public void drawClef(String symbol, double x, double y) {
-        for (int i = 0; i < symbol.length(); i++, y += 22) {
-            //Get the letter
-            Text t = new Text(x, y, symbol.substring(i, i+1));
-            t.setFont(Font.font("impact", 24));
-            pane.getChildren().add(t);
+        if (symbol.equalsIgnoreCase("TAB")) {
+        	for (int i = 0; i < symbol.length(); i++, y += 22) {
+                Text t = new Text(x, y, symbol.substring(i, i+1));
+                t.setFont(Font.font("impact", 24));
+                pane.getChildren().add(t);
+            }
+        }
+        else if (symbol.equalsIgnoreCase("percussion")) {
+        	//Move the Clef down for every staff
+        	y = y + 19;
+        	//Since we're outputting "II" instead of percussion, we have to change symbol
+        	symbol = "II";
+        	for (int i = 0; i < symbol.length(); i++, x += 12) {
+                Text t = new Text(x, y, symbol.substring(i, i+1));
+                t.setFont(Font.font("impact", 33));
+                pane.getChildren().add(t);
+            }
         }
     }
 
@@ -216,6 +228,7 @@ public class PreviewMXLController {
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
 		      	int y = 0;
+
 		      	double limit = getlimit();
 	    		
 		    	if(instName.equals("Guitar")) {
@@ -272,30 +285,39 @@ public class PreviewMXLController {
 		    		}
 		    		}
 		    		for (int i = 1; i <= limit; i++) {
-//			      		System.out.println("run");
-//			    		y2=0;
-			    		instrumentMusicLines(instName, y);
-			      		//Draw TAB
-//			        	drawClef(cleff, 6, 20+y);
+			      		instrumentMusicLines(instName, y);
+			      		//Draw Clef
+			        	drawClef(cleff, 6, 20+y);
 			        	//Draw Bar lines
-			        	if(limit!=1) {
-			        	barLines(barx, y, instName);
-			        	}
 			        	barLines(450, y, instName);
-
 			      		y += 120;
-//			      		
-//			      	}
-		    	}
+//			      		double limit = Math.ceil(numMeasures/2);
+			      		}
+//		    		for (int i = 1; i <= limit; i++) {
+////			      		System.out.println("run");
+////			    		y2=0;
+//			    		instrumentMusicLines(instName, y);
+//			      		//Draw TAB
+////			        	drawClef(cleff, 6, 20+y);
+//			        	//Draw Bar lines
+//			        	if(limit!=1) {
+//			        	barLines(barx, y, instName);
+//			        	}
+//			        	barLines(450, y, instName);
+//
+//			      		y += 120;
+////			      		
+////			      	}
+//		    	}
 		    	
 		    	
 		    	}
-		}catch (JAXBException e) {
+		
+		} catch (JAXBException e) {
+
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-  
+		} 
 
     }
 }
