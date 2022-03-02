@@ -182,11 +182,8 @@ public class PreviewMXLController {
          pane.getChildren().add(t);
     	
     	
-    	
-    }
-    public void drawCircle(double x, double y) {
-    	DrawCircle circle = new DrawCircle(x, y);
-    	pane.getChildren().add(circle.getCircle());
+//    	DrawCircle circle = new DrawCircle(x, y);
+//    	pane.getChildren().add(circle.getCircle());
     }
 
     //Update the GUI
@@ -212,7 +209,6 @@ public class PreviewMXLController {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
 			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
-			 
 		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
@@ -248,50 +244,47 @@ public class PreviewMXLController {
 		    	}
 		    	else if(instName.equals("Drumset")) {
 		    		int x = 0;
-		    		int y2 = 0;
-//		    		y = 0;
+		    		y = 0;
 		    		int count = 0;
-//		    		int x2 = x;
+		    		int x2 = x;
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()));
+		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count = x;
 		    			x+=20;
 		    		}
 		    		
 		    		else {
-		    			
-		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
+		    			int y2 = 0;
+//		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
 		    				y2 = 42;
-		    			}
-		    			else {
+//		    			}
+//		    			else {
 		    				y2 = 26;
-		    			}
-		    			drawCircle(count, y2);
-//		    			drawNotes(count, y2,String.valueOf(notes.get(i)));
+//		    			}
+		    			
+		    			drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
 		    		}
-		    		for (int i = 1; i <= limit; i++) {
-//			      		System.out.println("run");
-//			    		y2=0;
-			    		instrumentMusicLines(instName, y);
-			      		//Draw TAB
-//			        	drawClef(cleff, 6, 20+y);
-			        	//Draw Bar lines
-			        	if(limit!=1) {
-			        	barLines(barx, y, instName);
-			        	}
-			        	barLines(450, y, instName);
+		    	}
+		    	for (int i = 1; i <= limit; i++) {
+		      		System.out.println("run");
+		    		y=0;
+		    		instrumentMusicLines(instName, y);
+		      		//Draw TAB
+		        	drawClef(cleff, 6, 20+y);
+		        	//Draw Bar lines
+		        	if(limit!=1) {
+		        	barLines(barx, y, instName);
+		        	}
+		        	barLines(450, y, instName);
 
-			      		y += 120;
-//			      		
-//			      	}
-		    	}
+		      		y += 120;
+		      		
+		      	}
 		    	
-		    	
-		    	}
-		}catch (JAXBException e) {
+		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
