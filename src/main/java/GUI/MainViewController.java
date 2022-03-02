@@ -347,12 +347,8 @@ public class MainViewController extends Application {
 
 	@FXML
 	private void previewButtonHandle() throws IOException {
-		Parent root;
-
-//		Converter conv = new Converter(this);
-//		conv.update();
-//		NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
 		
+		Parent root;
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
  			root = loader.load();
@@ -362,6 +358,9 @@ public class MainViewController extends Application {
 			controller.update();
 
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
+// 			Converter conv = new Converter(this);
+// 			conv.update();
+// 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);

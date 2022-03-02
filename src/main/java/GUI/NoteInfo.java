@@ -35,7 +35,6 @@ public class NoteInfo {
 	
 public static ArrayList<Integer> GgetX(String sml) {
 		
-		
         Pattern pattern = Pattern.compile("<string>(.*?)</string>");
         Matcher matcher = pattern.matcher(sml);
         while (matcher.find()) {
