@@ -255,10 +255,13 @@ public class PreviewMXLController {
 					}
 		    	}
 		    	else if(instName.equals("Drumset")) {
-		    		int x = 0;
-		    		y = 0;
-		    		int count = 0;
-		    		int x2 = x;
+
+		    		int x = 50;
+		    		int y2 = 0;
+//		    		y = 0;
+		    		int count = 50;
+//		    		int x2 = x;
+
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
 		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()));
@@ -267,7 +270,6 @@ public class PreviewMXLController {
 		    		}
 		    		
 		    		else {
-		    			int y2 = 0;
 		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
 		    				y2 = 42;
 		    			}
