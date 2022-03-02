@@ -353,9 +353,7 @@ public class MainViewController extends Application {
 	@FXML
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
-//		Converter conv = new Converter(this);
-//		conv.update();
-//		NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
+		
 		
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
@@ -365,6 +363,9 @@ public class MainViewController extends Application {
  			controller.setMainViewController(this);
 			controller.update();
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
+// 			Converter conv = new Converter(this);
+// 			conv.update();
+// 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
