@@ -187,10 +187,10 @@ public class PreviewMXLController {
     	}
     }
     
-    public void drawNotes(double x, double y,String a) {
+    public void drawNotes(double x, double y,String a,int f) {
     	String num = a;
     	 Text t = new Text(x, y, a);
-         t.setFont(Font.font("impact", 14));
+         t.setFont(Font.font("calibri", f));
          pane.getChildren().add(t);
     	
     }
@@ -234,23 +234,22 @@ public class PreviewMXLController {
 		    		for(int i=0;i<notes.size();i++) {
 						int yy = notes.get(i).getNotations().getTechnical().getString();
 						int x;
+						int f=0;
 					//	System.out.println(notes.get(i).getChord()!=null);
 					//	System.out.println(counter);
-						if(notes.get(i).getChord()!=null) {
-							if(counter==1) {
-								
-								barx=95+(i-counter-2)*30;
-							}
-
-							counter++;
-							x=80+(i-counter)*30;
+						if(notes.get(i).getGrace()!=null) {
+							f=11;
+						//	System.out.println("ran");
+							
 						}
 						else {
-						x=80+(i-1)*30;
+							f=14;
+
 						}
+						double xpos=NoteInfo.notePos(notes,notes.get(i));
 						y=0+(yy-1)*13;
 						
-						drawNotes(x, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
 						
 					}
 		    	}
@@ -264,8 +263,9 @@ public class PreviewMXLController {
 
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()));
+		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
 		    			count = x;
+		    		System.out.println(notes.get(i).getInstrument());
 		    			x+=20;
 		    		}
 		    		
