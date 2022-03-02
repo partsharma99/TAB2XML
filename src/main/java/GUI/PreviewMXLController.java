@@ -189,7 +189,7 @@ public class PreviewMXLController {
     public void drawNotes(double x, double y,String a) {
     	String num = a;
     	 Text t = new Text(x, y, a);
-         t.setFont(Font.font("impact", 14));
+         t.setFont(Font.font("veranda", 14));
          pane.getChildren().add(t);
     	
     	
