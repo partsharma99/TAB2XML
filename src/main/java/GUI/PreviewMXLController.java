@@ -225,7 +225,6 @@ public class PreviewMXLController {
 		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 		   //Draw the Music lines on the GUI
 		      	int y = 0;
-
 		      	double limit = getlimit();
 	    		
 		    	if(instName.equals("Guitar")) {
@@ -281,53 +280,28 @@ public class PreviewMXLController {
 		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
-		    		
 		    		}
-		    		for (int i = 1; i <= limit; i++) {
-			    		y=0;
-			    		instrumentMusicLines(instName, y);
-			      		//Draw TAB
-
-			      		instrumentMusicLines(instName, y);
-			      		//Draw Clef
-			        	drawClef(cleff, 6, 20+y);
-
-			        	//Draw Bar lines
-			        	if(limit!=1) {
-			        	barLines(barx, y, instName);
-			        	}
-			        	barLines(450, y, instName);
-
-			      		y += 120;
-			      		
-			      	}
-		    		
-//		    		for (int i = 1; i <= limit; i++) {
-////			      		System.out.println("run");
-////			    		y2=0;
-//			    		instrumentMusicLines(instName, y);
-//			      		//Draw TAB
-////			        	drawClef(cleff, 6, 20+y);
-//			        	//Draw Bar lines
-//			        	if(limit!=1) {
-//			        	barLines(barx, y, instName);
-//			        	}
-//			        	barLines(450, y, instName);
-//
-//			      		y += 120;
-////			      		
-////			      	}
-//		    	}
-		    	
-		    	
 		    	}
+		    	for (int i = 1; i <= limit; i++) {
+		    		y=0;
+		    		instrumentMusicLines(instName, y);
+		      		//Draw TAB
 
-		    	
-		    	
-		    	
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
+		        	drawClef(cleff, 6, 20+y);
 
+		        	//Draw Bar lines
+		        	if(limit!=1) {
+		        	barLines(barx, y, instName);
+		        	}
+		        	barLines(450, y, instName);
+
+		      		y += 120;
+		      		
+		      	}
+		    	
 		} catch (JAXBException e) {
-
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
