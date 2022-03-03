@@ -27,6 +27,7 @@ public class NoteInfo {
         while (matcher.find()) {
         	//x.add(i);
 //        	()
+        	////rrrrr
         	y.add(Integer. parseInt(matcher.group(1)));
         	i++;
         }
