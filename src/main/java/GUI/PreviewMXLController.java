@@ -174,55 +174,22 @@ public class PreviewMXLController {
 //		              y += 120;
 		          }
 		        
-		        startx = startx + 12;
+		        startx = startx + 24;
 		        double stringnum;
 		        double x = startx;
 		        double prevX;
 		        double xInc = 0;
+		        Note2 prev;
+		        Note2 current;
+		        
 		        for(int i=0; i<numMeasures; i++) {
 		        	notelistI = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
 		        	for(int j=0; j<notelistI.size(); j++) {
-		        		Note2 ele = notelistI.get(j);
-		        		stringnum = ele.getNotations().getTechnical().getString();
-		        		NoteAndPos np = new NoteAndPos(ele, x, stringnum);
-		        		nplist.add(np);
-		        		
-		        		//if current note has both a chord and grace
-		        		//OR
-		        		//if current note has only a chord then...
-		        		//set x of current note to be x of previous note
-		        		
-		        		if((ele.getChord()!=null && ele.getGrace()!=null) || (ele.getChord()!=null)){
-		        			prevX = nplist.get(j-1).getX();
-		        			nplist.get(j).setX(prevX);
-		        			nplist.get(j).setY(13*(stringnum-1));
-		        		}		        		
-		        		//if current note has grace
-		        		//OR
-		        		//if current note does not have a grace then check to see if prev has grace
-		        			//if prev has grace make current closer
-		        			//if prev does not have a grace set x of current to be incremented
-		        		
-		        		else if(ele.getGrace()!=null || ele.getGrace()==null) {
-		        			if(j!=0) {
-		        				if(nplist.get(j-1).getNote().getGrace()!=null) {
-		        					prevX = nplist.get(j-1).getX();
-			        				nplist.get(j).setX(prevX + 6);
-			        				nplist.get(j).setY(13*(stringnum-1));
-			        			}
-		        				else {
-		        					nplist.get(j).setX(6.5 * xInc);
-				        			nplist.get(j).setY(13*(stringnum-1));
-		        				}
-		        			}
-		        			else {
-		        				nplist.get(j).setX(startx);
-			        			nplist.get(j).setY(13*(stringnum-1));
-		        			}
-		        		}
-		        		xInc = ele.getDuration();
+		        		NoteAndPos np = new NoteAndPos(notelistI.get(j), 0, 0);
 		        	}
 		        }
+		        
+		        
 		        double xcord;
 		        double ycord;
 		        if(instName.equalsIgnoreCase("Guitar")) {
