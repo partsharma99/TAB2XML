@@ -16,13 +16,14 @@ public class Note2 {
 	private Dot2 dot;
 	private String stem;
 	private String notehead;
+	private NoteHead2 notehead2;
 	private Notations2 notations;
 
 	public Note2() {
 	}
 
 	public Note2(Chord2 chord, Grace2 grace, Pitch2 pitch, Unpitched2 unpitched, int duration, Instrument2 instrument, int voice, String type,
-			TimeModification2 timemodification, Dot2 dot, String stem, String notehead, Notations2 notations) {
+			TimeModification2 timemodification, Dot2 dot, String stem, String notehead,NoteHead2 notehead2, Notations2 notations) {
 		this.chord = chord;
 		this.grace = grace;
 		this.pitch = pitch;
@@ -35,6 +36,7 @@ public class Note2 {
 		this.dot = dot;
 		this.stem = stem;
 		this.notehead = notehead;
+		this.notehead2 = notehead2;
 		this.notations = notations;
 	}
 	
@@ -146,6 +148,16 @@ public class Note2 {
 		this.notehead = notehead;
 	}
 	
+	
+	@XmlElement(name = "notehead")
+	public NoteHead2 getNotehead2() {
+		return notehead2;
+	}
+
+	public void setNotehead2(NoteHead2 notehead2) {
+		this.notehead2 = notehead2;
+	}
+
 	@XmlElement
 	public Notations2 getNotations() {
 		return notations;
@@ -160,7 +172,7 @@ public class Note2 {
 		return "Note2 [chord=" + chord + ", grace=" + grace + ", pitch=" + pitch + ", unpitched=" + unpitched
 				+ ", duration=" + duration + ", instrument=" + instrument + ", voice=" + voice + ", type=" + type
 				+ ", timemodification=" + timemodification + ", dot=" + dot + ", stem=" + stem + ", notehead="
-				+ notehead + ", notations=" + notations + "]";
+				+ notehead + ", notehead2=" + notehead2 + ", notations=" + notations + "]";
 	}
-
+	
 }
