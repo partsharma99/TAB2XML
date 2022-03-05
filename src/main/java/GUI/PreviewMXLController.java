@@ -10,6 +10,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -83,7 +84,7 @@ public class PreviewMXLController {
 //        gc.fillRect(50, 50, 100, 100);
 //        System.out.println("draw rectangle");
 //	}
-//	// paint the canvas
+	// paint the canvas
 //	public void paint(GraphicsContext g) {
 //		// set color to red
 //		//g.setColor(Color.BLACK);
@@ -138,13 +139,29 @@ public class PreviewMXLController {
      	}
  	}	
 
+    public void drawSmallLine(int x) {
+    	DrawLine dl = new DrawLine(x-5 , -5,x+10 , -5);
+    	pane.getChildren().add(dl.getLine());
+    }
     //TAB = guitar; (II) = bass and drum;
     public void drawClef(String symbol, double x, double y) {
-        for (int i = 0; i < symbol.length(); i++, y += 22) {
-            //Get the letter
-            Text t = new Text(x, y, symbol.substring(i, i+1));
-            t.setFont(Font.font("impact", 24));
-            pane.getChildren().add(t);
+        if (symbol.equalsIgnoreCase("TAB")) {
+        	for (int i = 0; i < symbol.length(); i++, y += 22) {
+                Text t = new Text(x, y, symbol.substring(i, i+1));
+                t.setFont(Font.font("impact", 24));
+                pane.getChildren().add(t);
+            }
+        }
+        else if (symbol.equalsIgnoreCase("percussion")) {
+        	//Move the Clef down for every staff
+        	y = y + 19;
+        	//Since we're outputting "II" instead of percussion, we have to change symbol
+        	symbol = "II";
+        	for (int i = 0; i < symbol.length(); i++, x += 12) {
+                Text t = new Text(x, y, symbol.substring(i, i+1));
+                t.setFont(Font.font("impact", 33));
+                pane.getChildren().add(t);
+            }
         }
     }
 
@@ -174,17 +191,22 @@ public class PreviewMXLController {
     	}
     }
     
-    public void drawNotes(double x, double y,String a) {
+    public void drawNotes(double x, double y,String a,int f) {
     	String num = a;
     	 Text t = new Text(x, y, a);
-         t.setFont(Font.font("impact", 14));
+         t.setFont(Font.font("calibri", f));
          pane.getChildren().add(t);
     	
-    	
-//    	DrawCircle circle = new DrawCircle(x, y);
-//    	pane.getChildren().add(circle.getCircle());
     }
-
+         public void drawCircle(double x, double y) {
+         DrawCircle circle = new DrawCircle(x, y); 
+    	pane.getChildren().add(circle.getCircle());
+         }
+         
+         public void drawVerticalLines(int x, int y) {
+        	 DrawLine line = new DrawLine(x, -25, x, y);
+        	 pane.getChildren().add(line.getLine());
+         }
     //Update the GUI
     
     public double getlimit() throws JAXBException {
@@ -221,58 +243,79 @@ public class PreviewMXLController {
 		    		for(int i=0;i<notes.size();i++) {
 						int yy = notes.get(i).getNotations().getTechnical().getString();
 						int x;
+						int f=0;
 					//	System.out.println(notes.get(i).getChord()!=null);
 					//	System.out.println(counter);
-						if(notes.get(i).getChord()!=null) {
-							if(counter==1) {
-								
-								barx=95+(i-counter-2)*30;
-							}
-
-							counter++;
-							x=80+(i-counter)*30;
+						if(notes.get(i).getGrace()!=null) {
+							f=11;
+						//	System.out.println("ran");
+							
 						}
 						else {
-						x=80+(i-1)*30;
+							f=14;
+
 						}
+						double xpos=NoteInfo.notePos(notes,notes.get(i));
 						y=0+(yy-1)*13;
 						
-						drawNotes(x, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
 						
 					}
 		    	}
 		    	else if(instName.equals("Drumset")) {
-		    		int x = 0;
-		    		y = 0;
-		    		int count = 0;
-		    		int x2 = x;
+
+		    		int x = 50;
+		    		int y2 = 0;
+//		    		y = 0;
+		    		int count = 50;
+//		    		int x2 = x;
+
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    			if(notes.get(i).getInstrument().getId().equals("P1-I50")) {
+		    				drawSmallLine(x);
+		    				
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    			}
+		    			else {
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    				drawVerticalLines(x+5, y);
+		    			}
+		    			
 		    			count = x;
-		    			x+=20;
+//		    			System.out.println(notes.get(i).getInstrument());
+		    			x+=30;
 		    		}
 		    		
 		    		else {
-		    			int y2 = 0;
-//		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
-		    				y2 = 42;
+		    			if(notes.get(i).getUnpitched().getDisplaystep().equals("C")) {
+		    				y2 = 20;
+		    			}
+		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("F")){
+		    				y2 = 45;
+		    			}
+//		    			if(notes.get(i).getInstrument().getId().equals("P1-I36")) {
+//		    				drawCircle(count + 10, y2);
 //		    			}
 //		    			else {
-		    				y2 = 26;
+		    				drawCircle(count, y2);
+			    			drawVerticalLines(count +5, y2);
 //		    			}
 		    			
-		    			drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
-		      		System.out.println("run");
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
+
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
 		        	drawClef(cleff, 6, 20+y);
+
 		        	//Draw Bar lines
 		        	if(limit!=1) {
 		        	barLines(barx, y, instName);
@@ -286,9 +329,7 @@ public class PreviewMXLController {
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-  
+		} 
 
     }
 }
