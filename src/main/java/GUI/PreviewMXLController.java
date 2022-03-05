@@ -139,6 +139,10 @@ public class PreviewMXLController {
      	}
  	}	
 
+    public void drawSmallLine(int x) {
+    	DrawLine dl = new DrawLine(x-5 , -5,x+10 , -5);
+    	pane.getChildren().add(dl.getLine());
+    }
     //TAB = guitar; (II) = bass and drum;
     public void drawClef(String symbol, double x, double y) {
         if (symbol.equalsIgnoreCase("TAB")) {
@@ -197,6 +201,11 @@ public class PreviewMXLController {
          public void drawCircle(double x, double y) {
          DrawCircle circle = new DrawCircle(x, y); 
     	pane.getChildren().add(circle.getCircle());
+         }
+         
+         public void drawVerticalLines(int x, int y) {
+        	 DrawLine line = new DrawLine(x, -25, x, y);
+        	 pane.getChildren().add(line.getLine());
          }
     //Update the GUI
     
@@ -263,20 +272,36 @@ public class PreviewMXLController {
 
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
-		    			drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    			if(notes.get(i).getInstrument().getId().equals("P1-I50")) {
+		    				drawSmallLine(x);
+		    				
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    			}
+		    			else {
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    				drawVerticalLines(x+5, y);
+		    			}
+		    			
 		    			count = x;
-		    		System.out.println(notes.get(i).getInstrument());
-		    			x+=20;
+//		    			System.out.println(notes.get(i).getInstrument());
+		    			x+=30;
 		    		}
 		    		
 		    		else {
-		    			if(notes.get(i).getUnpitched().getDisplayoctave() == 5) {
-		    				y2 = 42;
+		    			if(notes.get(i).getUnpitched().getDisplaystep().equals("C")) {
+		    				y2 = 20;
 		    			}
-		    			else {
-		    				y2 = 26;
+		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("F")){
+		    				y2 = 45;
 		    			}
-		    			drawCircle(count, y2);
+//		    			if(notes.get(i).getInstrument().getId().equals("P1-I36")) {
+//		    				drawCircle(count + 10, y2);
+//		    			}
+//		    			else {
+		    				drawCircle(count, y2);
+			    			drawVerticalLines(count +5, y2);
+//		    			}
+		    			
 		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=20;
 		    		}
