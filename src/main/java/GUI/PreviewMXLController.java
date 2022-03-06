@@ -125,17 +125,18 @@ public class PreviewMXLController {
     	}
     }
     
-    public void drawNotes(double x, double y, String a) {
-    	String num = a;
+    public void drawNotes(double x, double y, String a, double fontsize) {
     	Text t = new Text(x, y, a);
-        t.setFont(Font.font("impact", 10));
+        t.setFont(Font.font("Times New Roman", fontsize));
         pane.getChildren().add(t);
     	
     }
-//         public void drawCircle(double x, double y) {
-//         DrawCircle circle = new DrawCircle(x, y); 
-//    	pane.getChildren().add(circle.getCircle());
-//         }
+    
+    public void drawCircle(double x, double y) {
+        DrawCircle circle = new DrawCircle(x, y); 
+    	pane.getChildren().add(circle.getCircle());
+        }
+    
     //Update the GUI
     
 //    public double getlimit() throws JAXBException {
@@ -156,11 +157,10 @@ public class PreviewMXLController {
     	ScorePartwise2 sc;
 		try {
 	      		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-	      		int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+	      		int numMeasures = sc.getListOfParts().get(0).getListOfMeasures().size();
 			    String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 			    String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
-			    ArrayList <Note2> notelistI;
-			    ArrayList <NoteAndPos> nplist = new ArrayList<NoteAndPos>();
+			    List <Note2> notelist  = ListOfMeasureAndNote.getlistOfNotes(sc);
 			    
 			    int y = 0;
 		        double limit = Math.ceil(numMeasures/2);
@@ -174,34 +174,79 @@ public class PreviewMXLController {
 //		              y += 120;
 		          }
 		        
-		        startx = startx + 24;
-		        double stringnum;
-		        double x = startx;
-		        double prevX;
-		        double xInc = 0;
-		        Note2 prev;
-		        Note2 current;
-		        
-		        for(int i=0; i<numMeasures; i++) {
-		        	notelistI = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
-		        	for(int j=0; j<notelistI.size(); j++) {
-		        		NoteAndPos np = new NoteAndPos(notelistI.get(j), 0, 0);
-		        	}
-		        }
-		        
-		        
 		        double xcord;
 		        double ycord;
+		        
 		        if(instName.equalsIgnoreCase("Guitar")) {
+		        	List<NoteAndPos> guitarNPlist = InstCordPos.setAndGetNotesPos(instName, notelist);
 		        	String notenum;
-		        	for(int k=0; k<nplist.size(); k++) {
-		        		xcord = nplist.get(k).getX();
-		        		ycord = nplist.get(k).getY();
-		        		notenum = "" + nplist.get(k).getNote().getNotations().getTechnical().getFret();
-		        		drawNotes(xcord, ycord, notenum);
+		        	for(int k=0; k < guitarNPlist.size(); k++) {
+		        		xcord = guitarNPlist.get(k).getX();
+		        		ycord = guitarNPlist.get(k).getY();
+		        		notenum = "" + guitarNPlist.get(k).getNote().getNotations().getTechnical().getFret();
+		        		if(guitarNPlist.get(k).getNote().getGrace()!=null) {
+		        			drawNotes(xcord, ycord, notenum, 6.5);
+		        		}
+		        		else {
+		        			drawNotes(xcord, ycord, notenum, 13);
+		        		}
 		        		System.out.println("fret: " + notenum + ", x=" + xcord + ",  y=" + ycord);
 		        	}
 		        }
+		        
+		        else if(instName.equalsIgnoreCase("Drumset")) {
+		        	String notehead;
+		        	List<NoteAndPos> drumsetNPlist = InstCordPos.setAndGetNotesPos(instName, notelist);
+		        	for(int k=0; k < drumsetNPlist.size(); k++) {
+		        		xcord = drumsetNPlist.get(k).getX();
+		        		ycord = drumsetNPlist.get(k).getY();
+		        		notehead = drumsetNPlist.get(k).getNote().getNotehead();
+		        		//drawing x at specified note
+		        		if(notehead!=null && notehead.equalsIgnoreCase("x")){
+		        			//line1
+		        			double x1 = xcord - 5; 
+		        			double y1 = ycord - 5;
+		        			double x1end = xcord + 5;
+		        			double y1end = ycord + 5;
+		        			DrawLine linex1 = new DrawLine(x1, y1, x1end, y1end);
+		        			//line2
+		        			double x2 = xcord - 5;
+		        			double y2 = ycord + 5;
+		        			double x2end = xcord + 5;
+		        			double y2end = ycord - 5;
+		        			DrawLine linex2 = new DrawLine(x2, y2, x2end, y2end);
+		        			pane.getChildren().add(linex1.getLine());
+		        			pane.getChildren().add(linex2.getLine());
+		        			//check to see if we need to draw horizontal line through x
+		        			if(drumsetNPlist.get(k).getNote().getInstrument().getId().equalsIgnoreCase("P1-I50")) {
+		        				DrawLine linelast = new DrawLine((x1-1), ycord, (x1end+1), ycord);
+		        				pane.getChildren().add(linelast.getLine());
+		        			}
+		        		}
+		        		//we are drawing circles as our notes otherwise
+		        		else {
+		        			drawCircle(xcord, ycord);
+		        		}
+		        	}
+		        }
+		        
+		        else if(instName.equalsIgnoreCase("Bass")) {
+		        	String notenum;
+		        	List<NoteAndPos> bassNPlist = InstCordPos.setAndGetNotesPos(instName, notelist);
+		        	for(int k=0; k < bassNPlist.size(); k++) {
+		        		xcord = bassNPlist.get(k).getX();
+		        		ycord = bassNPlist.get(k).getY();
+		        		notenum = "" + bassNPlist.get(k).getNote().getNotations().getTechnical().getFret();
+		        		if(bassNPlist.get(k).getNote().getGrace()!=null) {
+		        			drawNotes(xcord, ycord, notenum, 6.5);
+		        		}
+		        		else {
+		        			drawNotes(xcord, ycord, notenum, 13);
+		        		}
+		        	}
+		        }
+		        
+		        
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} 
