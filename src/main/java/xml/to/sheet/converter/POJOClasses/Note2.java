@@ -1,5 +1,7 @@
 package xml.to.sheet.converter.POJOClasses;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 
 public class Note2 {
@@ -13,16 +15,21 @@ public class Note2 {
 	private int voice;
 	private String type;
 	private TimeModification2 timemodification;
-	private Dot2 dot;
+	private List<Dot2> listofdot;
 	private String stem;
 	private String notehead;
+	private NoteHead2 notehead2;
 	private Notations2 notations;
+	private Rest2 rest;
+	private Beam2 beam;
+	
 
 	public Note2() {
 	}
 
 	public Note2(Chord2 chord, Grace2 grace, Pitch2 pitch, Unpitched2 unpitched, int duration, Instrument2 instrument, int voice, String type,
-			TimeModification2 timemodification, Dot2 dot, String stem, String notehead, Notations2 notations) {
+			TimeModification2 timemodification, List<Dot2> listofdot, String stem, String notehead,NoteHead2 notehead2, Notations2 notations,
+			Rest2 rest, Beam2 beam) {
 		this.chord = chord;
 		this.grace = grace;
 		this.pitch = pitch;
@@ -32,10 +39,13 @@ public class Note2 {
 		this.voice = voice;
 		this.type = type;
 		this.timemodification = timemodification;
-		this.dot = dot;
+		this.listofdot = listofdot;
 		this.stem = stem;
 		this.notehead = notehead;
+		this.notehead2 = notehead2;
 		this.notations = notations;
+		this.rest = rest;
+		this.beam = beam;
 	}
 	
 	@XmlElement
@@ -119,13 +129,13 @@ public class Note2 {
 		this.timemodification = timemodification;
 	}
 
-	@XmlElement
-	public Dot2 getDot() {
-		return dot;
+	@XmlElement(name = "dot")
+	public List<Dot2> getListofdot() {
+		return listofdot;
 	}
 
-	public void setDot(Dot2 dot) {
-		this.dot = dot;
+	public void setListofdot(List<Dot2> listofdot) {
+		this.listofdot = listofdot;
 	}
 
 	@XmlElement
@@ -146,6 +156,16 @@ public class Note2 {
 		this.notehead = notehead;
 	}
 	
+	
+	@XmlElement(name = "notehead")
+	public NoteHead2 getNotehead2() {
+		return notehead2;
+	}
+
+	public void setNotehead2(NoteHead2 notehead2) {
+		this.notehead2 = notehead2;
+	}
+
 	@XmlElement
 	public Notations2 getNotations() {
 		return notations;
@@ -154,13 +174,32 @@ public class Note2 {
 	public void setNotations(Notations2 notations) {
 		this.notations = notations;
 	}
+	
+	@XmlElement
+	public Rest2 getRest() {
+		return rest;
+	}
+
+	public void setRest(Rest2 rest) {
+		this.rest = rest;
+	}
+	
+	@XmlElement
+	public Beam2 getBeam() {
+		return beam;
+	}
+
+	public void setBeam(Beam2 beam) {
+		this.beam = beam;
+	}
 
 	@Override
 	public String toString() {
 		return "Note2 [chord=" + chord + ", grace=" + grace + ", pitch=" + pitch + ", unpitched=" + unpitched
 				+ ", duration=" + duration + ", instrument=" + instrument + ", voice=" + voice + ", type=" + type
-				+ ", timemodification=" + timemodification + ", dot=" + dot + ", stem=" + stem + ", notehead="
-				+ notehead + ", notations=" + notations + "]";
+				+ ", timemodification=" + timemodification + ", listofdot=" + listofdot + ", stem=" + stem
+				+ ", notehead=" + notehead + ", notehead2=" + notehead2 + ", notations=" + notations + ", rest=" + rest
+				+ ", beam=" + beam + "]";
 	}
-
+	
 }

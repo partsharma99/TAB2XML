@@ -62,7 +62,44 @@ public class PreviewMXLController {
 	@FXML
 	public void handleGotoMeasure() {
 	}
-	
+
+//	public void drawLines() {
+//		gc = canvas.getGraphicsContext2D();
+//        gc.setFill(Color.WHITE);
+//        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//        System.out.println("color set to white and background rectangle drawn");
+//        
+//        gc.strokeLine(10, 100, 200, 100);
+//        gc.strokeLine(10, 110, 200, 110);
+//        gc.strokeLine(10, 120, 200, 120);
+//        gc.strokeLine(10, 130, 200, 130);
+//        gc.strokeLine(10, 140, 200, 140);
+//        System.out.println("drawn lines");
+//	}
+//	
+//	public void drawTestRectangle() {
+//		gc = canvas.getGraphicsContext2D();
+//        gc.setFill(Color.BLACK);
+//        System.out.println("color set to black");
+//        gc.fillRect(50, 50, 100, 100);
+//        System.out.println("draw rectangle");
+//	}
+	// paint the canvas
+//	public void paint(GraphicsContext g) {
+//		// set color to red
+//		//g.setColor(Color.BLACK);
+//		g.setFill(Color.ALICEBLUE);
+//
+//		// set Font
+//		g.setFont(new Font("Bold", 1));
+//		g.lineTo(100, 100);
+//
+//	}
+//
+//	@Override
+//	public void start(Stage primaryStage) throws Exception {
+//	}
+
 	
     private MainViewController mvc;
 	@FXML 
@@ -272,12 +309,20 @@ public class PreviewMXLController {
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
+
+
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
+
+		      		System.out.println("run");
+
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
 
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
+
 		        	drawClef(cleff, 6, 20+y);
 
 		        	//Draw Bar lines
