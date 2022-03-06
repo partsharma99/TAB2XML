@@ -67,6 +67,7 @@ import utility.Settings;
 import xml.to.sheet.converter.DrawPane;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
@@ -377,7 +378,15 @@ public class MainViewController extends Application {
 		parser.parse(conv.getMusicXML());
 		
 		Player player = new Player();
+
 		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+
+
+		ScorePartwise2 sc;
+
+	
+		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument(InstrumentType.getInstrumentType(conv.getMusicXML()));
+
 		player.play(musicXMLPattern);
 		              
 	}
