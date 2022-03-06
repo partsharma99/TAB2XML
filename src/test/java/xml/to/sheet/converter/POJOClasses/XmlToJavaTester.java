@@ -42,13 +42,13 @@ class XmlToJavaTester {
 
 	@Test
 	void test1_PushNumOfMeasures() throws JAXBException {
-		String xmlString = bendTestHolder();
+		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfMeasures(sc).size()==3);
 	}
 	@Test
 	void test1_PushNumOfNotes() throws JAXBException {
-		String xmlString = bendTestHolder();
+		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfNotes(sc).size()==27);
 	}
