@@ -1,25 +1,15 @@
 package GUI;
-
-//import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-//import javafx.fxml.Initializable;
-//
-//import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-//import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
-//import javafx.scene.paint.*;
-//import javafx.scene.text.Font;
-//import javafx.stage.Stage;
-//import javafx.stage.Window;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
@@ -28,31 +18,12 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
-//import java.net.URL;
-//import java.util.ResourceBundle;
-//
-//import org.fxmisc.flowless.VirtualizedScrollPane;
-//import org.fxmisc.richtext.CodeArea;
-//import org.fxmisc.richtext.LineNumberFactory;
-//
-//import converter.Converter;
-/*
-Sample tab
-|-----------0-----|-0---------------|
-|---------0---0---|-0---------------|
-|-------1-------1-|-1---------------|
-|-----2-----------|-2---------------|
-|---2-------------|-2---------------|
-|-0---------------|-0---------------|
-
-*/
 public class PreviewMXLController {
 	
 	@FXML public Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
-//	private GraphicsContext gc;
 	public FXMLLoader loader;
 	
 	@FXML
@@ -308,12 +279,18 @@ public class PreviewMXLController {
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
+
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
+
+		      		System.out.println("run");
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
 
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
+
 		        	drawClef(cleff, 6, 20+y);
 
 		        	//Draw Bar lines
