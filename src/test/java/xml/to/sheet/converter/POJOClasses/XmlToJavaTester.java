@@ -44,28 +44,28 @@ class XmlToJavaTester {
 	//================================================================================================================
 	//Drum-set Tests
 	@Test
-	void test1_PushPartName() throws JAXBException {
+	void test2_PushTestPartName() throws JAXBException {
 		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(sc.getPartlist().getScorepart().get(0).getPartname().equals("Drumset"));
 	}
 
 	@Test
-	void test1_PushNumOfMeasures() throws JAXBException {
+	void test2_PushTestNumOfMeasures() throws JAXBException {
 		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfMeasures(sc).size()==3);
 	}
 	
 	@Test
-	void test1_PushNumOfNotes() throws JAXBException {
+	void test2_PushTestNumOfNotes() throws JAXBException {
 		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfNotes(sc).size()==27);
 	}
 	
 	@Test
-	void test1_PushTestGetFirstNoteInfo() throws JAXBException {
+	void test2_PushTestGetFirstNoteInfo() throws JAXBException {
 		String xmlString = PushTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfNotes(sc).get(0).getNotehead().equals("x"));
@@ -74,28 +74,28 @@ class XmlToJavaTester {
 	//================================================================================================================
 	//Bass Tests
 	@Test
-	void test1_MoneyTestPartName() throws JAXBException {
+	void test3_MoneyTestPartName() throws JAXBException {
 		String xmlString = MoneyTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(sc.getPartlist().getScorepart().get(0).getPartname().equals("Bass"));
 	}
 	
 	@Test
-	void test1_MoneyTestNumOfMeasures() throws JAXBException {
+	void test3_MoneyTestNumOfMeasures() throws JAXBException {
 		String xmlString = MoneyTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfMeasures(sc).size()==4);
 	}
 	
 	@Test
-	void test1_MoneyTestNumOfNotes() throws JAXBException {
+	void test3_MoneyTestNumOfNotes() throws JAXBException {
 		String xmlString = MoneyTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfNotes(sc).size()==32);
 	}
 	
 	@Test
-	void test1_MoneyTestGetFirstNoteInfo() throws JAXBException {
+	void test3_MoneyTestGetFirstNoteInfo() throws JAXBException {
 		String xmlString = MoneyTestHolder();
 		ScorePartwise2 sc = XmlToJava.unmarshal(xmlString, ScorePartwise2.class);
 		assertTrue(ListOfMeasureAndNote.getlistOfNotes(sc).get(0).getNotations().getTechnical().getFret()==2);
