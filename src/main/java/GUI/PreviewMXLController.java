@@ -648,18 +648,10 @@ public class PreviewMXLController {
 //		    				drawCircle(count + 10, y2);
 //		    			}
 //		    			else {
-		    			int count2 = count;
-		    			if(notes.get(i).getChord() != null) {
-		    				drawCircle(count2, y2);
-			    			drawVerticalLines(count +5, y2);
-			    
-		    			}
-		    			else {
-		    				drawCircle(count, y2);
-			    			drawVerticalLines(count +5, y2);
-		    			}
-//		    			}
 		    			
+//		    			}
+		    			drawCircle(count, y2);
+		    			drawVerticalLines(count +5, y2);
 		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
 		    			count+=30;
 		    		}
