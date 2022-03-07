@@ -1,42 +1,38 @@
 package GUI;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-
-
-import java.awt.event.ActionListener;
 //hers rafsdhfaksdfad
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import java.util.regex.Pattern;
 
-import javax.swing.JFrame;
-import javax.xml.bind.JAXBContext;
+import javax.sound.midi.Instrument;
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Patch;
+import javax.sound.midi.Soundbank;
+import javax.sound.midi.Synthesizer;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.swing.text.AbstractDocument.Content;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.jfugue.integration.MusicXmlParser;
 import org.jfugue.player.Player;
+import org.jfugue.theory.Note;
 import org.staccato.StaccatoParserListener;
 
 import converter.Converter;
@@ -45,12 +41,9 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -59,19 +52,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import models.ScorePartwise;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 import utility.Range;
 import utility.Settings;
-import xml.to.sheet.converter.DrawPane;
-import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Instrument2;
 import xml.to.sheet.converter.POJOClasses.Measure2;
 import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
@@ -89,7 +79,7 @@ public class MainViewController extends Application {
 
 	public Highlighter highlighter;
 	public Converter converter;
-
+	
 	@FXML  Label mainViewState;
 	@FXML  TextField instrumentMode;
 	
@@ -291,19 +281,6 @@ public class MainViewController extends Application {
 		stage.show();
 		return scene.getWindow();
 	}
-	
-	//for the preview sheet section
-	private Window openNewCanvasWindow(Parent root, Canvas canvas, String windowName) {
-		Stage stage = new Stage();
-		stage.setTitle(windowName);
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.initOwner(MainApp.STAGE);
-		stage.setResizable(false);
-		Scene scene = new Scene(root, 300, 400);
-		stage.setScene(scene);
-		stage.show();
-		return scene.getWindow();
-	}
 
 	@FXML
 	private void saveTabButtonHandle() {
@@ -354,8 +331,6 @@ public class MainViewController extends Application {
 	@FXML
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 		Parent root;
-		
-		
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
  			root = loader.load();
@@ -375,20 +350,122 @@ public class MainViewController extends Application {
 	
 	@FXML
 	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-		StaccatoParserListener listener = new StaccatoParserListener();
-		MusicXmlParser parser = new MusicXmlParser();
-		parser.addParserListener(listener);
-		Converter conv = new Converter(this);
-		conv.update();
-		parser.parse(conv.getMusicXML());
-		Player player = new Player();
+
+		//playing the music using the jaxb parser on a note-by-note basis
 		
+		ScorePartwise2 sc = null;
+		Synthesizer midiSynth = null;
+		try {
+			sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
+			midiSynth = MidiSystem.getSynthesizer();
+			midiSynth.open();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+			System.out.println("Failed to unmarshall the musicXML file.");
+		} catch (MidiUnavailableException e) {
+	         e.printStackTrace();
+	      }
+		
+		if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
+			/*get and load default instrument and channel lists
 
-		ScorePartwise2 sc;
+				for (int i = 0; i < sc.getListOfParts().get(0).getListOfMeasures().size(); i++) {
 
-	
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument(InstrumentType.getInstrumentType(conv.getMusicXML()));
-		player.play(musicXMLPattern);
+			 * get the note
+			 * for each note, get:
+			 * - duration
+			 * - instrument	id
+			 * - voice
+			 * - type
+			 * - channel of its instrument
+			 * 
+			 * then:
+			 * - load instrument(note[i].instr) into synthesizer
+			 * - mChannels[instr.getChannel].turn note on( , duration)
+
+				}
+			 */
+			MidiChannel thisChannel = midiSynth.getChannels()[9];
+			List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
+
+			for(int i=0; i < allMeasures.size(); i++) {
+				List<Note2> notes = allMeasures.get(i).getListOfNotes();
+				for(int j=0; j < notes.size(); j++) {
+					//System.out.println(notes.get(i).getInstrument().getId());
+					String thisID = notes.get(j).getInstrument().getId();
+
+					/*
+					 * usual ID is in the format P1-I[ID]
+					 * so the following code will get the integer version 
+					 * of the last two characters in thisID
+					 */
+					
+					String numStr = "";
+					numStr += thisID.charAt(thisID.length()-2);
+					numStr += thisID.charAt(thisID.length()-1);
+
+					int ID = Integer.parseInt(numStr);
+					/*System.out.println("The string is: " + numStr);
+					System.out.println("The actual instrument id is: " + (ID-1));
+					System.out.println("THe instrument is " + notes.get(j).getInstrument().toString());
+					*/
+					thisChannel.noteOn(ID-1, 78);
+					try { Thread.sleep(100); // wait time in milliseconds to control duration
+					} catch( InterruptedException e ) {
+						e.printStackTrace();
+					}
+					numStr="";
+				}
+			}
+
+				thisChannel.allNotesOff();
+				
+		} else if(sc.getInstrumentName().equalsIgnoreCase("Guitar")) {
+			/*StaccatoParserListener listener = new StaccatoParserListener();
+			MusicXmlParser parser = new MusicXmlParser();
+			parser.addParserListener(listener);
+			Converter conv = new Converter(this);
+			conv.update();
+			parser.parse(conv.getMusicXML());
+			Player player = new Player();
+			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
+			player.play(musicXMLPattern);*/
+		
+			MidiChannel thisChannel = midiSynth.getChannels()[0];
+			List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
+			
+			for(int i=0; i < allMeasures.size(); i++) {
+				List<Note2> notes = allMeasures.get(i).getListOfNotes();
+				for(int j=0; j < notes.size(); j++) {
+					int duration = notes.get(j).getDuration();
+					int octave = notes.get(j).getPitch().getOctave();
+					String step = notes.get(j).getPitch().getStep();
+					String tone = step+(octave);
+					
+					for(int noteNum = 0; noteNum < 128; noteNum++) {
+						if(tone.equals(Note.getToneString((byte) noteNum))) {
+							noteNum+=1;
+							/*
+							System.out.println("got the note number " + noteNum + " from step: " + tone);
+							System.out.println("octave: " + octave);
+							System.out.println("tone: " + tone);
+							*/
+							thisChannel.noteOn(noteNum, duration);
+							try { Thread.sleep(500); // wait time in milliseconds to control duration
+							} catch( InterruptedException e ) {
+								e.printStackTrace();
+							}
+						}
+					}
+					
+				
+				}
+			}
+			
+			thisChannel.allNotesOff();
+		
+		} 
+//>>>>>>> branch 'Feature-GL&Mohammad' of https://github.com/partsharma99/TAB2XML
 		              
 	}
 	
@@ -464,6 +541,7 @@ public class MainViewController extends Application {
         task.isDone();
         return task;
     }
+    
     
 	@Override
 	public void start(Stage primaryStage) throws Exception {

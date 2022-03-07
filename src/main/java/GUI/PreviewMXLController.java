@@ -314,6 +314,9 @@
 
 package GUI;
 
+
+import java.io.IOException;
+
 //import javafx.application.Application;
 import javafx.fxml.FXML;
 
@@ -338,19 +341,21 @@ import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
+import javafx.fxml.FXML;
+import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
-//import java.net.URL;
-//import java.util.ResourceBundle;
-//
-//import org.fxmisc.flowless.VirtualizedScrollPane;
-//import org.fxmisc.richtext.CodeArea;
-//import org.fxmisc.richtext.LineNumberFactory;
-//
-//import converter.Converter;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import converter.Converter;
 /*
 Sample tab
 |-----------0-----|-0---------------|
@@ -361,13 +366,15 @@ Sample tab
 |-0---------------|-0---------------|
 
 */
+
 public class PreviewMXLController {
+
 	
-	@FXML public Canvas canvas;
+//	@FXML public Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
-//	private GraphicsContext gc;
+	private GraphicsContext gc;
 	public FXMLLoader loader;
 	
 	@FXML
@@ -378,6 +385,8 @@ public class PreviewMXLController {
 	public void handleGotoMeasure() {
 	}
 	
+	
+
 //	public void drawLines() {
 //		gc = canvas.getGraphicsContext2D();
 //        gc.setFill(Color.WHITE);
@@ -434,7 +443,7 @@ public class PreviewMXLController {
             	y += 13;
         	}
      	}
-     	else if (instrument.equalsIgnoreCase("drumset")) {
+     	else if (instrument.equalsIgnoreCase("Drumset")) {
      		int i = 1;
      		while (i <= 5) {
              	DrawLine dl = new DrawLine(0.0, y, this.pane.getMaxWidth(), y);
@@ -545,8 +554,8 @@ public class PreviewMXLController {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
 			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
-		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
-		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
+		     String instName = sc.getInstrumentName();
+		     String cleff = sc.getCleff();
 		   //Draw the Music lines on the GUI
 		      	int y = 0;
 		      	double limit = getlimit();
@@ -683,3 +692,4 @@ public class PreviewMXLController {
 
     }
 }
+
