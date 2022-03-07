@@ -28,8 +28,11 @@ public class InstCordPos {
 		 }
 		//set y for each point for drum-set => display-step
 		 else if(instName.equalsIgnoreCase("Drumset")) {
+			 String step = "";
 			 for(int i=0; i<notelist.size(); i++) {
-		     		String step = notelist.get(i).getUnpitched().getDisplaystep();
+				 System.out.println(step);
+		     		step = notelist.get(i).getUnpitched().getDisplaystep();
+		     		System.out.println(instName);
 		     		double ycord = 0;
 		     		if(step.equalsIgnoreCase("A")) {
 		     			ycord = -13;
