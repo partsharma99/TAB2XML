@@ -366,10 +366,7 @@ public class MainViewController extends Application {
 	      }
 		
 		if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
-			/*get and load default instrument and channel lists
-
-				for (int i = 0; i < sc.getListOfParts().get(0).getListOfMeasures().size(); i++) {
-
+			/*get and load default instrument and channel list
 			 * get the note
 			 * for each note, get:
 			 * - duration
@@ -420,16 +417,6 @@ public class MainViewController extends Application {
 				thisChannel.allNotesOff();
 				
 		} else if(sc.getInstrumentName().equalsIgnoreCase("Guitar")) {
-			/*StaccatoParserListener listener = new StaccatoParserListener();
-			MusicXmlParser parser = new MusicXmlParser();
-			parser.addParserListener(listener);
-			Converter conv = new Converter(this);
-			conv.update();
-			parser.parse(conv.getMusicXML());
-			Player player = new Player();
-			org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
-			player.play(musicXMLPattern);*/
-		
 			MidiChannel thisChannel = midiSynth.getChannels()[0];
 			List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
 			
@@ -441,15 +428,18 @@ public class MainViewController extends Application {
 					String step = notes.get(j).getPitch().getStep();
 					String tone = step+(octave);
 					
+					
+					
 					for(int noteNum = 0; noteNum < 128; noteNum++) {
 						if(tone.equals(Note.getToneString((byte) noteNum))) {
 							noteNum+=1;
 							/*
+							Check the details of the note:
 							System.out.println("got the note number " + noteNum + " from step: " + tone);
 							System.out.println("octave: " + octave);
 							System.out.println("tone: " + tone);
 							*/
-							thisChannel.noteOn(noteNum, duration);
+							thisChannel.noteOn(noteNum, 78);
 							try { Thread.sleep(500); // wait time in milliseconds to control duration
 							} catch( InterruptedException e ) {
 								e.printStackTrace();
