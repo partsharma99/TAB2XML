@@ -11,6 +11,10 @@ This work is licensed under a
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
 
+Where to find the documents:
+1. Under the TAB2XML package go to the "Documents" folder
+2. Under the Documents folder you can find the important documents
+
 How to Run The Application
 1. Open the project in Eclipse
 2. Select the workspace in Eclipse where the TAB2XML_G14 project is located.
