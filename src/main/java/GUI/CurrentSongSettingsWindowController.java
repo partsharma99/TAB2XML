@@ -15,7 +15,7 @@ import utility.GuitarUtils;
 import utility.Settings;
 
 public class CurrentSongSettingsWindowController extends Application {
-
+//SINA TEST
 	private MainViewController mvc;
 	//Preferences prefs;
 	private Node[][] gridPaneArray = null;
