@@ -387,42 +387,7 @@ public class PreviewMXLController {
 	
 	
 
-//	public void drawLines() {
-//		gc = canvas.getGraphicsContext2D();
-//        gc.setFill(Color.WHITE);
-//        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//        System.out.println("color set to white and background rectangle drawn");
-//        
-//        gc.strokeLine(10, 100, 200, 100);
-//        gc.strokeLine(10, 110, 200, 110);
-//        gc.strokeLine(10, 120, 200, 120);
-//        gc.strokeLine(10, 130, 200, 130);
-//        gc.strokeLine(10, 140, 200, 140);
-//        System.out.println("drawn lines");
-//	}
-//	
-//	public void drawTestRectangle() {
-//		gc = canvas.getGraphicsContext2D();
-//        gc.setFill(Color.BLACK);
-//        System.out.println("color set to black");
-//        gc.fillRect(50, 50, 100, 100);
-//        System.out.println("draw rectangle");
-//	}
-	// paint the canvas
-//	public void paint(GraphicsContext g) {
-//		// set color to red
-//		//g.setColor(Color.BLACK);
-//		g.setFill(Color.ALICEBLUE);
-//
-//		// set Font
-//		g.setFont(new Font("Bold", 1));
-//		g.lineTo(100, 100);
-//
-//	}
-//
-//	@Override
-//	public void start(Stage primaryStage) throws Exception {
-//	}
+
 	
     private MainViewController mvc;
 	@FXML 
@@ -552,7 +517,6 @@ public class PreviewMXLController {
     	ScorePartwise2 sc;
 		try {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
 		     String instName = sc.getInstrumentName();
 		     String cleff = sc.getCleff();
@@ -560,66 +524,74 @@ public class PreviewMXLController {
 		      	int y = 0;
 		      	double limit = getlimit();
 	    		
+		      	//Checking the instrument name
 		    	if(instName.equals("Guitar")) {
+		    		//Setting the y axis for the notes to 0
 		    		y = 0;
-					int counter=1;
-
+		    		//Running the loop for maximum number of notes
 		    		for(int i=0;i<notes.size();i++) {
 						int yy = notes.get(i).getNotations().getTechnical().getString();
-						int x;
+
 						int f=0;
-					//	System.out.println(notes.get(i).getChord()!=null);
-					//	System.out.println(counter);
+						
+						//Checking if Grace is null
 						if(notes.get(i).getGrace()!=null) {
+							//If not null, setting the font size to 11
 							f=11;
-						//	System.out.println("ran");
-							
 						}
 						else {
+							//If null, setting the font size to 14
 							f=14;
 
 						}
+						//Setting the x-axis
 						double xpos=NoteInfo.notePos(notes,notes.get(i));
+						//Setting the y-axis of the note to the string number and multiplying it with 13 because 13
+						//units is the difference between the drawn lines on the screen
 						y=0+(yy-1)*13;
 						
+						//Drawing the notes by passing the x, y and the font size
 						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
 						
 					}
 		    	}
+		    	//Checking the instrument name
 		    	else if(instName.equals("Bass")) {
 		    		y = 0;
-					int counter=1;
-
+		    		
+		    		//Running the loop for maximum number of notes
 		    		for(int i=0;i<notes.size();i++) {
 						int yy = notes.get(i).getNotations().getTechnical().getString();
 						int x;
 						int f=0;
-					//	System.out.println(notes.get(i).getChord()!=null);
-					//	System.out.println(counter);
+				
 						if(notes.get(i).getGrace()!=null) {
+							//If not null, setting the font size to 11
 							f=11;
-						//	System.out.println("ran");
-							
 						}
 						else {
+							//If null, setting the font size to 14
 							f=14;
-
 						}
+						//Setting the x-axis
 						double xpos=NoteInfo.notePos(notes,notes.get(i));
+						//Setting the y-axis of the note to the string number and multiplying it with 13 because 13
+						//units is the difference between the drawn lines on the screen
 						y=0+(yy-1)*13;
 						
+						//Drawing the notes by passing the x, y and the font size
 						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
 						
 					}
 		    	}
+		    	//Checking the instrument name
 		    	else if(instName.equals("Drumset")) {
 
 		    		int x = 50;
-		    		int y2 = 0;
-//		    		y = 0;
+		    		int y2 = 0;	    	
 		    		int count = 50;
-//		    		int x2 = x;
 
+		    		
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
 		    			if(notes.get(i).getInstrument().getId().equals("P1-I50")) {
@@ -633,9 +605,7 @@ public class PreviewMXLController {
 		    			}
 		    			
 		    				count = x;
-		    			
-		    				
-//		    			System.out.println(notes.get(i).getInstrument());
+		    		
 		    			x+=30;
 		    		}
 		    		
@@ -653,15 +623,10 @@ public class PreviewMXLController {
 		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("E")) {
 		    				y2 = 7;
 		    			}
-//		    			if(notes.get(i).getInstrument().getId().equals("P1-I36")) {
-//		    				drawCircle(count + 10, y2);
-//		    			}
-//		    			else {
-		    			
-//		    			}
+
 		    			drawCircle(count, y2);
 		    			drawVerticalLines(count +5, y2);
-		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    	
 		    			count+=30;
 		    		}
 		    		}
