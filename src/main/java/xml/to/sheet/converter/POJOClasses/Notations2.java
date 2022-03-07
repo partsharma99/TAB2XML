@@ -10,15 +10,17 @@ public class Notations2 {
 	private List<Slur2> listOfSlurs;
 	private Slide2 slide;
 	private Technicial2 technical;
+	private Ornaments2 ornaments;
 
 	public Notations2() {
 	}
 
-	public Notations2(List<Tied2> listOfTieds, List<Slur2> listOfSlurs, Slide2 slide, Technicial2 technical) {
+	public Notations2(List<Tied2> listOfTieds, List<Slur2> listOfSlurs, Slide2 slide, Technicial2 technical, Ornaments2 ornaments) {
 		this.listOfTieds = listOfTieds;
 		this.listOfSlurs = listOfSlurs;
 		this.slide = slide;
 		this.technical = technical;
+		this.ornaments = ornaments;
 	}
 	
 	@XmlElement(name = "tied")
@@ -56,11 +58,20 @@ public class Notations2 {
 	public void setTechnical(Technicial2 technical) {
 		this.technical = technical;
 	}
+	
+	@XmlElement
+	public Ornaments2 getOrnaments() {
+		return ornaments;
+	}
+
+	public void setOrnaments(Ornaments2 ornaments) {
+		this.ornaments = ornaments;
+	}
 
 	@Override
 	public String toString() {
 		return "Notations2 [listOfTieds=" + listOfTieds + ", listOfSlurs=" + listOfSlurs + ", slide=" + slide
-				+ ", technical=" + technical + "]";
+				+ ", technical=" + technical + ", ornaments=" + ornaments + "]";
 	}
-	
+
 }
