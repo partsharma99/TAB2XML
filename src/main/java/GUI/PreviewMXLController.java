@@ -263,6 +263,32 @@ public class PreviewMXLController {
 						
 					}
 		    	}
+		    	else if(instName.equals("Bass")) {
+		    		y = 0;
+					int counter=1;
+
+		    		for(int i=0;i<notes.size();i++) {
+						int yy = notes.get(i).getNotations().getTechnical().getString();
+						int x;
+						int f=0;
+					//	System.out.println(notes.get(i).getChord()!=null);
+					//	System.out.println(counter);
+						if(notes.get(i).getGrace()!=null) {
+							f=11;
+						//	System.out.println("ran");
+							
+						}
+						else {
+							f=14;
+
+						}
+						double xpos=NoteInfo.notePos(notes,notes.get(i));
+						y=0+(yy-1)*13;
+						
+						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
+						
+					}
+		    	}
 		    	else if(instName.equals("Drumset")) {
 
 		    		int x = 50;
@@ -283,28 +309,45 @@ public class PreviewMXLController {
 		    				drawVerticalLines(x+5, y);
 		    			}
 		    			
-		    			count = x;
+		    				count = x;
+		    			
+		    				
 //		    			System.out.println(notes.get(i).getInstrument());
 		    			x+=30;
 		    		}
 		    		
 		    		else {
+		    			
 		    			if(notes.get(i).getUnpitched().getDisplaystep().equals("C")) {
 		    				y2 = 20;
 		    			}
 		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("F")){
 		    				y2 = 45;
 		    			}
+		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("D")) {
+		    				y2 = 13;
+		    			}
+		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("E")) {
+		    				y2 = 7;
+		    			}
 //		    			if(notes.get(i).getInstrument().getId().equals("P1-I36")) {
 //		    				drawCircle(count + 10, y2);
 //		    			}
 //		    			else {
+		    			int count2 = count;
+		    			if(notes.get(i).getChord() != null) {
+		    				drawCircle(count2, y2);
+			    			drawVerticalLines(count +5, y2);
+			    
+		    			}
+		    			else {
 		    				drawCircle(count, y2);
 			    			drawVerticalLines(count +5, y2);
+		    			}
 //		    			}
 		    			
 		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
-		    			count+=20;
+		    			count+=30;
 		    		}
 		    		}
 		    	}
