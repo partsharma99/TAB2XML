@@ -329,12 +329,9 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
-<<<<<<< HEAD
+
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
-=======
-	private void previewButtonHandle() throws IOException {
-		
->>>>>>> branch 'Develop' of https://github.com/partsharma99/TAB2XML
+
 		Parent root;
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
@@ -354,7 +351,7 @@ public class MainViewController extends Application {
 	}
 	
 	@FXML
-<<<<<<< HEAD
+
     private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
         //playing the music using the jaxb parser on a note-by-note basis
         
@@ -404,7 +401,7 @@ public class MainViewController extends Application {
             MidiChannel thisChannel = midiSynth.getChannels()[9];
             List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
 
-<<<<<<< HEAD
+
             for(int i=0; i < allMeasures.size(); i++) {
                 List<Note2> notes = allMeasures.get(i).getListOfNotes();
                 for(int j=0; j < notes.size(); j++) {
