@@ -339,6 +339,7 @@ import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -551,7 +552,7 @@ public class PreviewMXLController {
 		      	int y = 0;
 		      	double limit = getlimit();
 	    		
-		    	if(instName.equals("Guitar")) {
+		    	if(instName.equals("Guitar") || instName.equals("Bass")) {
 		    		y = 0;
 					int counter=1;
 
@@ -622,6 +623,8 @@ public class PreviewMXLController {
 		    		}
 		    		}
 		    	}
+
+		    	
 		    	for (int i = 1; i <= limit; i++) {
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
