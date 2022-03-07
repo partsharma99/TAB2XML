@@ -3,6 +3,9 @@ package xml.to.sheet.converter.POJOClasses;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+//POJO Class used to support the JAXB library being used to parse
+//the xml string.
+
 public class MidiInstrument2 {
 	
 	private int midichannel;

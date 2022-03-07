@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+//POJO Class used to support the JAXB library being used to parse
+//the xml string.
+
 @XmlRootElement(name = "score-partwise")
 public class ScorePartwise2 {
 	

@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
+//POJO Class used to support the JAXB library being used to parse
+//the xml string.
+
 public class Partlist2 {
 	
 	private List<Scorepart2> listOfSoreparts;
