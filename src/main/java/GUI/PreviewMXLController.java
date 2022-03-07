@@ -313,11 +313,12 @@
 //}
 
 package GUI;
+/github.com/partsharma99/TAB2XML
 
 
 import java.io.IOException;
 
-//import javafx.application.Application;
+
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
@@ -348,6 +349,7 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -374,7 +376,9 @@ public class PreviewMXLController {
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
+
 	private GraphicsContext gc;
+
 	public FXMLLoader loader;
 	
 	@FXML
@@ -384,8 +388,7 @@ public class PreviewMXLController {
 	@FXML
 	public void handleGotoMeasure() {
 	}
-	
-	
+
 
 
 	
@@ -483,7 +486,15 @@ public class PreviewMXLController {
     public void drawNotes(double x, double y,String a,int f) {
     	String num = a;
     	 Text t = new Text(x, y, a);
+
          t.setFont(Font.font("calibri", f));
+
+
+         t.setFont(Font.font("veranda", 14));
+
+         t.setFont(Font.font("calibri", f));
+
+
          pane.getChildren().add(t);
     	
     }
@@ -632,12 +643,23 @@ public class PreviewMXLController {
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
+
+
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
+
+		      		System.out.println("run");
+
+
+
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
 
+
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
+
 		        	drawClef(cleff, 6, 20+y);
 
 		        	//Draw Bar lines
@@ -656,5 +678,9 @@ public class PreviewMXLController {
 		} 
 
     }
+
+
+
 }
+
 
