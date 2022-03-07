@@ -127,7 +127,7 @@ public class PreviewMXLController {
             	y += 13;
         	}
      	}
-     	else if (instrument.equalsIgnoreCase("drumset")) {
+     	else if (instrument.equalsIgnoreCase("Drumset")) {
      		int i = 1;
      		while (i <= 5) {
              	DrawLine dl = new DrawLine(0.0, y, this.pane.getMaxWidth(), y);
@@ -217,8 +217,8 @@ public class PreviewMXLController {
 			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
 			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
 			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
-		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
-		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
+		     String instName = sc.getInstrumentName();
+		     String cleff = sc.getCleff();
 		   //Draw the Music lines on the GUI
 		      	int y = 0;
 		      	double limit = getlimit();

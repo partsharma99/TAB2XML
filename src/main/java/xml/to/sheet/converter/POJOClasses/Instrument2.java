@@ -2,13 +2,13 @@ package xml.to.sheet.converter.POJOClasses;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class Instrument2 {
+public class Instrument2{
 	
 	private String id;
-
+	
 	public Instrument2() {
+		
 	}
-
 	public Instrument2(String id) {
 		this.id = id;
 	}

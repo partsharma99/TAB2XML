@@ -6,27 +6,27 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class Partlist2 {
 	
-	private List<Scorepart2> listOfSoreparts;
+	private List<Scorepart2> listOfScoreparts;
 
 	public Partlist2() {
 	}
 
 	public Partlist2(List<Scorepart2> listOfScoreparts) {
-		this.listOfSoreparts = listOfScoreparts;
+		this.listOfScoreparts = listOfScoreparts;
 	}
 
 	@XmlElement(name = "score-part")
 	public List<Scorepart2> getScorepart() {
-		return listOfSoreparts;
+		return listOfScoreparts;
 	}
 
 	public void setScorepart(List<Scorepart2> listOfScoreparts) {
-		this.listOfSoreparts = listOfScoreparts;
+		this.listOfScoreparts = listOfScoreparts;
 	}
 
 	@Override
 	public String toString() {
-		return "Partlist2 [listOfSoreparts=" + listOfSoreparts + "]";
+		return "Partlist2 [listOfSoreparts=" + listOfScoreparts + "]";
 	}
 	
 }
