@@ -30,9 +30,10 @@ public class InstCordPos {
 		 else if(instName.equalsIgnoreCase("Drumset")) {
 			 String step = "";
 			 for(int i=0; i<notelist.size(); i++) {
-				 System.out.println(step);
+				 
+				 System.out.println(instName);
 		     		step = notelist.get(i).getUnpitched().getDisplaystep();
-		     		System.out.println(instName);
+		     		System.out.println(step);
 		     		double ycord = 0;
 		     		if(step.equalsIgnoreCase("A")) {
 		     			ycord = -13;
