@@ -16,7 +16,7 @@ Where to find the documents:
 2. Under the Documents folder you can find the important documents
 
 How to Run The Application
-1. Open the project in Eclipse
+1. Open the project in Eclipse Java 17.0, Gradle 7.3
 2. Select the workspace in Eclipse where the TAB2XML_G14 project is located.
 3. Once the workbench opens, the Gradle Tasks section should be located on the right hand side.
 4. Under the Gradle Tasks section the TAB2XML_G14 folder should be located.
