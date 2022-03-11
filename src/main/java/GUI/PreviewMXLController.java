@@ -1,21 +1,32 @@
-
 package GUI;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 //import javafx.application.Application;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 //import javafx.fxml.Initializable;
 //
 //import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
 //import javafx.scene.paint.*;
@@ -50,16 +61,45 @@ Sample tab
 
 */
 public class PreviewMXLController {
-	
-	@FXML public Canvas canvas;
+	@FXML 
+	private AnchorPane anchorPane;
+	@FXML private Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
-	@FXML Button savePDF;
-//	private GraphicsContext gc;
 	public FXMLLoader loader;
+	@FXML 
+	Button printPDF;
+	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+	
+//	@FXML
+//	public void printPDF() {
+//	}
 	
 	@FXML
-	public void savePDF() {
+	public <printButtonPressed> void printPDF() {
+
+		Printer p = Printer.getDefaultPrinter();
+		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
+		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+		WritableImage snap = anchorPane.snapshot(null, null);
+		ImageView view = new ImageView(snap);
+
+		double x = l.getPrintableWidth()/snap.getWidth();
+		double y = l.getPrintableHeight()/snap.getHeight();
+		
+		view.getTransforms().add(new Scale(x, x));
+
+		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
+			Translate grid = new Translate(0, 0);
+			view.getTransforms().add(grid);
+			int currentPage = 0;
+			while(currentPage < Math.ceil(x/y)) {
+				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
+				sheetToPrint.printPage(l, view);
+				currentPage++;
+			}
+			sheetToPrint.endJob();
+		}
 	}
 	
 	@FXML
