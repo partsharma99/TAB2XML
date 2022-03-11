@@ -12,6 +12,7 @@
 <?import javafx.scene.control.ScrollPane?>
 
 <?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="450.0" minWidth="640.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PreviewMXLController">
 	<center>
@@ -33,7 +34,7 @@
 								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 							</padding>
 							<children>
-								<Button fx:id="savePDFButton" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#savePDF" prefWidth="115.0" text="Save as PDF">
+								<Button fx:id="savePDFButton" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" onAction="#printPDF" prefWidth="115.0" text="Print PDF">
 									<padding>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>

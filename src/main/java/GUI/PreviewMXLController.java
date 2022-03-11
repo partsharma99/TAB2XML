@@ -1,42 +1,55 @@
 package GUI;
 
-
-
-import java.io.IOException;
-
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 //import javafx.application.Application;
-
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+//import javafx.fxml.Initializable;
+//
+//import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+//import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
+//import javafx.scene.paint.*;
+//import javafx.scene.text.Font;
+//import javafx.stage.Stage;
+//import javafx.stage.Window;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
-import javafx.fxml.FXML;
-import javafx.scene.layout.Pane;
 import java.io.IOException;
+//import java.io.IOException;
 import java.util.List;
 
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
-
-import converter.Converter;
+//import java.net.URL;
+//import java.util.ResourceBundle;
+//
+//import org.fxmisc.flowless.VirtualizedScrollPane;
+//import org.fxmisc.richtext.CodeArea;
+//import org.fxmisc.richtext.LineNumberFactory;
+//
+//import converter.Converter;
 /*
 Sample tab
 |-----------0-----|-0---------------|
@@ -47,29 +60,51 @@ Sample tab
 |-0---------------|-0---------------|
 
 */
-
-
 public class PreviewMXLController {
-
-	
-//	@FXML public Canvas canvas;
+	@FXML 
+	private AnchorPane anchorPane;
+	@FXML private Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
-	@FXML Button savePDF;
-
-	private GraphicsContext gc;
-
 	public FXMLLoader loader;
+	@FXML 
+	Button printPDF;
+	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+	
+//	@FXML
+//	public void printPDF() {
+//	}
 	
 	@FXML
-	public void savePDF() {
+	public <printButtonPressed> void printPDF() {
+
+		Printer p = Printer.getDefaultPrinter();
+		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
+		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+		WritableImage snap = anchorPane.snapshot(null, null);
+		ImageView view = new ImageView(snap);
+
+		double x = l.getPrintableWidth()/snap.getWidth();
+		double y = l.getPrintableHeight()/snap.getHeight();
+		
+		view.getTransforms().add(new Scale(x, x));
+
+		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
+			Translate grid = new Translate(0, 0);
+			view.getTransforms().add(grid);
+			int currentPage = 0;
+			while(currentPage < Math.ceil(x/y)) {
+				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
+				sheetToPrint.printPage(l, view);
+				currentPage++;
+			}
+			sheetToPrint.endJob();
+		}
 	}
 	
 	@FXML
 	public void handleGotoMeasure() {
 	}
-
-	
 
 //	public void drawLines() {
 //		gc = canvas.getGraphicsContext2D();
@@ -203,11 +238,7 @@ public class PreviewMXLController {
     public void drawNotes(double x, double y,String a,int f) {
     	String num = a;
     	 Text t = new Text(x, y, a);
-
-         t.setFont(Font.font("veranda", 14));
-
          t.setFont(Font.font("calibri", f));
-
          pane.getChildren().add(t);
     	
     }
@@ -321,23 +352,12 @@ public class PreviewMXLController {
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
-
-
-		      		instrumentMusicLines(instName, y);
-		      		//Draw Clef
-
-		      		System.out.println("run");
-
-
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
 
-
-
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
-
 		        	drawClef(cleff, 6, 20+y);
 
 		        	//Draw Bar lines
@@ -356,9 +376,4 @@ public class PreviewMXLController {
 		} 
 
     }
-
-
 }
-
-}
-

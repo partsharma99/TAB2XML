@@ -41,6 +41,13 @@ public class ScorePartwise2 {
 	public void setPartlist(Partlist2 partlist) {
 		this.partlist = partlist;
 	}
+	
+	public String getInstrumentName() {
+		return this.getPartlist().getScorepart().get(0).getPartname();
+	}
+	public String getCleff() {
+		return this.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
+	}
 
 	@XmlElement(name = "part")
 	public List<Part2> getListOfParts() {
@@ -58,6 +65,17 @@ public class ScorePartwise2 {
 
 	public void setVersion(double version) {
 		this.version = version;
+	}
+	
+	//just added
+	public Scorepart2[] getScoreParts() {
+		int numOfScoreParts = this.getPartlist().getScorepart().size();
+		Scorepart2[] scoreParts = new Scorepart2[numOfScoreParts];
+		for (int i = 0; i < numOfScoreParts; i++) {
+			scoreParts[i] = this.getPartlist().getScorepart().get(i);
+		}
+		
+		return scoreParts;
 	}
 
 	@Override
