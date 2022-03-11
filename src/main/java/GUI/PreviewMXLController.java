@@ -1,3 +1,4 @@
+
 package GUI;
 
 //import javafx.application.Application;
@@ -311,20 +312,12 @@ public class PreviewMXLController {
 		    		}
 		    	}
 		    	for (int i = 1; i <= limit; i++) {
-
-
-		      		instrumentMusicLines(instName, y);
-		      		//Draw Clef
-
-		      		System.out.println("run");
-
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
 
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
-
 		        	drawClef(cleff, 6, 20+y);
 
 		        	//Draw Bar lines
