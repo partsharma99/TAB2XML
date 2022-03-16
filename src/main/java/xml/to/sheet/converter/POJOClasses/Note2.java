@@ -15,15 +15,15 @@ public class Note2 {
 	private TimeModification2 timemodification;
 	private Dot2 dot;
 	private String stem;
-	private String notehead;
-	private NoteHead2 notehead2;
+	private NoteHead2 notehead;
 	private Notations2 notations;
+	private Rest2 rest;
 
 	public Note2() {
 	}
 
 	public Note2(Chord2 chord, Grace2 grace, Pitch2 pitch, Unpitched2 unpitched, int duration, Instrument2 instrument, int voice, String type,
-			TimeModification2 timemodification, Dot2 dot, String stem, String notehead,NoteHead2 notehead2, Notations2 notations) {
+			TimeModification2 timemodification, Dot2 dot, String stem, NoteHead2 notehead, Notations2 notations, Rest2 rest) {
 		this.chord = chord;
 		this.grace = grace;
 		this.pitch = pitch;
@@ -36,8 +36,8 @@ public class Note2 {
 		this.dot = dot;
 		this.stem = stem;
 		this.notehead = notehead;
-		this.notehead2 = notehead2;
 		this.notations = notations;
+		this.rest = rest;
 	}
 	
 	@XmlElement
@@ -140,22 +140,12 @@ public class Note2 {
 	}
 	
 	@XmlElement
-	public String getNotehead() {
+	public NoteHead2 getNotehead() {
 		return notehead;
 	}
 
-	public void setNotehead(String notehead) {
+	public void setNotehead(NoteHead2 notehead) {
 		this.notehead = notehead;
-	}
-	
-	
-	@XmlElement(name = "notehead")
-	public NoteHead2 getNotehead2() {
-		return notehead2;
-	}
-
-	public void setNotehead2(NoteHead2 notehead2) {
-		this.notehead2 = notehead2;
 	}
 
 	@XmlElement
@@ -166,13 +156,22 @@ public class Note2 {
 	public void setNotations(Notations2 notations) {
 		this.notations = notations;
 	}
+	
+	@XmlElement
+	public Rest2 getRest() {
+		return rest;
+	}
+
+	public void setRest(Rest2 rest) {
+		this.rest = rest;
+	}
 
 	@Override
 	public String toString() {
 		return "Note2 [chord=" + chord + ", grace=" + grace + ", pitch=" + pitch + ", unpitched=" + unpitched
 				+ ", duration=" + duration + ", instrument=" + instrument + ", voice=" + voice + ", type=" + type
 				+ ", timemodification=" + timemodification + ", dot=" + dot + ", stem=" + stem + ", notehead="
-				+ notehead + ", notehead2=" + notehead2 + ", notations=" + notations + "]";
+				+ notehead + ", notations=" + notations + ", rest=" + rest + "]";
 	}
 	
 }
