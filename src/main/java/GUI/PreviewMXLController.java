@@ -1,37 +1,43 @@
+
 package GUI;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+//import javafx.application.Application;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
-import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
-
+//import javafx.fxml.Initializable;
+//
+//import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 //import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
+//import javafx.scene.paint.*;
+//import javafx.scene.text.Font;
+//import javafx.stage.Stage;
+//import javafx.stage.Window;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
+//import java.net.URL;
+//import java.util.ResourceBundle;
+//
+//import org.fxmisc.flowless.VirtualizedScrollPane;
+//import org.fxmisc.richtext.CodeArea;
+//import org.fxmisc.richtext.LineNumberFactory;
+//
+//import converter.Converter;
 /*
 Sample tab
 |-----------0-----|-0---------------|
@@ -43,50 +49,58 @@ Sample tab
 
 */
 public class PreviewMXLController {
-	@FXML 
-	private AnchorPane anchorPane;
-	@FXML private Canvas canvas;
+	
+	@FXML public Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
+	@FXML Button savePDF;
+//	private GraphicsContext gc;
 	public FXMLLoader loader;
-	@FXML 
-	Button printPDF;
-	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-	
-//	@FXML
-//	public void printPDF() {
-//	}
 	
 	@FXML
-	public <printButtonPressed> void printPDF() {
-
-		Printer p = Printer.getDefaultPrinter();
-		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
-		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
-		WritableImage snap = anchorPane.snapshot(null, null);
-		ImageView view = new ImageView(snap);
-
-		double x = l.getPrintableWidth()/snap.getWidth();
-		double y = l.getPrintableHeight()/snap.getHeight();
-		
-		view.getTransforms().add(new Scale(x, x));
-
-		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
-			Translate grid = new Translate(0, 0);
-			view.getTransforms().add(grid);
-			int currentPage = 0;
-			while(currentPage < Math.ceil(x/y)) {
-				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
-				sheetToPrint.printPage(l, view);
-				currentPage++;
-			}
-			sheetToPrint.endJob();
-		}
+	public void savePDF() {
 	}
 	
 	@FXML
 	public void handleGotoMeasure() {
 	}
+	
+//	public void drawLines() {
+//		gc = canvas.getGraphicsContext2D();
+//        gc.setFill(Color.WHITE);
+//        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//        System.out.println("color set to white and background rectangle drawn");
+//        
+//        gc.strokeLine(10, 100, 200, 100);
+//        gc.strokeLine(10, 110, 200, 110);
+//        gc.strokeLine(10, 120, 200, 120);
+//        gc.strokeLine(10, 130, 200, 130);
+//        gc.strokeLine(10, 140, 200, 140);
+//        System.out.println("drawn lines");
+//	}
+//	
+//	public void drawTestRectangle() {
+//		gc = canvas.getGraphicsContext2D();
+//        gc.setFill(Color.BLACK);
+//        System.out.println("color set to black");
+//        gc.fillRect(50, 50, 100, 100);
+//        System.out.println("draw rectangle");
+//	}
+	// paint the canvas
+//	public void paint(GraphicsContext g) {
+//		// set color to red
+//		//g.setColor(Color.BLACK);
+//		g.setFill(Color.ALICEBLUE);
+//
+//		// set Font
+//		g.setFont(new Font("Bold", 1));
+//		g.lineTo(100, 100);
+//
+//	}
+//
+//	@Override
+//	public void start(Stage primaryStage) throws Exception {
+//	}
 	
     private MainViewController mvc;
 	@FXML 
