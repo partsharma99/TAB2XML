@@ -13,7 +13,7 @@ This work is licensed under a
 
 Where to find the documents:
 1. Under the TAB2XML package go to the "Documents" folder
-2. Under the Documents folder you can find the important documents
+2. Under the Documents folder you can find the important documents such as the user manual, requirements document,
 
 How to Run The Application
 1. Open the project in Eclipse Java 17.0, Gradle 7.3
