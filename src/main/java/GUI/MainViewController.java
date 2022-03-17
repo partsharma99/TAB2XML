@@ -364,21 +364,20 @@ public class MainViewController extends Application {
             midiSynth.open();
             PlayTabController controller = new PlayTabController(sc, midiSynth);
             
+            /*
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/tabPlayer.fxml"));
             loader.setController(controller);
             root = loader.load();
  			
  			convertWindow = this.openNewWindow(root, "Music Player");
+ 			*/
             controller.play();
         } catch (JAXBException e) {
             e.printStackTrace();
             System.out.println("Failed to unmarshall the musicXML file.");
         } catch (MidiUnavailableException e) {
              e.printStackTrace();
-        } catch (IOException e) {
- 			Logger logger = Logger.getLogger(getClass().getName());
- 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
- 		}
+        }
        	
     }
 	
