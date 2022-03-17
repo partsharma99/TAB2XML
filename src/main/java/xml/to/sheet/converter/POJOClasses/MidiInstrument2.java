@@ -1,6 +1,5 @@
 package xml.to.sheet.converter.POJOClasses;
 
-import javax.sound.midi.Patch;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -12,14 +11,11 @@ public class MidiInstrument2 {
 	private double volume;
 	private int pan;
 	private String id;
-	private Patch patch;
 
 	public MidiInstrument2() {
 		
 	}
 	public MidiInstrument2(int midichannel, int midiprogram, int midiunpitched, double volume, int pan, String id) {
-
-		this.patch = new Patch(0, midiprogram);
 		this.midichannel = midichannel;
 		this.midiprogram = midiprogram;
 		this.midiunpitched = midiunpitched;
@@ -27,10 +23,7 @@ public class MidiInstrument2 {
 		this.pan = pan;
 		this.id = id;
 	}
-
-	public Patch getPatch() {
-		return this.patch;
-	}
+	
 	@XmlElement(name = "midi-channel")
 	public int getMidichannel() {
 		return midichannel;

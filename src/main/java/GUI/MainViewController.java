@@ -18,12 +18,16 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.sound.midi.Instrument;
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Patch;
+import javax.sound.midi.Sequence;
 import javax.sound.midi.Soundbank;
 import javax.sound.midi.Synthesizer;
+import javax.sound.midi.Track;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -329,7 +333,9 @@ public class MainViewController extends Application {
 	}
 
 	@FXML
+
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
+
 		Parent root;
  		try {
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
@@ -339,9 +345,6 @@ public class MainViewController extends Application {
  			controller.setMainViewController(this);
 			controller.update();
  			convertWindow = this.openNewWindow(root, "Preview Sheet Music");
-// 			Converter conv = new Converter(this);
-// 			conv.update();
-// 			NewSheet MusicSheet = new NewSheet(conv.getMusicXML());
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
@@ -349,113 +352,35 @@ public class MainViewController extends Application {
 	}
 	
 	@FXML
-	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-		//playing the music using the jaxb parser on a note-by-note basis
-		
-		ScorePartwise2 sc = null;
-		Synthesizer midiSynth = null;
-		try {
-			sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
-			midiSynth = MidiSystem.getSynthesizer();
-			midiSynth.open();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-			System.out.println("Failed to unmarshall the musicXML file.");
-		} catch (MidiUnavailableException e) {
-	         e.printStackTrace();
-	      }
-		
-		if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
-			/*get and load default instrument and channel list
-			 * get the note
-			 * for each note, get:
-			 * - duration
-			 * - instrument	id
-			 * - voice
-			 * - type
-			 * - channel of its instrument
-			 * 
-			 * then:
-			 * - load instrument(note[i].instr) into synthesizer
-			 * - mChannels[instr.getChannel].turn note on( , duration)
 
-				}
-			 */
-			MidiChannel thisChannel = midiSynth.getChannels()[9];
-			List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
-
-			for(int i=0; i < allMeasures.size(); i++) {
-				List<Note2> notes = allMeasures.get(i).getListOfNotes();
-				for(int j=0; j < notes.size(); j++) {
-					//System.out.println(notes.get(i).getInstrument().getId());
-					String thisID = notes.get(j).getInstrument().getId();
-
-					/*
-					 * usual ID is in the format P1-I[ID]
-					 * so the following code will get the integer version 
-					 * of the last two characters in thisID
-					 */
-					
-					String numStr = "";
-					numStr += thisID.charAt(thisID.length()-2);
-					numStr += thisID.charAt(thisID.length()-1);
-
-					int ID = Integer.parseInt(numStr);
-					/*System.out.println("The string is: " + numStr);
-					System.out.println("The actual instrument id is: " + (ID-1));
-					System.out.println("THe instrument is " + notes.get(j).getInstrument().toString());
-					*/
-					thisChannel.noteOn(ID-1, 78);
-					try { Thread.sleep(100); // wait time in milliseconds to control duration
-					} catch( InterruptedException e ) {
-						e.printStackTrace();
-					}
-					numStr="";
-				}
-			}
-
-				thisChannel.allNotesOff();
-				
-		} else if(sc.getInstrumentName().equalsIgnoreCase("Guitar")) {
-			MidiChannel thisChannel = midiSynth.getChannels()[0];
-			List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
-			
-			for(int i=0; i < allMeasures.size(); i++) {
-				List<Note2> notes = allMeasures.get(i).getListOfNotes();
-				for(int j=0; j < notes.size(); j++) {
-					int duration = notes.get(j).getDuration();
-					int octave = notes.get(j).getPitch().getOctave();
-					String step = notes.get(j).getPitch().getStep();
-					String tone = step+(octave);
-					
-					
-					
-					for(int noteNum = 0; noteNum < 128; noteNum++) {
-						if(tone.equals(Note.getToneString((byte) noteNum))) {
-							noteNum+=1;
-							/*
-							Check the details of the note:
-							System.out.println("got the note number " + noteNum + " from step: " + tone);
-							System.out.println("octave: " + octave);
-							System.out.println("tone: " + tone);
-							*/
-							thisChannel.noteOn(noteNum, 78);
-							try { Thread.sleep(500); // wait time in milliseconds to control duration
-							} catch( InterruptedException e ) {
-								e.printStackTrace();
-							}
-						}
-					}
-					
-				
-				}
-			}
-			
-			thisChannel.allNotesOff();
-		
-		} 
-		              
-	}
+    private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
+        //playing the music using the jaxb parser on a note-by-note basis
+        Parent root;
+        ScorePartwise2 sc = null;
+        Synthesizer midiSynth = null;
+        try {
+            sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
+            midiSynth = MidiSystem.getSynthesizer();
+            midiSynth.open();
+            PlayTabController controller = new PlayTabController(sc, midiSynth);
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/tabPlayer.fxml"));
+            loader.setController(controller);
+            root = loader.load();
+ 			
+ 			convertWindow = this.openNewWindow(root, "Music Player");
+            controller.play();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            System.out.println("Failed to unmarshall the musicXML file.");
+        } catch (MidiUnavailableException e) {
+             e.printStackTrace();
+        } catch (IOException e) {
+ 			Logger logger = Logger.getLogger(getClass().getName());
+ 			logger.log(Level.SEVERE, "Failed to create new Window.", e);
+ 		}
+       	
+    }
 	
 
 	public void refresh() {
