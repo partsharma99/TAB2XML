@@ -1,37 +1,39 @@
 package xml.to.sheet.converter.POJOClasses;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
+
 public class NoteHead2 {
-	
-	private String parantheses;
-	private String text;
 
-	public NoteHead2() {
-	}
+    private String parentheses;
+    private String text;
 
-	public NoteHead2(String parantheses, String text) {
-		this.parantheses = parantheses;
-		this.text = text;
-	}
+    public NoteHead2() {
+    }
 
-	public String getParantheses() {
-		return parantheses;
-	}
+    public NoteHead2(String parentheses, String text) {
+        this.parentheses = parentheses;
+        this.text = text;
+    }
 
-	public void setParantheses(String parantheses) {
-		this.parantheses = parantheses;
-	}
+    @XmlAttribute
+    public String getParentheses() {
+        return parentheses;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public void setParentheses(String parentheses) {
+        this.parentheses = parentheses;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    @XmlValue
+    public String getText() {
+        return text;
+    }
 
-	@Override
-	public String toString() {
-		return "NoteHead2 [parantheses=" + parantheses + ", text=" + text + "]";
-	}
-	
+    public void setText(String text) {
+        this.text = text;
+    }
+
+
+
 }
