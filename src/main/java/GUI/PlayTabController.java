@@ -28,30 +28,56 @@ import javax.xml.bind.JAXBException;
 import org.jfugue.theory.Note;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import xml.to.sheet.converter.POJOClasses.Measure2;
 import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 
-public class PlayTabController {
+public class PlayTabController extends Thread{
     private MainViewController mvc;
     private ScorePartwise2 sc;
     private Synthesizer midiSynth;
     Sequencer sequencer = getSequencer();
     private Sequence seq;
+    private Thread playThread;
+    
+    @FXML Button playButton;
+    @FXML Button pauseButton;
+    
     private int tick_noteON;
     private int tick_noteOFF;
     private final String SEQ_DEV_NAME = "default";
     private final String SEQ_PROP_KEY = "javax.sound.midi.Sequence";
 	
-    public PlayTabController(ScorePartwise2 inputSC, Synthesizer inputSynth) {
+    public PlayTabController(ScorePartwise2 inputSC, Synthesizer inputSynth, MainViewController mvc) {
     	this.sc = inputSC;
     	this.midiSynth = inputSynth;
+    	this.mvc = mvc;
+    	playThread = new Thread();
     	tick_noteON =0;
     	tick_noteOFF =1;
     }
 
-    @FXML
+    public void run()
+    {
+        try {
+            // Displaying the thread that is running
+            System.out.println(
+                "Thread " + Thread.currentThread().getId()
+                + " is running");
+        }
+        catch (Exception e) {
+            // Throwing an exception
+            System.out.println("Exception is caught");
+        }
+    }
+    
+    @FXML 
 	public void play() throws JAXBException {
+//    	if(!playThread.isAlive()) {
+//    		playThread.start();
+//    	}
+    	
 		MidiChannel thisChannel;
 		
 		//playing the music using the jaxb parser on a note-by-note basis
@@ -116,11 +142,6 @@ public class PlayTabController {
 		
 		track.add(new MidiEvent(msg, ticks));
 		
-	}
-	
-	@FXML
-	public void pause() {
-		sequencer.stop();
 	}
 
 	public void composeDrumset(MidiChannel channel, int channelIndex) {
@@ -274,15 +295,21 @@ public class PlayTabController {
 		sequencer.start();
 		
 		while (sequencer.isRunning()) {
-			sleepFor(200);
+			if(playButton.isPressed() && sequencer.isOpen()) {
+				pause();
+				System.out.println("paused");
+			}
+			//sleepFor(200);
+			
 		}
 		
 		sleepFor(waitTime);
 		sequencer.close();
 	}
 	
+	@SuppressWarnings("static-access")
 	private void sleepFor(long millis) {
-		try { Thread.sleep(millis); // wait time in milliseconds to control duration
+		try { playThread.sleep(millis); // wait time in milliseconds to control duration
 		} catch( InterruptedException e ) {
 			e.printStackTrace();
 		}
@@ -291,5 +318,21 @@ public class PlayTabController {
 		int dur = duration+(6*counterOfTickFactor);
 //		System.out.println("dur " + dur);
 		return dur;
+	}
+	
+	@FXML
+	private void exit() {
+		try {
+			mvc.stop();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	public void pause() {
+		if(sequencer.isOpen()) {
+			sequencer.stop(); System.out.println("paused");
+		}
+		
 	}
 }

@@ -362,16 +362,14 @@ public class MainViewController extends Application {
             sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
             midiSynth = MidiSystem.getSynthesizer();
             midiSynth.open();
-            PlayTabController controller = new PlayTabController(sc, midiSynth);
+            PlayTabController controller = new PlayTabController(sc, midiSynth, this);
+            controller.start();
             
-            /*
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/tabPlayer.fxml"));
             loader.setController(controller);
             root = loader.load();
  			
  			convertWindow = this.openNewWindow(root, "Music Player");
- 			*/
-            controller.play();
         } catch (JAXBException e) {
             e.printStackTrace();
             System.out.println("Failed to unmarshall the musicXML file.");

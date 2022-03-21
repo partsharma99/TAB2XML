@@ -59,7 +59,7 @@ public class PreviewMXLController {
 	
 	@FXML
 	public <printButtonPressed> void printPDF() {
-
+		
 		Printer p = Printer.getDefaultPrinter();
 		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
 		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
