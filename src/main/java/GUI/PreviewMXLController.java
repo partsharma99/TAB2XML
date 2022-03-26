@@ -296,10 +296,7 @@ public class PreviewMXLController {
 			    String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 			    String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 			    List <Note2> notelist  = ListOfMeasureAndNote.getlistOfNotes(sc);
-			    
-			    Time2 t2 = new Time2();
-			    int beat = t2.getBeats();
-			    int beatType = t2.getBeattype();
+			    Time2 time = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime();
 			    
 			    
 			    int y = 0;
@@ -312,7 +309,9 @@ public class PreviewMXLController {
 		            //Draw Bar lines
 //		            barLines(450, y, instName);
 //		              y += 120;
-		            drawTimeSignature( 35, 28+y, instName, 4, 4);
+		            if(time != null) {
+		            	drawTimeSignature( 35, 28+y, instName, sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime().getBeats(), sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime().getBeattype());
+		            }
 		          }
 		        
 		        double xcord;

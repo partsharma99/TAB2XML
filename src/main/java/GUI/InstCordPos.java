@@ -11,7 +11,7 @@ public class InstCordPos {
 		 ArrayList <NoteAndPos> nplist = new ArrayList<NoteAndPos>();
 		 ArrayList <NoteAndPos> originalGuitarPos = new ArrayList<NoteAndPos>();
 		
-		 double startx = 48;
+		 double startx = 65;
 	     double xInc = 18;
 	     NoteAndPos current;
 	     NoteAndPos prev;
