@@ -34,6 +34,7 @@ import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.NoteHead2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.Tied2;
+import xml.to.sheet.converter.POJOClasses.Time2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
 
 import java.awt.geom.Arc2D;
@@ -251,10 +252,42 @@ public class PreviewMXLController {
 // 	    			limit=1;
 // 	    		}
 //
-//		return limit;
-//    	
-//    	
+//		return limit;	
 //    }
+    
+    public void drawTimeSignature(double x, double y, String instrument, int beats, int beatType) {
+    	if (instrument.equalsIgnoreCase("Guitar")) {
+    		y = y + 3.5;
+    		Text topNum = new Text(x, y, Integer.toString(beats));
+    		topNum.setFont(Font.font("calibri", 40));
+     		y += 31;
+     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
+     		lowerNum.setFont(Font.font("calibri", 40));
+     		pane.getChildren().add(topNum);
+     		pane.getChildren().add(lowerNum);
+    	}
+    	else if (instrument.equalsIgnoreCase("Drumset")) {
+    		y = y - 4;
+    		Text topNum = new Text(x, y, Integer.toString(beats));
+    		topNum.setFont(Font.font("calibri", 30));
+     		y += 24;
+     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
+     		lowerNum.setFont(Font.font("calibri", 30));
+     		pane.getChildren().add(topNum);
+     		pane.getChildren().add(lowerNum);
+    	}
+    	else {
+    		y = y - 9;
+    		Text topNum = new Text(x, y, Integer.toString(beats));
+    		topNum.setFont(Font.font("calibri", 24));
+     		y += 18;
+     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
+     		lowerNum.setFont(Font.font("calibri", 24));
+     		pane.getChildren().add(topNum);
+     		pane.getChildren().add(lowerNum);
+    	}
+ 	}
+    
     public void update() throws IOException {
     	ScorePartwise2 sc;
 		try {
@@ -263,6 +296,11 @@ public class PreviewMXLController {
 			    String instName = sc.getPartlist().getScorepart().get(0).getPartname();
 			    String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 			    List <Note2> notelist  = ListOfMeasureAndNote.getlistOfNotes(sc);
+			    
+			    Time2 t2 = new Time2();
+			    int beat = t2.getBeats();
+			    int beatType = t2.getBeattype();
+			    
 			    
 			    int y = 0;
 		        double limit = Math.ceil(numMeasures/2);
@@ -274,6 +312,7 @@ public class PreviewMXLController {
 		            //Draw Bar lines
 //		            barLines(450, y, instName);
 //		              y += 120;
+		            drawTimeSignature( 35, 28+y, instName, 4, 4);
 		          }
 		        
 		        double xcord;
