@@ -21,4 +21,5 @@ public class DrawLine {
   	public void setLine(Line line) {
   		this.line = line;
   	}
+  	
 }
