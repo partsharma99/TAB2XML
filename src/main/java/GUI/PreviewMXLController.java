@@ -149,20 +149,28 @@ public class PreviewMXLController {
 			    String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
 			    List <Note2> notelist  = ListOfMeasureAndNote.getlistOfNotes(sc);
 			    
-			    int y = 0;
-		        double limit = Math.ceil(numMeasures/2);
-		  
-		        for (int i = 1; i <= limit; i++) {
-		        	instrumentMusicLines(instName, y);
-		            //Draw TAB
-		            drawClef(cleff, 6, 20+y);
-		            //Draw Bar lines
-//		            barLines(450, y, instName);
-//		              y += 120;
-		          }
+//			    int y = 50;
+//		        double limit = Math.ceil(numMeasures/2);
+//		  
+//		        for (int i = 1; i <= limit; i++) {
+//		        	instrumentMusicLines(instName, y);
+//		            //Draw TAB
+//		            drawClef(cleff, 6, 20+y);
+//		            //Draw Bar lines
+////		            barLines(450, y, instName);
+////		              y += 120;
+//		          }
+		        
+	        	double startx = 65;
+	        	double starty = 50;
+	        	double xInc = 24;
+	        	double yInc = 13;
+	        	double basexInc = 10;
+	        	int diffbwstaves = 6;
 		        
 		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-		        	ArrayList<NoteAndPos> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, this.pane.getMaxWidth());
+		        	ArrayList<NoteAndPos> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
+		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
 		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, pane);
 		        	ArrayList<NoteAndPos> gracelist = ComponentClass.getGracList(gBNPlist);
 		        	DrawGuitarOrBass.drawGBGraces(gracelist, pane);
@@ -170,10 +178,12 @@ public class PreviewMXLController {
 		        	DrawGuitarOrBass.drawGBTies(tielist, pane);
 		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
 		        	DrawGuitarOrBass.drawGBSlurs(slurlist, pane);
+		        	DrawGuitarOrBass.drawInstrumentLines(gBNPlist, starty, yInc, diffbwstaves);
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {
-		        	ArrayList<NoteAndPos> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, this.pane.getMaxWidth());
+		        	ArrayList<NoteAndPos> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
+		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
 		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
 		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
 		        	DrawDrumset.drawDrumTies(tielist, pane);

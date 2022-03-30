@@ -1,5 +1,7 @@
 package GUI;
 
+import java.util.ArrayList;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -40,5 +42,26 @@ public class GeneralDrawing {
 		DrawCircle circle = new DrawCircle(xcord, ycord); 
     	pane.getChildren().add(circle.getCircle());
 	}
-    
+	
+	private static void drawInstlines(Double firstliney, int numoflines, double yInc, double maxX, Pane pane) {
+		for(int i=0; i<numoflines; i++) {
+			drawLine(0, firstliney+(i*yInc), maxX, firstliney+(i*yInc), pane);
+		}
+	}
+
+	public static void drawInstLinesHelper(ArrayList<Double> topofeachstaff, String instName, double yInc, double maxX, Pane pane) {
+		int numoflines = 0;
+		if(instName.equalsIgnoreCase("Guitar")) {
+			numoflines = 6;
+		}
+		else if(instName.equalsIgnoreCase("Drumset")) {
+			numoflines = 5;
+		}
+		else if(instName.equalsIgnoreCase("Bass")) {
+			numoflines = 4;
+		}
+		for(int i=0; i<topofeachstaff.size(); i++) {
+			drawInstlines(topofeachstaff.get(i), numoflines, yInc, maxX, pane);
+		}
+	}
 }

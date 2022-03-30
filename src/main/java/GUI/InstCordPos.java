@@ -20,8 +20,8 @@ public class InstCordPos {
 		 
 	     //all notes start at a point of (48,0)
 		 for(int i=0; i<notelist.size(); i++) {
-     		NoteAndPos np = new NoteAndPos(notelist.get(i), startx, 0);
-     		NoteAndPos ogP = new NoteAndPos(notelist.get(i), startx, 0);
+     		NoteAndPos np = new NoteAndPos(0, notelist.get(i), startx, 0);
+     		NoteAndPos ogP = new NoteAndPos(0, notelist.get(i), startx, 0);
      		nplist.add(i, np);
      		originalGuitarPos.add(i, ogP);
 		 }

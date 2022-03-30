@@ -33,7 +33,12 @@ public class ComponentClass {
     				gracelist.add(null);
     				k=l-1;
     			}
-    		}	
+    		}
+    		else {
+    			if(current.getNote().getGrace()!=null) {
+    				gracelist.add(current);
+    			}
+    		}
     	}
     	return gracelist;
 	}
