@@ -68,35 +68,35 @@ public class GeneralDrawing {
 		}
 	}
 
-	public static void drawBarLinesHelper(ScorePartwise2 sc, ArrayList<NoteAndPos> nplist, String instName, double yInc, double maxX,
-			Pane pane) {
-		
+	public static void drawBarLinesHelper(ArrayList<ArrayList<NoteAndPos>> stafflist, String instName, double xInc, double yInc, double maxX, Pane pane) {
+		NoteAndPos prev = null;
+		NoteAndPos current = null;
+		int measureholder = 0;
 		double lengthofbar = 0;
-		int numOfMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
-		ArrayList<Note2> measurei = new ArrayList<>();
 		if(instName.equalsIgnoreCase("Guitar")) {
-			lengthofbar = 6*yInc;
-		}
-		else if(instName.equalsIgnoreCase("Drumset")) {
 			lengthofbar = 5*yInc;
 		}
-		else if(instName.equalsIgnoreCase("Bass")) {
+		else if(instName.equalsIgnoreCase("Drumset")) {
 			lengthofbar = 4*yInc;
 		}
-		
-		for(int i=0; i<numOfMeasures; i++) {
-			if(ListOfMeasureAndNote.getNotesInMeasureI(sc, i)==null) {
-				continue;
-			}
-			else {
-				measurei = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
-			}
-			for(int j=0; j<nplist.size(); j++) {
-				
+		else if(instName.equalsIgnoreCase("Bass")) {
+			lengthofbar = 3*yInc;
+		}
+		for(int i=0; i<stafflist.size(); i++) {
+			for(int j=0; j<stafflist.get(i).size(); j++) {
+				if(j==0) {
+					drawLine(0, stafflist.get(i).get(j).getTopofstaff(), 0, stafflist.get(i).get(j).getTopofstaff()+lengthofbar, pane);
+					drawLine(maxX, stafflist.get(i).get(j).getTopofstaff(), maxX, stafflist.get(i).get(j).getTopofstaff()+lengthofbar, pane);
+					measureholder = stafflist.get(i).get(j).getMeasureNum();
+				}
+				else {
+					current = stafflist.get(i).get(j);
+					if(current.getMeasureNum()!=measureholder) {
+						measureholder++;
+						drawLine(current.getX()-(0.3*xInc), current.getTopofstaff(), current.getX()-(0.3*xInc), current.getTopofstaff()+lengthofbar, pane);
+					}
+				}
 			}
 		}
-		
-		
-		
 	}
 }
