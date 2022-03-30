@@ -341,6 +341,9 @@ public class InstCordPos2 {
 			ydiff = numofspaces*yInc;
 		}
 		
+		ArrayList<ArrayList<NoteAndPos>> stafflist = new ArrayList<>();
+		ArrayList<NoteAndPos> notesinstaffi = new ArrayList<>();
+		
 		for(int i=0; i<firstnotestaffI.size(); i++) {
 			current = firstnotestaffI.get(i);
 			if(i!=0) {
@@ -356,6 +359,10 @@ public class InstCordPos2 {
 							for(int t=first; t<=last; t++) {
 								nplist.get(t).setTopofstaff(tempstarty);
 							}
+							for(int t=first; t<=last; t++) {
+								notesinstaffi.add(nplist.get(t));
+							}
+							stafflist.add(notesinstaffi);
 						}
 						nplist.get(j).setY(nplist.get(j).getY()+tempydiff);
 					}
@@ -363,12 +370,18 @@ public class InstCordPos2 {
 				}
 			}
 		}
+		
 		drawhelper(topofeachstaff, instName, yInc, maxX, pane);
+		drawhelper2(sc, nplist, instName, yInc, maxX, pane);
 		return nplist;
 	}
-
+	
 	private static void drawhelper(ArrayList<Double> topofeachstaff, String instName, double yInc, double maxX, Pane pane) {
 		GeneralDrawing.drawInstLinesHelper(topofeachstaff, instName, yInc, maxX, pane);
+	}
+	
+	private static void drawhelper2(ScorePartwise2 sc, ArrayList<NoteAndPos> nplist, String instName, double yInc, double maxX, Pane pane) {
+		GeneralDrawing.drawBarLinesHelper(sc, nplist, instName, yInc, maxX, pane);
 	}
 
 }

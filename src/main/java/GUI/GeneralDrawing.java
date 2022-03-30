@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Note2;
+import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 
 public class GeneralDrawing {
 	
@@ -63,5 +66,37 @@ public class GeneralDrawing {
 		for(int i=0; i<topofeachstaff.size(); i++) {
 			drawInstlines(topofeachstaff.get(i), numoflines, yInc, maxX, pane);
 		}
+	}
+
+	public static void drawBarLinesHelper(ScorePartwise2 sc, ArrayList<NoteAndPos> nplist, String instName, double yInc, double maxX,
+			Pane pane) {
+		
+		double lengthofbar = 0;
+		int numOfMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+		ArrayList<Note2> measurei = new ArrayList<>();
+		if(instName.equalsIgnoreCase("Guitar")) {
+			lengthofbar = 6*yInc;
+		}
+		else if(instName.equalsIgnoreCase("Drumset")) {
+			lengthofbar = 5*yInc;
+		}
+		else if(instName.equalsIgnoreCase("Bass")) {
+			lengthofbar = 4*yInc;
+		}
+		
+		for(int i=0; i<numOfMeasures; i++) {
+			if(ListOfMeasureAndNote.getNotesInMeasureI(sc, i)==null) {
+				continue;
+			}
+			else {
+				measurei = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
+			}
+			for(int j=0; j<nplist.size(); j++) {
+				
+			}
+		}
+		
+		
+		
 	}
 }
