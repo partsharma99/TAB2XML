@@ -59,7 +59,7 @@ public class InstCordPos2 {
 		//////////////////////////////////////////////////////////////////////////////
 		
 		for(int i=0; i<notelist.size(); i++) {
-			NoteAndPos np = new NoteAndPos(0, notelist.get(i), startx, 0);
+			NoteAndPos np = new NoteAndPos(0, 0, notelist.get(i), startx, 0);
 			nplist.add(i, np);;
 		}
 
@@ -158,6 +158,7 @@ public class InstCordPos2 {
 						firstnotestaffI.add(nplist.get(index));
 						firstnotestaffI.add(null);
 					}
+					nplist.get(index).setMeasureNum(i);
 					index++;
 				}
 			}
@@ -219,6 +220,7 @@ public class InstCordPos2 {
 						firstnotestaffI.add(nplist.get(index));
 						firstnotestaffI.add(null);
 					}
+					nplist.get(index).setMeasureNum(i);
 					index++;
 				}
 			}
@@ -372,7 +374,7 @@ public class InstCordPos2 {
 		}
 		
 		drawhelper(topofeachstaff, instName, yInc, maxX, pane);
-		drawhelper2(sc, nplist, instName, yInc, maxX, pane);
+		drawhelper2(stafflist, instName, xInc, yInc, maxX, pane);
 		return nplist;
 	}
 	
@@ -380,8 +382,8 @@ public class InstCordPos2 {
 		GeneralDrawing.drawInstLinesHelper(topofeachstaff, instName, yInc, maxX, pane);
 	}
 	
-	private static void drawhelper2(ScorePartwise2 sc, ArrayList<NoteAndPos> nplist, String instName, double yInc, double maxX, Pane pane) {
-		GeneralDrawing.drawBarLinesHelper(sc, nplist, instName, yInc, maxX, pane);
+	private static void drawhelper2(ArrayList<ArrayList<NoteAndPos>> stafflist, String instName, double xInc, double yInc, double maxX, Pane pane) {
+		GeneralDrawing.drawBarLinesHelper(stafflist, instName, xInc, yInc, maxX, pane);
 	}
 
 }
