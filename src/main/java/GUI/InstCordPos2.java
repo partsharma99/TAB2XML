@@ -62,7 +62,7 @@ public class InstCordPos2 {
 			NoteAndPos np = new NoteAndPos(0, 0, notelist.get(i), startx, 0);
 			nplist.add(i, np);;
 		}
-
+		
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("bass")) {
 			for(int i=0; i<notelist.size(); i++) {
 				double ycord = notelist.get(i).getNotations().getTechnical().getString();
@@ -344,7 +344,6 @@ public class InstCordPos2 {
 		}
 		
 		ArrayList<ArrayList<NoteAndPos>> stafflist = new ArrayList<>();
-		ArrayList<NoteAndPos> notesinstaffi = new ArrayList<>();
 		
 		for(int i=0; i<firstnotestaffI.size(); i++) {
 			current = firstnotestaffI.get(i);
@@ -361,10 +360,11 @@ public class InstCordPos2 {
 							for(int t=first; t<=last; t++) {
 								nplist.get(t).setTopofstaff(tempstarty);
 							}
+							ArrayList<NoteAndPos> notesinstaffi = new ArrayList<>();
 							for(int t=first; t<=last; t++) {
 								notesinstaffi.add(nplist.get(t));
 							}
-							stafflist.add(notesinstaffi);
+							stafflist.add(staffcounter, notesinstaffi);
 						}
 						nplist.get(j).setY(nplist.get(j).getY()+tempydiff);
 					}

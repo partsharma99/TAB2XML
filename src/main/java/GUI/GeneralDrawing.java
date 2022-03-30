@@ -69,7 +69,6 @@ public class GeneralDrawing {
 	}
 
 	public static void drawBarLinesHelper(ArrayList<ArrayList<NoteAndPos>> stafflist, String instName, double xInc, double yInc, double maxX, Pane pane) {
-		NoteAndPos prev = null;
 		NoteAndPos current = null;
 		int measureholder = 0;
 		double lengthofbar = 0;
@@ -84,13 +83,13 @@ public class GeneralDrawing {
 		}
 		for(int i=0; i<stafflist.size(); i++) {
 			for(int j=0; j<stafflist.get(i).size(); j++) {
+				current = stafflist.get(i).get(j);
 				if(j==0) {
-					drawLine(0, stafflist.get(i).get(j).getTopofstaff(), 0, stafflist.get(i).get(j).getTopofstaff()+lengthofbar, pane);
-					drawLine(maxX, stafflist.get(i).get(j).getTopofstaff(), maxX, stafflist.get(i).get(j).getTopofstaff()+lengthofbar, pane);
 					measureholder = stafflist.get(i).get(j).getMeasureNum();
+					drawLine(0, current.getTopofstaff(), 0, current.getTopofstaff()+lengthofbar, pane);
+					drawLine(maxX, current.getTopofstaff(), maxX, current.getTopofstaff()+lengthofbar, pane);
 				}
 				else {
-					current = stafflist.get(i).get(j);
 					if(current.getMeasureNum()!=measureholder) {
 						measureholder++;
 						drawLine(current.getX()-(0.3*xInc), current.getTopofstaff(), current.getX()-(0.3*xInc), current.getTopofstaff()+lengthofbar, pane);
