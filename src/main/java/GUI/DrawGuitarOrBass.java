@@ -17,7 +17,7 @@ public class DrawGuitarOrBass {
     		ycord = nplist.get(k).getY();
     		notenum = "" + nplist.get(k).getNote().getNotations().getTechnical().getFret();
     		if(ycord>=pane.getMaxHeight()) {
-    			pane.resize(pane.getMaxWidth(), pane.getMaxHeight()+100);
+//    			pane.resize(pane.getMaxWidth(), pane.getMaxHeight()+100);
     		}
     		if(nplist.get(k).getNote().getGrace()!=null) {
     			GeneralDrawing.drawNotes(xcord, ycord, notenum, 6.5, pane);
@@ -26,6 +26,7 @@ public class DrawGuitarOrBass {
     			GeneralDrawing.drawNotes(xcord, ycord, notenum, 13, pane);
     		}
     	}
+//    	pane.resize(pane.getMaxWidth(), pane.getMaxHeight()+100);
 	}
 	
 	public static void drawGBGraces(ArrayList<NoteAndPos> gracelist, Pane pane) {
@@ -39,31 +40,49 @@ public class DrawGuitarOrBass {
     		if(k!=0) {
     			prev = gracelist.get(k-1);
     			if(prev!=null && current!=null) {
-    				if(prev.getNote().getNotations().getTechnical().getString()<3) { 
-    					if((prev.getNote().getGrace()!=null && prev.getNote().getChord()==null &&
-    					    current.getNote().getGrace()!=null && current.getNote().getChord()==null) ||
-    					   (prev.getNote().getGrace()!=null && prev.getNote().getChord()!=null &&
-    					    current.getNote().getGrace()!=null && current.getNote().getChord()==null)) {
-    						middledis = (current.getX() - prev.getX())/2;
-    						middlex = prev.getX() + middledis;
-    						middley = prev.getY() - 15;
-    						GeneralDrawing.drawQuad(prev.getX(), prev.getY()-3.5, middlex, middley, current.getX(), current.getY()-3.5, pane);
-    					}
-    					else if((prev.getNote().getGrace()!=null && prev.getNote().getChord()!=null &&
-	        				    current.getNote().getGrace()==null && current.getNote().getChord()==null) ||
-    						   (prev.getNote().getGrace()!=null && prev.getNote().getChord()==null &&
-    							current.getNote().getGrace()==null && current.getNote().getChord()==null)){
+    				if(prev.getNote().getNotations().getTechnical().getString()<3) {     					
+    					//prev = grace , no chord
+    					//current = no grace , no chord
+    					if(prev.getNote().getGrace()!=null && prev.getNote().getChord()==null &&
+    					   current.getNote().getGrace()==null && current.getNote().getChord()==null) {
     						middledis = (current.getX() - prev.getX())/2;
     						middlex = prev.getX() + middledis;
     						middley = current.getY() - 15;
-    						GeneralDrawing.drawQuad(prev.getX(), current.getY()-3.5, middlex, middley, current.getX(), current.getY()-5, pane);
+    						GeneralDrawing.drawQuad(prev.getX(), prev.getY()-5, middlex, middley, current.getX(), current.getY()-10, pane);
+    					}
+    					//prev = grace , no chord
+    					//current = grace , no chord
+    					if(prev.getNote().getGrace()!=null && prev.getNote().getChord()==null &&
+    					   current.getNote().getGrace()!=null && current.getNote().getChord()==null) {
+    						middledis = (current.getX() - prev.getX())/2;
+    						middlex = prev.getX() + middledis;
+    						middley = current.getY() - 15;
+    						GeneralDrawing.drawQuad(prev.getX(), current.getY()-5, middlex, middley, current.getX(), current.getY()-5, pane);
+    					}
+    					//prev = grace and chord
+    					//current = grace and no chord
+    					if(prev.getNote().getGrace()!=null && prev.getNote().getChord()!=null &&
+    					   current.getNote().getGrace()!=null && current.getNote().getChord()==null) {
+    						middledis = (current.getX() - prev.getX())/2;
+    						middlex = prev.getX() + middledis;
+    						middley = current.getY() - 15;
+    						GeneralDrawing.drawQuad(prev.getX(), current.getY()-5, middlex, middley, current.getX(), current.getY()-5, pane);
+    					}
+    					//prev = grace and chord
+    					//current = no grace and no chord
+    					if(prev.getNote().getGrace()!=null && prev.getNote().getChord()!=null &&
+    					   current.getNote().getGrace()==null && current.getNote().getChord()==null) {
+    						middledis = (current.getX() - prev.getX())/2;
+    						middlex = prev.getX() + middledis;
+    						middley = current.getY() - 15;
+    						GeneralDrawing.drawQuad(prev.getX(), current.getY()-5, middlex, middley, current.getX(), current.getY()-10, pane);
     					}
     				}
     				else if (prev.getNote().getNotations().getTechnical().getString()>=3){
     					middledis = (current.getX() - prev.getX())/2;
 	        			middlex = prev.getX() + middledis;
-	        			middley = prev.getY() + 15;
-	        			GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+	        			middley = prev.getY() + 11.5;
+	        			GeneralDrawing.drawQuad(prev.getX(), prev.getY()+1.5, middlex, middley, current.getX(), current.getY()+1.5, pane);
     				}
     			}
     		}
@@ -129,5 +148,9 @@ public class DrawGuitarOrBass {
     			}
     		}
     	}
+	}
+
+	public static void drawInstrumentLines(ArrayList<NoteAndPos> nplist, double starty, double yInc, int diffbwstaves) {
+		
 	}
 }
