@@ -1,26 +1,22 @@
 package GUI;
 
-import xml.to.sheet.converter.POJOClasses.Note2;
-
-public class NoteAndPos {
+public class barlineinfo {
 	
 	private double topofstaff;
 	private int staffnum;
 	private int measureNum;
-	private Note2 note;
-	private double x;
-	private double y;
+	private String emptyorfullornot;
+	private double xpos;
 	
-	public NoteAndPos() {
+	public barlineinfo() {
 	}
 
-	public NoteAndPos(double topofstaff, int staffnum, int measureNum, Note2 note, double x, double y) {
+	public barlineinfo(double topofstaff, int staffnum, int measureNum, String emptyorfullornot, double xpos) {
 		this.topofstaff = topofstaff;
 		this.staffnum = staffnum;
 		this.measureNum = measureNum;
-		this.note = note;
-		this.x = x;
-		this.y = y;
+		this.emptyorfullornot = emptyorfullornot;
+		this.xpos = xpos;
 	}
 
 	public double getTopofstaff() {
@@ -30,7 +26,7 @@ public class NoteAndPos {
 	public void setTopofstaff(double topofstaff) {
 		this.topofstaff = topofstaff;
 	}
-	
+
 	public int getStaffnum() {
 		return staffnum;
 	}
@@ -47,27 +43,20 @@ public class NoteAndPos {
 		this.measureNum = measureNum;
 	}
 
-	public Note2 getNote() {
-		return note;
+	public String getEmptyorfullornot() {
+		return emptyorfullornot;
 	}
 
-	public void setNote(Note2 note) {
-		this.note = note;
+	public void setEmptyorfull(String emptyorfullornot) {
+		this.emptyorfullornot = emptyorfullornot;
 	}
 
-	public double getX() {
-		return x;
+	public double getXpos() {
+		return xpos;
 	}
 
-	public void setX(double x) {
-		this.x = x;
+	public void setXpos(double xpos) {
+		this.xpos = xpos;
 	}
-
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
+	
 }

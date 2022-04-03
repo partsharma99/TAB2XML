@@ -161,39 +161,98 @@ public class PreviewMXLController {
 ////		              y += 120;
 //		          }
 		        
-	        	double startx = 65;
-	        	double starty = 50;
+	        	double startx = 66;
+	        	double starty = 66;
 	        	double xInc = 24;
 	        	double yInc = 13;
 	        	double basexInc = 10;
 	        	int diffbwstaves = 6;
 		        
 		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-		        	ArrayList<NoteAndPos> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
+		        	ArrayList<ArrayList<NoteAndPos>> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
 		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, pane);
 		        	ArrayList<NoteAndPos> gracelist = ComponentClass.getGracList(gBNPlist);
 		        	DrawGuitarOrBass.drawGBGraces(gracelist, pane);
 		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(gBNPlist, instName);
-		        	DrawGuitarOrBass.drawGBTies(tielist, pane);
+		        	DrawGuitarOrBass.drawGBTies(tielist, this.pane.getMaxWidth(), pane);
 		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
-		        	DrawGuitarOrBass.drawGBSlurs(slurlist, pane);
-		        	DrawGuitarOrBass.drawInstrumentLines(gBNPlist, starty, yInc, diffbwstaves);
+		        	DrawGuitarOrBass.drawGBSlurs(slurlist, this.pane.getMaxWidth(), pane);
+		        	ArrayList<NoteAndPos> beamlist = ComponentClass.getBeamList(gBNPlist, sc);
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {
-		        	ArrayList<NoteAndPos> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
+		        	ArrayList<ArrayList<NoteAndPos>> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
 		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
 		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
-		        	DrawDrumset.drawDrumTies(tielist, pane);
+		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
 		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
-		        	DrawDrumset.drawDrumSlurs(slurlist, pane);
+		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
 		        }
-		         
+		        
+//				else if(instName.equalsIgnoreCase("bass")) {
+//				for(int i=0; i<numOfMeasures; i++) {
+//					if(ListOfMeasureAndNote.getNotesInMeasureI(sc, i)==null) {
+//						measuremarker+=(3*(nplist.get(index-2).getNote().getDuration()+basexInc));
+//						continue;
+//					}
+//					else {
+//						measureI = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
+//						while(temp<measureI.size()) {
+//							durationtotalI+=measureI.get(temp).getDuration();
+//							temp++;
+//						}
+//						tempdurationtotalI = durationtotalI;
+//						durationtotalI=0;
+//						temp=0;
+//					}
+//					for(int j=0; j<measureI.size(); j++) {
+//						if(j==0) {
+//							if((measuremarker+((measureI.size()*basexInc) + tempdurationtotalI))<=maxX){
+//								if(index==0) {
+//									nplist.get(index).setX(startx);
+//									firstnotestaffI.add(nplist.get(index));
+//								}
+//								else {
+//									if(nplist.get(index).getNote().getChord()!=null) {
+//										nplist.get(index).setX(nplist.get(index-1).getX());
+//									}
+//									else {
+//										nplist.get(index).setX(nplist.get(index-1).getX() + 
+//												(nplist.get(index-1).getNote().getDuration()+basexInc));
+//									}
+//								}
+//							}
+//							else {
+//								nplist.get(index).setX(startx);
+//								firstnotestaffI.add(nplist.get(index-1));
+//								firstnotestaffI.add(null);
+//								firstnotestaffI.add(nplist.get(index));
+//							}
+//						}
+//						else {
+//							if(nplist.get(index).getNote().getChord()!=null) {
+//								nplist.get(index).setX(nplist.get(index-1).getX());
+//							}
+//							else {
+//								nplist.get(index).setX(nplist.get(index-1).getX() + 
+//										(nplist.get(index-1).getNote().getDuration()+basexInc));
+//							}
+//						}
+//						if(j+1==measureI.size()) {
+//							measuremarker = nplist.get(index).getX() + (nplist.get(index).getNote().getDuration()+basexInc);
+//						}
+//						if(i+1==numOfMeasures && j+1==measureI.size()) {
+//							firstnotestaffI.add(nplist.get(index));
+//							firstnotestaffI.add(null);
+//						}
+//						nplist.get(index).setMeasureNum(i);
+//						index++;
+//					}
+//				} 
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} 
-
     }
 }

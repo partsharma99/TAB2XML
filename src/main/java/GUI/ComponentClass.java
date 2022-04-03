@@ -2,36 +2,37 @@ package GUI;
 
 import java.util.ArrayList;
 
+import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
+import xml.to.sheet.converter.POJOClasses.Time2;
+
 public class ComponentClass {
 	
-	public static ArrayList<NoteAndPos> getGracList(ArrayList<NoteAndPos> nplist){
+	public static ArrayList<NoteAndPos> getGracList(ArrayList<ArrayList<NoteAndPos>> nplist){
 		NoteAndPos current = null;
     	NoteAndPos prev = null;
     	ArrayList<NoteAndPos> gracelist = new ArrayList<NoteAndPos>();
-    	for(int k=0; k<nplist.size(); k++) {
-    		current = nplist.get(k);
-    		if(k!=0) {
-    			prev = nplist.get(k-1);
-    			//current note has a grace (do not need to check previous note)
-    			//add current note
-    			if(current.getNote().getGrace()!=null) {
-    				gracelist.add(current);
-    			}
-    			//current does not have a grace (need to check previous note)
-    			//previous note has grace 
-    			//add current note
-    			//check to see if it is the last in the grace group by checking to see if the next note has a chord
-    			//if next note has a chord keep checking
-    			//if next note does not have a chord then end the search and add null to grace list to show end of grace group
-    			else if(current.getNote().getGrace()==null && prev.getNote().getGrace()!=null) {
-    				gracelist.add(current);
-    				int l = k + 1;
-    				while(l<nplist.size() && nplist.get(l).getNote().getChord()!=null) {
-    					gracelist.add(nplist.get(l));
-    					l++;
+    	
+    	for(int i=0; i<nplist.size(); i++) {
+    		if(nplist.get(i)!=null) {
+    			for(int j=0; j<nplist.get(i).size(); j++) {
+    				current = nplist.get(i).get(j);
+    				if(j!=0) {
+    					prev = nplist.get(i).get(j-1);
+    					if(current.getNote().getGrace()!=null) {
+    						gracelist.add(current);
+    					}
+    					else if(current.getNote().getGrace()==null && prev.getNote().getGrace()!=null) {
+    						gracelist.add(current);
+    						int l = i + 1;
+    						while(l<nplist.get(i).size() && nplist.get(i).get(l).getNote().getChord()!=null) {
+    							gracelist.add(current);
+    							l++;
+    						}
+    						gracelist.add(null);
+    						i=l-1;
+    					}
     				}
-    				gracelist.add(null);
-    				k=l-1;
     			}
     		}
     		else {
@@ -41,25 +42,72 @@ public class ComponentClass {
     		}
     	}
     	return gracelist;
+//    		current = nplist.get(i);
+//    		if(i!=0) {
+//    			prev = nplist.get(i-1);
+//    			//current note has a grace (do not need to check previous note)
+//    			//add current note
+//    			if(current.getNote().getGrace()!=null) {
+//    				gracelist.add(current);
+//    			}
+//    			//current does not have a grace (need to check previous note)
+//    			//previous note has grace 
+//    			//add current note
+//    			//check to see if it is the last in the grace group by checking to see if the next note has a chord
+//    			//if next note has a chord keep checking
+//    			//if next note does not have a chord then end the search and add null to grace list to show end of grace group
+//    			else if(current.getNote().getGrace()==null && prev.getNote().getGrace()!=null) {
+//    				gracelist.add(current);
+//    				int l = i + 1;
+//    				while(l<nplist.size() && nplist.get(l).getNote().getChord()!=null) {
+//    					gracelist.add(nplist.get(l));
+//    					l++;
+//    				}
+//    				gracelist.add(null);
+//    				i=l-1;
+//    			}
+//    		}
+//    		else {
+//    			if(current.getNote().getGrace()!=null) {
+//    				gracelist.add(current);
+//    			}
+//    		}
+//    	}
+//    	return gracelist;
 	}
 	
-	public static ArrayList<NoteAndPos> getTieList(ArrayList<NoteAndPos> nplist, String instName){
+	public static ArrayList<NoteAndPos> getTieList(ArrayList<ArrayList<NoteAndPos>> nplist, String instName){
 		NoteAndPos current = null;
 		NoteAndPos next = null;
 		ArrayList<NoteAndPos> tiedlist = new ArrayList<NoteAndPos>();
     	ArrayList<NoteAndPos> orderedtiedlist = new ArrayList<NoteAndPos>();
-    	for(int k=0; k<nplist.size(); k++) {
-    		current = nplist.get(k);
-    		if(current.getNote().getNotations()!=null && 
-    		   current.getNote().getNotations().getListOfTieds()!=null &&
-    		   current.getNote().getRest()==null) {
-    			tiedlist.add(current);
+    	for(int i=0; i<nplist.size(); i++) {
+    		if(nplist.get(i)!=null) {
+    			for(int j=0; j<nplist.get(i).size(); j++) {
+    				current = nplist.get(i).get(j);
+    				if(current.getNote().getNotations()!=null && 
+    			       current.getNote().getNotations().getListOfTieds()!=null &&
+    			       current.getNote().getRest()==null) {
+    					tiedlist.add(current);
+    				}
+    			}
     		}
     	}
     	
+    	
+    	
+//    	for(int k=0; k<nplist.size(); k++) {
+//    		current = nplist.get(k);
+//    		if(current.getNote().getNotations()!=null && 
+//    		   current.getNote().getNotations().getListOfTieds()!=null &&
+//    		   current.getNote().getRest()==null) {
+//    			tiedlist.add(current);
+//    		}
+//    	}
+    	
     	//sorting the list of tied notes (adjacent elements must have the same string value for guitar
-    	for(int k = 0; k<tiedlist.size(); k++) {
-    		current = tiedlist.get(k);
+    	for(int i = 0; i<tiedlist.size(); i++) {
+    		current = tiedlist.get(i);
     		
     		//current note has a tied and it is a start
     		if(current.getNote().getNotations().getListOfTieds().size()==1 &&
@@ -72,7 +120,7 @@ public class ComponentClass {
     			
     			orderedtiedlist.add(current);
     			
-    			int l = k + 1;
+    			int l = i + 1;
     			while(l<tiedlist.size()) {
     				next = tiedlist.get(l);
     				
@@ -129,32 +177,35 @@ public class ComponentClass {
     	return orderedtiedlist;
 	}
 	
-	public static ArrayList<NoteAndPos> getSlurList(ArrayList<NoteAndPos> nplist, String instName){
+	public static ArrayList<NoteAndPos> getSlurList(ArrayList<ArrayList<NoteAndPos>> nplist, String instName){
 		NoteAndPos next = null;
 		NoteAndPos current = null;
 		//setting the list of slurs
     	ArrayList<NoteAndPos> onlyslurlist = new ArrayList<NoteAndPos>();
     	ArrayList<NoteAndPos> orderedslurlist = new ArrayList<NoteAndPos>();
-    	for(int k=0; k<nplist.size(); k++) {
-    		current = nplist.get(k);
-    		
-    		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-    			if(current.getNote().getNotations()!=null &&
-        		   current.getNote().getNotations().getListOfSlurs()!=null &&
-        		   current.getNote().getGrace()==null) {
-        			onlyslurlist.add(current);
+    	for(int i=0; i<nplist.size(); i++) {
+    		if(nplist.get(i)!=null) {
+    			for(int j=0; j<nplist.get(i).size(); j++) {
+    				current = nplist.get(i).get(j);
+    				if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
+    					if(current.getNote().getNotations()!=null &&
+    							current.getNote().getNotations().getListOfSlurs()!=null &&
+    							current.getNote().getGrace()==null) {
+    						onlyslurlist.add(current);
+    					}
+    				}
+    				else if(instName.equalsIgnoreCase("Drumset")) {
+    					if(current.getNote().getNotations()!=null && 
+    							current.getNote().getNotations().getListOfSlurs()!=null) {
+    						onlyslurlist.add(current);
+    					}
+    				}
     			}
-    		}
-    		else if(instName.equalsIgnoreCase("Drumset")) {
-        		if(current.getNote().getNotations()!=null && 
-        		   current.getNote().getNotations().getListOfSlurs()!=null) {
-        	    			onlyslurlist.add(current);
-        	    }
     		}
     	}
     	
-    	for(int k=0; k<onlyslurlist.size(); k++) {
-    		current = onlyslurlist.get(k);
+    	for(int i=0; i<onlyslurlist.size(); i++) {
+    		current = onlyslurlist.get(i);
     		
     		//only checking for starting slurs
     		if(current.getNote().getNotations().getListOfSlurs().size()==1 &&
@@ -162,7 +213,7 @@ public class ComponentClass {
     			
     			orderedslurlist.add(current);
     			
-    			int l = k + 1;
+    			int l = i + 1;
     			while(l<onlyslurlist.size()) {
     				next = onlyslurlist.get(l);
     				
@@ -193,27 +244,43 @@ public class ComponentClass {
     	return orderedslurlist;
 	}
 	
-	public static ArrayList<NoteAndPos> getBeamList(ArrayList<NoteAndPos> nplist){
-		//8 = 1/2
-		//16 = 1/4
-		//32 = 1/8
-		int countto1 = 0;
-		int countto4 = 0;
-		NoteAndPos prev= null;
-		NoteAndPos current = null;
-		ArrayList<NoteAndPos> measureI = new ArrayList<NoteAndPos>();
-    	ArrayList<NoteAndPos> beamlist = new ArrayList<NoteAndPos>();
-    	for(int k=0; k<nplist.size(); k++) {
-    		current = nplist.get(k);
-    		if(k!=0) {
-    			prev = nplist.get(k-1);
-    			if(prev.getNote().getRest()==null && current.getNote().getRest()==null) {
-    				
-    			}
-    			
-    		}
-    	}
-    	return beamlist;
+	public static ArrayList<NoteAndPos> getBeamList(ArrayList<ArrayList<NoteAndPos>> nplist, ScorePartwise2 sc){
+		ArrayList<NoteAndPos> beamlist = new ArrayList<>();
+		Measure2 measurei = null;
+		Time2 timeholder = null;
+		NoteAndPos currentnote = null;
+		double type = 0;
+		double totalcount = 0;
+		double onebeat = 0;
+		
+		//iterating through the measures to get the time signature of the current measure
+		for(int i=0; i<nplist.size(); i++) {
+			
+			//the ith measure
+			measurei = sc.getListOfParts().get(0).getListOfMeasures().get(i);
+			
+			
+			//grabbing the time signature of the current measure (it may or may not change but we must keep track in the case that it does)
+			if(measurei.getAttributes().getTime()!=null) {
+				timeholder = measurei.getAttributes().getTime();
+			}
+			
+			//
+			if(nplist.get(i)!=null) {
+				
+				for(int j=0; j<nplist.get(i).size(); j++) {
+					currentnote = nplist.get(i).get(j);
+					type = Integer.parseInt(currentnote.getNote().getType());
+					if(onebeat==timeholder.getBeattype()) {
+						beamlist.add(currentnote);
+						beamlist.add(null);
+					}
+					
+					
+				}
+			}
+		}
+		return null;
 	}
 	
 }
