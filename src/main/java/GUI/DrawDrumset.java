@@ -7,17 +7,17 @@ import xml.to.sheet.converter.POJOClasses.NoteHead2;
 
 public class DrawDrumset {
 
-	public static void drawDrumNotesAndStems(ArrayList<ArrayList<NoteAndPos>> nplist, Pane pane) {
+	public static void drawDrumNotesAndStems(ArrayList<measureinfo> listofmeasures, Pane pane) {
 		NoteAndPos prev = null;
 		NoteAndPos current = null;
 		double xcord = 0;
 		double ycord = 0;
 		double maxStemheight = 0;
 		NoteHead2 notehead = null;
-		for(int i=0; i<nplist.size(); i++) {
-			if(nplist.get(i)!=null) {
-				for(int j=0; j<nplist.get(i).size(); j++) {
-					current = nplist.get(i).get(j);
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(listofmeasures.get(i)!=null) {
+				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+					current = listofmeasures.get(i).getMeasure().get(j);
 					xcord = current.getX();
 					ycord = current.getY();
 					notehead = current.getNote().getNotehead();
@@ -47,12 +47,12 @@ public class DrawDrumset {
 			}
 		}
 
-		for(int i=0; i<nplist.size(); i++) {
-			if(nplist.get(i)!=null) {
-				for(int j=0; j<nplist.get(i).size(); j++) {
-					current = nplist.get(i).get(j);
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(listofmeasures.get(i)!=null) {
+				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+					current = listofmeasures.get(i).getMeasure().get(j);
 					if(j!=0) {
-						prev = nplist.get(i).get(j-1);
+						prev = listofmeasures.get(i).getMeasure().get(j-1);
 						//current note has a chord
 						if(current.getNote().getChord()!=null) {
 							//stem is up

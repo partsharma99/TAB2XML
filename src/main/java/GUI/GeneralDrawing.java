@@ -68,19 +68,20 @@ public class GeneralDrawing {
 				drawInstLines(barlineholder.get(i).getTopofstaff(), numoflines, yInc, maxX, pane);
 			}
 		}
+//		drawInstLines(barlineholder.get(barlineholder.size()-1).getTopofstaff()+
 	}
 
-	public static void drawBarLinesHelper(ArrayList<barlineinfo> barlineholder, String instName, double yInc, Pane pane) {
-		double lengthofbar = 0;
-		if(instName.equalsIgnoreCase("Guitar")) {
-			lengthofbar = 5*yInc;
-		}
-		else if(instName.equalsIgnoreCase("Bass")) {
-			lengthofbar = 3*yInc;
-		}
-		else if(instName.equalsIgnoreCase("Drumset")) {
-			lengthofbar = 4*yInc;
-		}
+	public static void drawBarLinesHelper(ArrayList<barlineinfo> barlineholder, double lengthofbar, Pane pane) {
+//		double lengthofbar = 0;
+//		if(instName.equalsIgnoreCase("Guitar")) {
+//			lengthofbar = 5*yInc;
+//		}
+//		else if(instName.equalsIgnoreCase("Bass")) {
+//			lengthofbar = 3*yInc;
+//		}
+//		else if(instName.equalsIgnoreCase("Drumset")) {
+//			lengthofbar = 4*yInc;
+//		}
 		for(int i=0; i<barlineholder.size(); i++) {
 			drawLine(barlineholder.get(i).getXpos(), 
 					barlineholder.get(i).getTopofstaff(), 

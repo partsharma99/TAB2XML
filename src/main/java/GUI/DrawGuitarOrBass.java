@@ -8,20 +8,20 @@ import javafx.scene.text.Text;
 
 public class DrawGuitarOrBass {
 
-	public static void drawGBNotes(ArrayList<ArrayList<NoteAndPos>> nplist, Pane pane) {
+	public static void drawGBNotes(ArrayList<measureinfo> listofmeasures, Pane pane) {
 		String notenum = "";
 		double xcord = 0;
 		double ycord = 0;
-		for(int i=0; i<nplist.size(); i++) {
-			if(nplist.get(i)!=null) {
-				for(int j=0; j<nplist.get(i).size(); j++) {
-					xcord = nplist.get(i).get(j).getX();
-					ycord = nplist.get(i).get(j).getY();
-					notenum = "" + nplist.get(i).get(j).getNote().getNotations().getTechnical().getFret();
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(listofmeasures.get(i).getMeasure()!=null) {
+				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+					xcord = listofmeasures.get(i).getMeasure().get(j).getX();
+					ycord = listofmeasures.get(i).getMeasure().get(j).getY();
+					notenum = "" + listofmeasures.get(i).getMeasure().get(j).getNote().getNotations().getTechnical().getFret();
 					if(ycord>=pane.getMaxHeight()) {
 						pane.resize(pane.getMaxWidth(), pane.getMaxHeight()+100);
 					}
-					if(nplist.get(i).get(j).getNote().getGrace()!=null) {
+					if(listofmeasures.get(i).getMeasure().get(j).getNote().getGrace()!=null) {
 						GeneralDrawing.drawNotes(xcord, ycord, notenum, 6.5, pane);
 					}
 					else {
