@@ -196,48 +196,49 @@ public class ComponentClass {
     		}
     	}
     	
-    	//(2)
-    	//Grouping slurs.
     	for(int i=0; i<onlyslurlist.size(); i++) {
-    		current = onlyslurlist.get(i);
+    	current = onlyslurlist.get(i);
+    	
+    	//only checking for starting slurs
+    	if(current.getNote().getNotations().getListOfSlurs().size()==1 &&
+    	   current.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start")) {
     		
-    		//only checking for starting slurs
-    		if(current.getNote().getNotations().getListOfSlurs().size()==1 &&
-    		   current.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start")) {
+    		orderedslurlist.add(current);
+    		int holder = current.getNote().getNotations().getListOfSlurs().get(0).getNumber();
+    		
+    		int temp = i + 1;
+    		while(temp<onlyslurlist.size()) {
+    			next = onlyslurlist.get(temp);
     			
-    			orderedslurlist.add(current);
-    			int holder = current.getNote().getNotations().getListOfSlurs().get(0).getNumber();
-    			
-    			int temp = i + 1;
-    			while(temp<onlyslurlist.size()) {
-    				next = onlyslurlist.get(temp);
-    				
-    				//if the next note has already been added to the ordered slur list then skip the check
-    				if(!(orderedslurlist.contains(next))) {
-    							        						
-    					//if next note is stop and start then add
-    					//the search for the last note in the slur continues
-    					if(next.getNote().getNotations().getListOfSlurs().size()==2 &&
-    					   next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start") &&
-    					   next.getNote().getNotations().getListOfSlurs().get(1).getType().equalsIgnoreCase("stop")){
-    						holder = next.getNote().getNotations().getListOfSlurs().get(1).getNumber();
-    						orderedslurlist.add(next);
-    					}
-    					//if next note is a stop then add
-    					//after this is reached that means that all the notes that are tied have been added in the same order
-    					//break from the loop to then stop the check as it is completed
-    					else if(next.getNote().getNotations().getListOfSlurs().size()==1 &&
-    							next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("stop") &&
-    							next.getNote().getNotations().getListOfSlurs().get(0).getNumber()==holder){
-    						orderedslurlist.add(next);
-    						orderedslurlist.add(null);
-	        				break;		
-    					}
+    			//if the next note has already been added to the ordered slur list then skip the check
+    			if(orderedslurlist.contains(next)==false) {
+    						        						
+    				//if next note is stop and start then add
+    				//the search for the last note in the slur continues
+    				if(next.getNote().getNotations().getListOfSlurs().size()==2 &&
+    				   next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start") &&
+    				   next.getNote().getNotations().getListOfSlurs().get(1).getType().equalsIgnoreCase("stop")){
+    					holder = next.getNote().getNotations().getListOfSlurs().get(1).getNumber();
+    					orderedslurlist.add(next);
     				}
-    				temp++;
+    				//if next note is a stop then add
+    				//after this is reached that means that all the notes that are tied have been added in the same order
+    				//break from the loop to then stop the check as it is completed
+    				else if(next.getNote().getNotations().getListOfSlurs().size()==1 &&
+    						next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("stop") &&
+    						next.getNote().getNotations().getListOfSlurs().get(0).getNumber()==holder){
+    					orderedslurlist.add(next);
+    					orderedslurlist.add(null);
+        				break;		
+    				}
     			}
+    			temp++;
     		}
     	}
+    }
+    	
+    	//(2)
+    	//Grouping slurs.
     	next = null;
     	current = null;
     	onlyslurlist = null;
@@ -473,7 +474,46 @@ public class ComponentClass {
 
 
 
-
+//or(int i=0; i<onlyslurlist.size(); i++) {
+//	current = onlyslurlist.get(i);
+//	
+//	//only checking for starting slurs
+//	if(current.getNote().getNotations().getListOfSlurs().size()==1 &&
+//	   current.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start")) {
+//		
+//		orderedslurlist.add(current);
+//		int holder = current.getNote().getNotations().getListOfSlurs().get(0).getNumber();
+//		
+//		int temp = i + 1;
+//		while(temp<onlyslurlist.size()) {
+//			next = onlyslurlist.get(temp);
+//			
+//			//if the next note has already been added to the ordered slur list then skip the check
+//			if(orderedslurlist.contains(next)==false) {
+//						        						
+//				//if next note is stop and start then add
+//				//the search for the last note in the slur continues
+//				if(next.getNote().getNotations().getListOfSlurs().size()==2 &&
+//				   next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start") &&
+//				   next.getNote().getNotations().getListOfSlurs().get(1).getType().equalsIgnoreCase("stop")){
+//					holder = next.getNote().getNotations().getListOfSlurs().get(1).getNumber();
+//					orderedslurlist.add(next);
+//				}
+//				//if next note is a stop then add
+//				//after this is reached that means that all the notes that are tied have been added in the same order
+//				//break from the loop to then stop the check as it is completed
+//				else if(next.getNote().getNotations().getListOfSlurs().size()==1 &&
+//						next.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("stop") &&
+//						next.getNote().getNotations().getListOfSlurs().get(0).getNumber()==holder){
+//					orderedslurlist.add(next);
+//					orderedslurlist.add(null);
+//    				break;		
+//				}
+//			}
+//			temp++;
+//		}
+//	}
+//}
 
 
 
