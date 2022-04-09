@@ -3,6 +3,7 @@ package GUI;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -10,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import javafx.scene.text.Text;
+import utility.Range;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.NoteHead2;
@@ -25,15 +27,30 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
 
+import org.fxmisc.richtext.CodeArea;
+
+import converter.Converter;
+import converter.measure.TabMeasure;
+
 public class PreviewMXLController {
 	
 	@FXML public Canvas canvas;
 	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
+	@FXML public CodeArea mainText;
 	public FXMLLoader loader;
+	private ArrayList<NoteAndPos> notePositions;
+	public Converter converter;
 	
-	
+	public ArrayList<NoteAndPos> getNotePositions() {
+		return notePositions;
+	}
+
+	public void setNotePositions(ArrayList<NoteAndPos> notePositions) {
+		this.notePositions = notePositions;
+	}
+
 	private MainViewController mvc;
 	@FXML private Pane pane;
 	
@@ -41,10 +58,46 @@ public class PreviewMXLController {
 	public void savePDF() {
 	}
 	
-	@FXML
-	public void handleGotoMeasure() {
+	
+	public boolean goToMeasure(int measureCount) {
+		int measure = 0;
+		for(int i = 0; i< this.notePositions.size(); i++) {
+			if(i == measureCount) {
+				measure = i;
+			}
+		}
+		 double z = notePositions.get(measure).getMeasureNum();
+		 double x = notePositions.get(measure).getX();
+		 double y = notePositions.get(measure).getY();
+//		 TabMeasure measure1 = converter.getScore().getMeasure(measure);
+//		 if (measure1 == null) return false;
+//	     List<Range> linePositions = measure1.getRanges();
+//	     int pos = linePositions.get(0).getStart();
+	     int x1 = (int) x;
+	     int y1 = (int) y;
+	     mainText.moveTo(x1, y1);
+	     mainText.requestFollowCaret();
+	     mainText.requestFocus();
+	     return true;
 	}
 	
+	@FXML
+	private void handleGotoMeasure() {
+		
+		int measureNumber = Integer.parseInt( gotoMeasureField.getText() );
+		if (!goToMeasure(measureNumber)) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setContentText("Measure " + measureNumber + " could not be found.");
+			alert.setHeaderText(null);
+			alert.show();
+		}
+	}
+	
+	
+	@FXML
+	public void handleSpaceBetweenNotes(){
+		
+	}
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
     }
@@ -171,6 +224,7 @@ public class PreviewMXLController {
 		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
 		        	ArrayList<NoteAndPos> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
+		        	this.setNotePositions(gBNPlist);
 		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, pane);
 		        	ArrayList<NoteAndPos> gracelist = ComponentClass.getGracList(gBNPlist);
 		        	DrawGuitarOrBass.drawGBGraces(gracelist, pane);
