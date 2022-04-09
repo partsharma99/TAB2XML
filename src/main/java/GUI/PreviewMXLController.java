@@ -163,22 +163,29 @@ public class PreviewMXLController {
 		        
 	        	double startx = 66;
 	        	double starty = 66;
-	        	double xInc = 15;
-	        	double yInc = 13;
+	        	double xInc = 20;
+	        	double yInc = 20;
 	        	double basexInc = 10;
 	        	int diffbwstaves = 6;
+	        	double font = 20;
+	        	double gracefont = font/2;
+	        	
 		        
 		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
 		        	ArrayList<measureinfo> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
-//		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, pane);
-//		        	ArrayList<NoteAndPos> gracelist = ComponentClass.getGracList(gBNPlist);
-//		        	DrawGuitarOrBass.drawGBGraces(gracelist, pane);
-//		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(gBNPlist, instName);
-//		        	DrawGuitarOrBass.drawGBTies(tielist, this.pane.getMaxWidth(), pane);
-//		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
-//		        	DrawGuitarOrBass.drawGBSlurs(slurlist, this.pane.getMaxWidth(), pane);
+		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, font, gracefont, pane);
+		        	ArrayList<ArrayList<NoteAndPos>> gracelist = ComponentClass.getGracList(gBNPlist);
+		        	DrawGuitarOrBass.drawGBGraces(gracelist, font, gracefont, yInc, pane);
+		        	gracelist = null;
+		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(gBNPlist, instName);
+		        	DrawGuitarOrBass.drawGBTies(tielist, font, yInc, this.pane.getMaxWidth(), pane);
+		        	tielist = null;
+		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
+		        	DrawGuitarOrBass.drawGBSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
+		        	slurlist = null;
 		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
+		        	beamlist = null;
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {

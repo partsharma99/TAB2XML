@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.layout.Pane;
-import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.Part2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
@@ -12,131 +11,69 @@ import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 public class InstCordPos2 {
 
 	public static ArrayList<measureinfo> getListofPositions(ScorePartwise2 sc, String instName, List<Note2> notelist, double xstart, double ystart, 
-			double xincrement, double yincrement, 
-			double baseincrement, int diffbwstaves, double maxX,
-			Pane pane) {
-
+																													  double xincrement, double yincrement, 
+																													  double baseincrement, int diffbwstaves, double maxX,
+																													  Pane pane) {
+		//(1)
+		//Create and initialize the primary note positioning variables.
+		//////////////////////////////////////////////////////////////////////////////
 		double startx = 0;
 		double starty = 0;
 		double xInc = 0;
 		double yInc = 0;
-		int staffcounter = 1;
-
-		//////////////////////////////////////////////////////////////////////////////
-
 		startx = xstart;
 		starty = ystart;
 		xInc = xincrement;
 		yInc = yincrement;
-
-		//////////////////////////////////////////////////////////////////////////////	
+		//////////////////////////////////////////////////////////////////////////////
+		
+		//(2)
+		//Create and initialize helper variables for the note positioning.
+		//////////////////////////////////////////////////////////////////////////////
+		
+		//a)
+		//Pointers to note and measures
 		NoteAndPos currentn = null;
 		NoteAndPos prevn = null;
-
-		//		int numOfMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
-		//
-		//		ArrayList <Note2> measureI = new ArrayList<Note2>(); 
-		//		ArrayList <ArrayList<NoteAndPos>> nplist = new ArrayList<>();
-		//
-		//		NoteAndPos prev = null;
-		//		NoteAndPos current = null;
-
-		ArrayList<barlineinfo> barlineholder= new ArrayList <>();
+		measureinfo currentm = null;
+		measureinfo prevm = null;
+		//////////////////////////////////////////////////////////////
+		
+		//b)
+		//Helper variables for horizontal drawing component.
+		int staffcounter = 1;
 		int nctotal = 0;
-
-		double emptymeasuresize = 100;
+		double totaldurationI = 0;
 		double measuremarker = startx;
 		boolean first = false;
-
+		double emptymeasuresize = 100;
 		int temp = 0;
-		double totaldurationI = 0;
-
+		double distance = 0;
+		//////////////////////////////////////////////////////////////
+		
+		//c)
+		//Helper variables for vertical drawing component.
+		double ycord = 0;
 		double ydiff = 0;
-		double tempydiff = 0;
 		int numofspaces = 0;
-		double tempstarty = 0;
 		double lengthofbar = 0;
-
+		double tempstarty = 0;
+		double tempydiff = 0;
 		//////////////////////////////////////////////////////////////////////////////
-
-		//		//Creating array of measures for sheet music.
-		//		for(int i=0; i<numOfMeasures; i++) {
-		//			if(ListOfMeasureAndNote.getNotesInMeasureI(sc, i)==null) {
-		//				nplist.add(i, null);
-		//			}
-		//			else {
-		//				measureI = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
-		//				ArrayList<NoteAndPos> measurelist = new ArrayList<>();
-		//				for(int j=0; j<measureI.size(); j++) {
-		//					NoteAndPos np = new NoteAndPos(0, 0, i+1, measureI.get(j), startx, 0);
-		//					measurelist.add(j, np);
-		//				}
-		//				nplist.add(i, measurelist);
-		//			}	
-		//		}
-
-		//		//Putting the notes on the corresponding string for the guitar or bass.
-		//		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("bass")) {
-		//			for(int i=0; i<nplist.size(); i++) {
-		//				if(nplist.get(i)!=null) {			
-		//					for(int j=0; j<nplist.get(i).size(); j++) {
-		//						double ycord = nplist.get(i).get(j).getNote().getNotations().getTechnical().getString();
-		//						nplist.get(i).get(j).setY(yInc * (ycord-1)+(starty+5));
-		//					}
-		//				}
-		//			}
-		//		}
-
-		//		//Putting the notes in the corresponding spot for the drum-set.
-		//		else if(instName.equalsIgnoreCase("Drumset")) {
-		//			String scoreInstName = "";
-		//			double ycord = 0;
-		//			for(int i=0; i<nplist.size(); i++) {
-		//				if(nplist.get(i)!=null) {
-		//					for(int j=0; j<nplist.get(i).size(); j++) {
-		//						if(nplist.get(i).get(j).getNote().getInstrument()!=null) {
-		//							scoreInstName = nplist.get(i).get(j).getNote().getInstrument().getId();
-		//							if(scoreInstName.equalsIgnoreCase("P1-I50")) {
-		//								ycord = starty-yInc;
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I43")) {
-		//								ycord = starty-(0.5*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I52")) {
-		//								ycord = starty-(0*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I48")) {
-		//								ycord = starty+(0.5*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I46")) {
-		//								ycord = starty+yInc;
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I39")) {
-		//								ycord = starty+(1.5*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I44")) {
-		//								ycord = starty+(2.5*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I42")) {
-		//								ycord = starty+(3*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I36")) {
-		//								ycord = starty+(3.5*yInc);
-		//							}
-		//							else if(scoreInstName.equalsIgnoreCase("P1-I45")) {
-		//								ycord = starty+(4.5*yInc);
-		//							}
-		//							nplist.get(i).get(j).setY(ycord);
-		//						}
-		//					}
-		//				}
-		//			}
-		//		}
-
+		
+		//(3)
+		//Arraylist holders: hold information to be used to help position and draw notes and other visual components
 		ArrayList<Part2> partlist = new ArrayList<>(sc.getListOfParts());
 		ArrayList<measureinfo> listofmeasures = new ArrayList<>();
 		ArrayList<NoteAndPos> measurelist = null;
-
+		ArrayList <measureinfo> staffholder = new ArrayList<>();
+		ArrayList<barlineinfo> barlineholder= new ArrayList <>();
+		ArrayList<barlineinfo> topofstaff = new ArrayList<>();
+		ArrayList<Double> maxbeami = new ArrayList<>();
+		//////////////////////////////////////////////////////////////////////////////
+		
+		//(4)
+		//Getting all the measures that are inside the sheet music.	
 		for(int i=0; i<partlist.size(); i++) {
 			if(partlist.get(i)!=null && partlist.get(i).getListOfMeasures()!=null) {
 				for(int j=0; j<partlist.get(i).getListOfMeasures().size(); j++) {
@@ -144,7 +81,7 @@ public class InstCordPos2 {
 						if(partlist.get(i).getListOfMeasures().get(j).getListOfNotes()!=null) {
 							measurelist = new ArrayList<>();
 							for(int k=0; k<partlist.get(i).getListOfMeasures().get(j).getListOfNotes().size(); k++) {
-								measurelist.add(new NoteAndPos(0, i+1, 0, j+1, partlist.get(i).getListOfMeasures().get(j).getListOfNotes().get(k), 0, 0, 0));
+								measurelist.add(new NoteAndPos(0, i+1, 0, 0, partlist.get(i).getListOfMeasures().get(j).getListOfNotes().get(k), 0, 0, 0));
 							}
 							listofmeasures.add(new measureinfo(i+1, measurelist, null, null));
 						}
@@ -156,21 +93,25 @@ public class InstCordPos2 {
 			}
 		}
 		
+		//(5.1)
+		//*Conditional step*
+		//Placing guitar or bass notes on there strings
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("bass")) {
 			for(int i=0; i<listofmeasures.size(); i++) {
 				if(listofmeasures.get(i).getMeasure()!=null) {			
 					for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
-						double ycord = listofmeasures.get(i).getMeasure().get(j).getNote().getNotations().getTechnical().getString();
+						ycord = listofmeasures.get(i).getMeasure().get(j).getNote().getNotations().getTechnical().getString();
 						listofmeasures.get(i).getMeasure().get(j).setY(yInc * (ycord-1)+(starty+5));
 					}
 				}
 			}
 		}
-
-		//Putting the notes in the corresponding spot for the drum-set.
+		
+		//(5.2)
+		//*Condiotnal step*
+		//Placing the drum notes according to there id.
 		else if(instName.equalsIgnoreCase("Drumset")) {
 			String scoreInstName = "";
-			double ycord = 0;
 			for(int i=0; i<listofmeasures.size(); i++) {
 				if(listofmeasures.get(i).getMeasure()!=null) {
 					for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
@@ -212,7 +153,9 @@ public class InstCordPos2 {
 				}
 			}
 		}
-
+		
+		//(6)
+		//Setting the types for each of the notes.
 		for(int i=0; i<listofmeasures.size(); i++) {
 			if(listofmeasures.get(i).getMeasure()!=null) {
 				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
@@ -237,21 +180,21 @@ public class InstCordPos2 {
 				}
 			}
 		}
-
-		ArrayList<NoteAndPos>currentm = null;
-		ArrayList <measureinfo> staffholder = new ArrayList<>();
+		
+		//(7)
+		//Setting the x-cordinate for each of the notes.
 		for(int i=0; i<listofmeasures.size(); i++) {
-			currentm = listofmeasures.get(i).getMeasure();
-			if(currentm!=null) {
-				nctotal = getNumberofnonchorded(currentm);
+			measurelist = listofmeasures.get(i).getMeasure();
+			if(measurelist!=null) {
+				nctotal = getNumberofnonchorded(measurelist);
 				if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-					totaldurationI = getTotalduration(currentm);
+					totaldurationI = getTotalduration(measurelist);
 				}
 				else if (instName.equalsIgnoreCase("Drumset")){
 					totaldurationI = 0;
 				}
-				for(int j=0; j<currentm.size(); j++) {
-					currentn = currentm.get(j);
+				for(int j=0; j<measurelist.size(); j++) {
+					currentn = measurelist.get(j);
 					//do not know if staff is in perfect condition
 					//add to staff holder until case 2 or case 3 are met
 					if(measuremarker+xInc+(nctotal*xInc)+totaldurationI<=maxX) {
@@ -276,18 +219,17 @@ public class InstCordPos2 {
 								}
 								//current note is not a chord
 								else {
-									currentn.setX(currentm.get(j-1).getX() + currentm.get(j-1).getNote().getDuration() + xInc);
+									currentn.setX(measurelist.get(j-1).getX() + measurelist.get(j-1).getNote().getDuration() + xInc);
 								}
 							}
 						}
 						//last note in measure
 						//set end of measure bar line
-						if(j+1==currentm.size()) {
+						if(j+1==measurelist.size()) {
 							measuremarker = currentn.getX() + currentn.getNote().getDuration() + xInc;
 							listofmeasures.get(i).setEndof(new barlineinfo(0, staffcounter, i+1, "full", measuremarker));
 							staffholder.add(listofmeasures.get(i));
 						}
-
 					}
 					//staff is not in perfect condition
 					//this means that the measures in the staff do not fill it up 
@@ -298,7 +240,9 @@ public class InstCordPos2 {
 							resizemeasure(listofmeasures.get(i), instName, xInc, true);
 							staffholder.add(listofmeasures.get(i));
 						}
-						resizestaff(staffholder, instName, startx, xInc, emptymeasuresize, maxX);
+						else {
+							resizestaff(staffholder, instName, startx, xInc, emptymeasuresize, maxX);
+						}
 						staffholder.clear();
 						staffholder = new ArrayList<measureinfo>();
 						measuremarker = startx;
@@ -335,30 +279,46 @@ public class InstCordPos2 {
 					}
 				}
 			}
-			if(listofmeasures.get(listofmeasures.size()-1)!=null) {
-				listofmeasures.get(listofmeasures.size()-1).setEndof(new barlineinfo(0, staffcounter, listofmeasures.size(), "full", maxX));
-			}
-			else {
-				listofmeasures.get(listofmeasures.size()-1).setEndof(new barlineinfo(0, staffcounter, listofmeasures.size(), "empty", maxX));
-			}
+		}
+		//(7.1)
+		//*Conditional Step*
+		//Setting end barline of last measure if it is not empty
+		if(listofmeasures.get(listofmeasures.size()-1)!=null) {
+			listofmeasures.get(listofmeasures.size()-1).setEndof(new barlineinfo(0,
+							   listofmeasures.get(listofmeasures.size()-1).getStartof().getStaffnum(), listofmeasures.size(), "full", maxX));
+		}
+		//(7.2)
+		//*Conditional Step*
+		//Setting end barline of last measure if it is empty
+		else {
+			listofmeasures.get(listofmeasures.size()-1).setEndof(new barlineinfo(0, 
+					           listofmeasures.get(listofmeasures.size()-1).getStartof().getStaffnum(), listofmeasures.size(), "empty", maxX));
 		}
 
-
-		//Reallignment
-		measureinfo current = null;
-		measureinfo prev = null;
+		//(8)
+		//Realligning any misalligned barlines in spite of resizing each measure in each staff.
 		for(int i=0; i<listofmeasures.size(); i++) {
-			current = listofmeasures.get(i);
+			currentm = listofmeasures.get(i);
 			if(i!=0) {
-				prev = listofmeasures.get(i-1);
-				if(prev.getEndof().getXpos()!=maxX && current.getStartof().getXpos()!=0) {
-					current.getStartof().setXpos(prev.getEndof().getXpos());
+				prevm = listofmeasures.get(i-1);
+				if(prevm.getEndof().getXpos()!=maxX && currentm.getStartof().getXpos()!=0) {
+					currentm.getStartof().setXpos(prevm.getEndof().getXpos());
 				}
 			}
 		}
-
-		//setting the staff number for the notes
-		temp = 0;
+		
+		//(9.1)
+		//Setting the measure number for each of the notes
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(listofmeasures.get(i).getMeasure()!=null) {
+				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+					listofmeasures.get(i).getMeasure().get(j).setMeasureNum(i+1);
+				}
+			}
+		}
+		
+		//(9.2)
+		//Setting the staff number for each of the notes. 
 		for(int i=0; i<listofmeasures.size(); i++) {
 			if(listofmeasures.get(i).getMeasure()!=null) {
 				temp = listofmeasures.get(i).getStartof().getStaffnum();
@@ -368,9 +328,8 @@ public class InstCordPos2 {
 			}
 		}
 
-		//Graces
-		double distance = 0;
-		//Shifting the notes that are graces, closer together for the guitar or drum-set.
+		//(10)
+		//Shifting all grace notes closer together.
 		for(int i=0; i<listofmeasures.size(); i++) {
 			if(listofmeasures.get(i).getMeasure()!=null) {
 				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
@@ -422,11 +381,11 @@ public class InstCordPos2 {
 				}
 			}
 		}
-
-		//Setting up an arraylist to hold the necessary barlines
-		barlineholder = new ArrayList<>();
+		
+		//(11)
+		//Setting up an arraylist to hold the necessary barlines.
 		for(int i=0; i<listofmeasures.size(); i++) {
-			//add start and end for each measure that is the start of a staff
+			//add start and end barlines for each measure that is the end measure of a staff
 			if(listofmeasures.get(i).getEndof().getXpos()==maxX) {
 				barlineholder.add(listofmeasures.get(i).getStartof());
 				barlineholder.add(listofmeasures.get(i).getEndof());
@@ -435,9 +394,9 @@ public class InstCordPos2 {
 				barlineholder.add(listofmeasures.get(i).getStartof());
 			}
 		}
-
-		//Setting the difference between each of the first lines of the different staves.
-		//Setting the length of the bar line corresponding to the instrument.
+		
+		//(12)
+		//Setting the number of spaces, the length of each bar line, and the difference b/w each of the top lines in each staff.
 		if(instName.equalsIgnoreCase("Guitar")) {
 			numofspaces = 5 + diffbwstaves;
 			ydiff = numofspaces*yInc;
@@ -453,8 +412,9 @@ public class InstCordPos2 {
 			ydiff = numofspaces*yInc;
 			lengthofbar = 3 * yInc;
 		}
-
-		//Setting the y-value of each note, given that there may be multiple staves.
+		
+		//(13)
+		//Setting the y-cordinate for each note, given that there may be multiple staves.
 		for(int i=0; i<listofmeasures.size(); i++) {
 			if(listofmeasures.get(i).getMeasure()!=null) {
 				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
@@ -466,28 +426,114 @@ public class InstCordPos2 {
 				}
 			}
 		}
-
-		//Setting the y-value for each bar line, given that there may be multiple staves.
+		//(14)
+		//Setting the y-cordinate for each bar line, given that there may be multiple staves.
 		for(int i=0; i<barlineholder.size(); i++) {
 			tempydiff = ydiff * (barlineholder.get(i).getStaffnum()-1);
 			tempstarty = starty + tempydiff;
 			barlineholder.get(i).setTopofstaff(tempstarty);
 		}
-
+		
+		//(15)
+		//Setting up an arraylist to hold the top y-coordinate for each of the top lines in each staff.
+		for(int i=0; i<barlineholder.size(); i++) {
+			//reached new staff so add
+			if(barlineholder.get(i).getXpos()==0) {
+				topofstaff.add(barlineholder.get(i));
+			}
+		}
+		
+		//(16.1)
+		//*Condiotional step*
+		//Setting up an arraylist that holds the middle y-cordinate between staves in the guitar and bass sheet music.
+		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
+			for(int i=0; i<topofstaff.size(); i++) {
+				if(i+1<topofstaff.size()) {
+					double top1 = topofstaff.get(i).getTopofstaff() + lengthofbar;
+					double top2 = topofstaff.get(i+1).getTopofstaff();
+					double middis = (top2 - top1)/2;
+					maxbeami.add(top1 + middis);
+				}
+				else {
+					double top1 = topofstaff.get(i).getTopofstaff() + lengthofbar;
+					double top2 = topofstaff.get(i).getTopofstaff() + ydiff;
+					double middis = (top2 - top1)/2;
+					maxbeami.add(top1 + middis);
+				}
+			}
+		}
+		
+		//(16.2)
+		//*Condiotional step*
+		//Setting up an arraylist that holds the middle y-cordinate between staves in the drumset sheet music.
+		else if(instName.equalsIgnoreCase("Drumset")) {
+			for(int i=0; i<topofstaff.size(); i++) {
+				if(i==0) {
+					double top1 = topofstaff.get(i).getTopofstaff();
+					double top2 = topofstaff.get(i).getTopofstaff() + lengthofbar - ydiff;
+					double middis = (top1 - top2)/2;
+					maxbeami.add(top1 - middis);
+				}
+				else {
+					double top1 = topofstaff.get(i).getTopofstaff();
+					double top2 = topofstaff.get(i-1).getTopofstaff() + lengthofbar;
+					double middis = (top1 - top2)/2;
+					maxbeami.add(top1 - middis);
+				}
+			}
+		}		
+		
+    	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(listofmeasures, sc, instName, pane);
+		NoteAndPos first1 = null;
+		NoteAndPos last = null;
+		int staffnum = 0;
+		
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(beamlist.get(i)!=null) {
+				for(int j=0; j<beamlist.get(i).size();) {
+					first1 = beamlist.get(i).get(j);
+ 					if(first1!=null) {
+						last = first1;
+						temp = j;
+						while(temp<beamlist.get(i).size() && beamlist.get(i).get(temp)!=null) {
+							temp++;
+						}
+						temp--;
+						last = beamlist.get(i).get(temp);
+						staffnum = beamlist.get(i).get(j).getStaffnum()-1;
+						GeneralDrawing.drawLine(first1.getX(), maxbeami.get(staffnum), last.getX(), maxbeami.get(staffnum), pane);
+						j = temp + 2;
+					}
+					else {
+						j++;
+					}
+				}
+			}
+		}
+		
+		//(17)
 		//Helps draw the instrument lines.
 		drawhelper1(barlineholder, instName, yInc, maxX, pane);
-
+		
+		//(18)
 		//Helps draw the bar lines.
 		drawhelper2(barlineholder, lengthofbar, pane);
-
+		
+		//(19)
 		//Helps draw the measure number above the bar lines.
 		drawHelper3(barlineholder, yInc, maxX, pane);
-
-		DrawGuitarOrBass.drawGBNotes(listofmeasures, pane);
-
+		
+		partlist = null;
+		measurelist = null;
+		staffholder = null;
+		barlineholder= null;
+		topofstaff = null;
+		maxbeami = null;
+		
 		return listofmeasures;
 	}
-
+	
+	//Hepler Method 1: Gets total duration of notes in a single measure.
 	private static double getTotalduration(ArrayList<NoteAndPos> currentMeasure) {
 		double total = 0;
 		for(int i=0; i<currentMeasure.size(); i++) {
@@ -497,7 +543,8 @@ public class InstCordPos2 {
 		}
 		return total;
 	}
-
+	
+	//Hepler Method 2: Gets total number of non-chorded notes in a single measure.
 	private static int getNumberofnonchorded(ArrayList<NoteAndPos> currentMeasure) {
 		int count = 0;
 		for(int i=0; i<currentMeasure.size(); i++) {
@@ -507,15 +554,18 @@ public class InstCordPos2 {
 		}
 		return count;
 	}
-
+	
+	//Helper Method 3: Helps draw instrument lines.
 	private static void drawhelper1(ArrayList<barlineinfo> barlineholder, String instName, double yInc, double maxX, Pane pane) {
 		GeneralDrawing.drawInstLinesHelper(barlineholder, instName, yInc, maxX, pane);
 	}
-
+	
+	//Helper Method 4: Helps draw barlines.
 	private static void drawhelper2(ArrayList<barlineinfo> barlineholder, double lengthofbar, Pane pane) {
 		GeneralDrawing.drawBarLinesHelper(barlineholder, lengthofbar, pane);
 	}
-
+	
+	//Helper Method 5: Helps draw measure numbers.
 	private static void drawHelper3(ArrayList<barlineinfo> barlineholder, double yInc, double maxX, Pane pane) {
 		for(int i=0; i<barlineholder.size(); i++) {
 			if(barlineholder.get(i).getXpos()!=maxX) {
@@ -523,7 +573,8 @@ public class InstCordPos2 {
 			}
 		}
 	}
-
+	
+	//Helper Method 6: Helps resize measure.
 	private static void resizemeasure(measureinfo m, String instName, double xInc, boolean firstinstaff) {
 		int nctotal = getNumberofnonchorded(m.getMeasure());
 		double dur = getTotalduration(m.getMeasure());
@@ -595,7 +646,8 @@ public class InstCordPos2 {
 			}
 		}
 	}
-
+	
+	//Helper Method 7: Helps resize staff.
 	private static void resizestaff(ArrayList<measureinfo> staffholder, String instName, double startx, double xInc, double emptymeasuresize, double maxX) {
 		int nonempty = 0;
 		double addtoeachm = 0;
