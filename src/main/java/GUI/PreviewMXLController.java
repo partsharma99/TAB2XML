@@ -1,153 +1,113 @@
 package GUI;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-//import javafx.application.Application;
+ import javafx.beans.property.BooleanProperty;
+ import javafx.beans.property.SimpleBooleanProperty;
+ //import javafx.application.Application;
+ import javafx.fxml.FXML;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-
-import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
-//import javafx.fxml.Initializable;
-//
-//import javafx.scene.*;
-
-import javafx.scene.canvas.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-
-import javafx.scene.text.Text;
-
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
-
-import utility.Range;
-
-import xml.to.sheet.converter.ListOfMeasureAndNote;
-import xml.to.sheet.converter.POJOClasses.Note2;
-import xml.to.sheet.converter.POJOClasses.NoteHead2;
+ import javafx.fxml.FXMLLoader;
+ import javafx.print.PageLayout;
+ import javafx.print.PageOrientation;
+ import javafx.print.Paper;
+ import javafx.print.Printer;
+ import javafx.print.PrinterJob;
+ //import javafx.fxml.Initializable;
+ //
+ //import javafx.scene.*;
+ import javafx.scene.canvas.*;
+ import javafx.scene.control.Button;
+ import javafx.scene.control.TextField;
+ import javafx.scene.image.ImageView;
+ import javafx.scene.image.WritableImage;
+ import javafx.scene.layout.AnchorPane;
+ import javafx.scene.layout.Pane;
+ import javafx.scene.paint.Color;
+ import javafx.scene.text.Font;
+ //import javafx.scene.text.FontWeight;
+ import javafx.scene.text.Text;
+ import javafx.scene.transform.Scale;
+ import javafx.scene.transform.Translate;
+ import xml.to.sheet.converter.ListOfMeasureAndNote;
+ import xml.to.sheet.converter.POJOClasses.Note2;
+ //import javafx.scene.paint.*;
+//import javafx.scene.text.Font;
+//import javafx.stage.Stage;
+//import javafx.stage.Window;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
-import xml.to.sheet.converter.POJOClasses.Tied2;
-import xml.to.sheet.converter.POJOClasses.Time2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
-
-import java.awt.geom.Arc2D;
 import java.io.IOException;
-
 //import java.io.IOException;
-
-import java.util.ArrayList;
-
 import java.util.List;
-
 //import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
+//import java.net.URL;
+//import java.util.ResourceBundle;
+//
+//import org.fxmisc.flowless.VirtualizedScrollPane;
+//import org.fxmisc.richtext.CodeArea;
+//import org.fxmisc.richtext.LineNumberFactory;
+//
+//import converter.Converter;
+/*
+Sample tab
+|-----------0-----|-0---------------|
+|---------0---0---|-0---------------|
+|-------1-------1-|-1---------------|
+|-----2-----------|-2---------------|
+|---2-------------|-2---------------|
+|-0---------------|-0---------------|
 
-import org.fxmisc.richtext.CodeArea;
-
-import converter.Converter;
-import converter.measure.TabMeasure;
-
-public class PreviewMXLController {
-	@FXML 
-	private AnchorPane anchorPane;
-	@FXML private Canvas canvas;
-	@FXML TextField gotoMeasureField;
-	@FXML Button gotoMeasureButton;
-
-	@FXML Button savePDF;
+ */
+ public class PreviewMXLController {
 
 
+ 	@FXML 
+ 	private AnchorPane anchorPane;
+ 	@FXML private Canvas canvas;
+ 	@FXML TextField gotoMeasureField;
+ 	@FXML Button gotoMeasureButton;
+ 	@FXML Button savePDF;
+ //	private GraphicsContext gc;
+ 	public FXMLLoader loader;
+ 	@FXML 
+ 	Button printPDF;
+ 	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
 
-	@FXML public CodeArea mainText;
+ //	@FXML
+ //	public void printPDF() {
+ //	}
 
-	public FXMLLoader loader;
+ 	@FXML
+ 	public void savePDF() {}
+ 	public <printButtonPressed> void printPDF() {
 
-	@FXML 
-	Button printPDF;
-	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-	
-//	@FXML
-//	public void printPDF() {
-//	}
+ 		Printer p = Printer.getDefaultPrinter();
+ 		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
+ 		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+ 		WritableImage snap = anchorPane.snapshot(null, null);
+ 		ImageView view = new ImageView(snap);
 
-	private ArrayList<NoteAndPos> notePositions;
-	public Converter converter;
+ 		double x = l.getPrintableWidth()/snap.getWidth();
+ 		double y = l.getPrintableHeight()/snap.getHeight();
 
-	
-	public ArrayList<NoteAndPos> getNotePositions() {
-		return notePositions;
+ 		view.getTransforms().add(new Scale(x, x));
+
+ 		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
+ 			Translate grid = new Translate(0, 0);
+ 			view.getTransforms().add(grid);
+ 			int currentPage = 0;
+ 			while(currentPage < Math.ceil(x/y)) {
+ 				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
+ 				sheetToPrint.printPage(l, view);
+ 				currentPage++;
+ 			}
+ 			sheetToPrint.endJob();
+ 		}
+ 	}
+
+ 	@FXML
+	public void handleGotoMeasure() {
 	}
-
-	public void setNotePositions(ArrayList<NoteAndPos> notePositions) {
-		this.notePositions = notePositions;
-	}
-
-	private MainViewController mvc;
-	@FXML private Pane pane;
-	
-	@FXML
-	public <printButtonPressed> void printPDF() {
-
-		Printer p = Printer.getDefaultPrinter();
-		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
-		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
-		WritableImage snap = anchorPane.snapshot(null, null);
-		ImageView view = new ImageView(snap);
-
-		double x = l.getPrintableWidth()/snap.getWidth();
-		double y = l.getPrintableHeight()/snap.getHeight();
-		
-		view.getTransforms().add(new Scale(x, x));
-
-		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
-			Translate grid = new Translate(0, 0);
-			view.getTransforms().add(grid);
-			int currentPage = 0;
-			while(currentPage < Math.ceil(x/y)) {
-				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
-				sheetToPrint.printPage(l, view);
-				currentPage++;
-			}
-			sheetToPrint.endJob();
-		}
-	}
-	
-	
-	public boolean goToMeasure(int measureCount) {
-		int measure = 0;
-		for(int i = 0; i< this.notePositions.size(); i++) {
-			if(i == measureCount) {
-				measure = i;
-			}
-		}
-		 double z = notePositions.get(measure).getMeasureNum();
-		 double x = notePositions.get(measure).getX();
-		 double y = notePositions.get(measure).getY();
-//		 TabMeasure measure1 = converter.getScore().getMeasure(measure);
-//		 if (measure1 == null) return false;
-//	     List<Range> linePositions = measure1.getRanges();
-//	     int pos = linePositions.get(0).getStart();
-	     int x1 = (int) x;
-	     int y1 = (int) y;
-	     mainText.moveTo(x1, y1);
-	     mainText.requestFollowCaret();
-	     mainText.requestFocus();
-	     return true;
-	}
-
-
 //	public void drawLines() {
 //		gc = canvas.getGraphicsContext2D();
 //        gc.setFill(Color.WHITE);
@@ -184,28 +144,11 @@ public class PreviewMXLController {
 //	@Override
 //	public void start(Stage primaryStage) throws Exception {
 //	}
-
 	
- 
-
+    private MainViewController mvc;
+	@FXML 
+    private Pane pane;
 	
-	@FXML
-	private void handleGotoMeasure() {
-		
-		int measureNumber = Integer.parseInt( gotoMeasureField.getText() );
-		if (!goToMeasure(measureNumber)) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setContentText("Measure " + measureNumber + " could not be found.");
-			alert.setHeaderText(null);
-			alert.show();
-		}
-	}
-	
-	
-	@FXML
-	public void handleSpaceBetweenNotes(){
-		
-	}
 	public void setMainViewController(MainViewController mvcInput) {
 		mvc = mvcInput;
     }
@@ -240,7 +183,10 @@ public class PreviewMXLController {
         	}
      	}
  	}	
-
+    public void drawSmallLine(int x) {
+    	DrawLine dl = new DrawLine(x-5 , -5,x+10 , -5);
+    	pane.getChildren().add(dl.getLine());
+    }
     //TAB = guitar; (II) = bass and drum;
     public void drawClef(String symbol, double x, double y) {
         if (symbol.equalsIgnoreCase("TAB")) {
@@ -262,12 +208,14 @@ public class PreviewMXLController {
             }
         }
     }
-
     //Change the bar line length depending on the instrument
     private void barLines(double x, double y, String instrument) throws JAXBException {
     	if (instrument.equalsIgnoreCase("Guitar")) {
+    		if(getlimit()!=1) {
+    			System.out.println(getlimit());
     		DrawLine middleBar = new DrawLine(x, y, x, y + 64);
     		pane.getChildren().add(middleBar.getLine());
+    		}
         	DrawLine endBar = new DrawLine(x + 470, y, x + 470, y + 64);
           	pane.getChildren().add(endBar.getLine());
     	}
@@ -285,204 +233,134 @@ public class PreviewMXLController {
     	}
     }
     
-    public void drawNotes(double x, double y, String a, double fontsize) {
-    	Text t = new Text(x, y, a);
-        t.setFont(Font.font("Times New Roman", fontsize));
-        pane.getChildren().add(t);
+    public void drawNotes(double x, double y,String a,int f) {
+    	String num = a;
+    	 Text t = new Text(x, y, a);
+         t.setFont(Font.font("calibri", f));
+         pane.getChildren().add(t);
+    	
     }
-    
-    public void drawCircle(double x, double y) {
-        DrawCircle circle = new DrawCircle(x, y); 
+         public void drawCircle(double x, double y) {
+         DrawCircle circle = new DrawCircle(x, y,1); 
     	pane.getChildren().add(circle.getCircle());
-    }
-    
-    public void drawQuad(double startX, double startY,  double controlX, double controlY, double endX, double endY) {
-    	DrawQuad quad = new DrawQuad(startX, startY, controlX, controlY, endX, endY);
-    	pane.getChildren().add(quad.getQuadcurve());
-    }
-    
-
+         }
+         
+         public void drawVerticalLines(int x, int y) {
+        	 DrawLine line = new DrawLine(x, -25, x, y);
+        	 pane.getChildren().add(line.getLine());
+         }
     //Update the GUI
     
-//    public double getlimit() throws JAXBException {
-//    	ScorePartwise2 sc;
-//		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-//
-//    	 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
-//    	 double limit = Math.ceil(numMeasures/2);
-//    			 if(limit==0) {
-// 	    			limit=1;
-// 	    		}
-//
-//		return limit;	
-//    }
-    
-    public void drawTimeSignature(double x, double y, String instrument, int beats, int beatType) {
-    	if (instrument.equalsIgnoreCase("Guitar")) {
-    		y = y + 3.5;
-    		Text topNum = new Text(x, y, Integer.toString(beats));
-    		topNum.setFont(Font.font("calibri", 40));
-     		y += 31;
-     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
-     		lowerNum.setFont(Font.font("calibri", 40));
-     		pane.getChildren().add(topNum);
-     		pane.getChildren().add(lowerNum);
-    	}
-    	else if (instrument.equalsIgnoreCase("Drumset")) {
-    		y = y - 4;
-    		Text topNum = new Text(x, y, Integer.toString(beats));
-    		topNum.setFont(Font.font("calibri", 30));
-     		y += 24;
-     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
-     		lowerNum.setFont(Font.font("calibri", 30));
-     		pane.getChildren().add(topNum);
-     		pane.getChildren().add(lowerNum);
-    	}
-    	else {
-    		y = y - 9;
-    		Text topNum = new Text(x, y, Integer.toString(beats));
-    		topNum.setFont(Font.font("calibri", 24));
-     		y += 18;
-     		Text lowerNum = new Text(x, y, Integer.toString(beatType));
-     		lowerNum.setFont(Font.font("calibri", 24));
-     		pane.getChildren().add(topNum);
-     		pane.getChildren().add(lowerNum);
-    	}
- 	}
-    
-
-    public void update() throws IOException {
+    public double getlimit() throws JAXBException {
+    	ScorePartwise2 sc;
+		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
+    	 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+    	 double limit = Math.ceil(numMeasures/2);
+    			 if(limit==0) {
+ 	    			limit=1;
+ 	    		}
+		return limit;
+    	
+    	
+    }
+    public void update() throws IOException { 	
+    	int barx = 0;
     	ScorePartwise2 sc;
 		try {
-	      		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-	      		double numMeasures = sc.getListOfParts().get(0).getListOfMeasures().size();
-			    String instName = sc.getPartlist().getScorepart().get(0).getPartname();
-			    String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
-			    List <Note2> notelist  = ListOfMeasureAndNote.getlistOfNotes(sc);
-			    Time2 time = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime();
-			    
-			    
-
-			    int y = 0;
-		        double limit = Math.ceil(numMeasures/2);
-		  
-//		        for (int i = 1; i <= limit; i++) {
-//		        	instrumentMusicLines(instName, y);
-//		            //Draw TAB
-//		            drawClef(cleff, 6, 20+y);
-//		            //Draw Bar lines
-////		            barLines(450, y, instName);
-////		              y += 120;
-//		            if(time != null) {
-//		            	drawTimeSignature( 35, 28+y, instName, sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime().getBeats(), sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getTime().getBeattype());
-//		            }
-//		          }
-
-		        
-	        	double startx = 66;
-	        	double starty = 66;
-	        	double xInc = 20;
-	        	double yInc = 20;
-	        	double basexInc = 10;
-	        	int diffbwstaves = 6;
-	        	double font = 20;
-	        	double gracefont = font/2;
-	        	
-		        
-		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-		        	ArrayList<measureinfo> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
-		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
-
-		        	//this.setNotePositions(gBNPlist);
-
-		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, font, gracefont, pane);
-		        	ArrayList<ArrayList<NoteAndPos>> gracelist = ComponentClass.getGracList(gBNPlist);
-		        	DrawGuitarOrBass.drawGBGraces(gracelist, font, gracefont, yInc, pane);
-		        	gracelist = null;
-
-		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(gBNPlist, instName);
-		        	DrawGuitarOrBass.drawGBTies(tielist, font, yInc, this.pane.getMaxWidth(), pane);
-		        	tielist = null;
-		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
-		        	DrawGuitarOrBass.drawGBSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
-		        	slurlist = null;
-		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
-		        	beamlist = null;
-		        }
-		        
-		        else if(instName.equalsIgnoreCase("Drumset")) {
-		        	ArrayList<measureinfo> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
-		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
-//		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
-//		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
-//		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
-		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
-		        	System.out.println("x");
-		        }
-		        
-//				else if(instName.equalsIgnoreCase("bass")) {
-//				for(int i=0; i<numOfMeasures; i++) {
-//					if(ListOfMeasureAndNote.getNotesInMeasureI(sc, i)==null) {
-//						measuremarker+=(3*(nplist.get(index-2).getNote().getDuration()+basexInc));
-//						continue;
-//					}
-//					else {
-//						measureI = ListOfMeasureAndNote.getNotesInMeasureI(sc, i);
-//						while(temp<measureI.size()) {
-//							durationtotalI+=measureI.get(temp).getDuration();
-//							temp++;
-//						}
-//						tempdurationtotalI = durationtotalI;
-//						durationtotalI=0;
-//						temp=0;
-//					}
-//					for(int j=0; j<measureI.size(); j++) {
-//						if(j==0) {
-//							if((measuremarker+((measureI.size()*basexInc) + tempdurationtotalI))<=maxX){
-//								if(index==0) {
-//									nplist.get(index).setX(startx);
-//									firstnotestaffI.add(nplist.get(index));
-//								}
-//								else {
-//									if(nplist.get(index).getNote().getChord()!=null) {
-//										nplist.get(index).setX(nplist.get(index-1).getX());
-//									}
-//									else {
-//										nplist.get(index).setX(nplist.get(index-1).getX() + 
-//												(nplist.get(index-1).getNote().getDuration()+basexInc));
-//									}
-//								}
-//							}
-//							else {
-//								nplist.get(index).setX(startx);
-//								firstnotestaffI.add(nplist.get(index-1));
-//								firstnotestaffI.add(null);
-//								firstnotestaffI.add(nplist.get(index));
-//							}
-//						}
-//						else {
-//							if(nplist.get(index).getNote().getChord()!=null) {
-//								nplist.get(index).setX(nplist.get(index-1).getX());
-//							}
-//							else {
-//								nplist.get(index).setX(nplist.get(index-1).getX() + 
-//										(nplist.get(index-1).getNote().getDuration()+basexInc));
-//							}
-//						}
-//						if(j+1==measureI.size()) {
-//							measuremarker = nplist.get(index).getX() + (nplist.get(index).getNote().getDuration()+basexInc);
-//						}
-//						if(i+1==numOfMeasures && j+1==measureI.size()) {
-//							firstnotestaffI.add(nplist.get(index));
-//							firstnotestaffI.add(null);
-//						}
-//						nplist.get(index).setMeasureNum(i);
-//						index++;
-//					}
-//				} 
+			sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
+			// int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
+			 List<Note2> notes = ListOfMeasureAndNote.getlistOfNotes(sc);
+		     String instName = sc.getPartlist().getScorepart().get(0).getPartname();
+		     String cleff = sc.getListOfParts().get(0).getListOfMeasures().get(0).getAttributes().getClef().getSign();
+		   //Draw the Music lines on the GUI
+		      	int y = 0;
+		      	double limit = getlimit();
+	    		
+		    	if(instName.equals("Guitar")) {
+		    		y = 0;
+					int counter=1;
+		    		for(int i=0;i<notes.size();i++) {
+						int yy = notes.get(i).getNotations().getTechnical().getString();
+						int x;
+						int f=0;
+					//	System.out.println(notes.get(i).getChord()!=null);
+					//	System.out.println(counter);
+						if(notes.get(i).getGrace()!=null) {
+							f=11;
+						//	System.out.println("ran");
+							
+						}
+						else {
+							f=14;
+						}
+						double xpos=NoteInfo.notePos(notes,notes.get(i));
+						y=0+(yy-1)*13;
+						
+						drawNotes(xpos, y+5,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()),f);
+						
+					}
+		    	}
+		    	else if(instName.equals("Drumset")) {
+		    		int x = 50;
+		    		int y2 = 0;
+//		    		y = 0;
+		    		int count = 50;
+//		    		int x2 = x;
+		    		for(int i = 0; i < notes.size(); i++) {
+		    		if(notes.get(i).getNotehead() != null) {
+		    			if(notes.get(i).getInstrument().getId().equals("P1-I50")) {
+		    				drawSmallLine(x);
+		    				
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    			}
+		    			else {
+		    				drawNotes(x, y,String.valueOf(notes.get(i).getNotehead()),14);
+		    				drawVerticalLines(x+5, y);
+		    			}
+		    			
+		    			count = x;
+//		    			System.out.println(notes.get(i).getInstrument());
+		    			x+=30;
+		    		}
+		    		
+		    		else {
+		    			if(notes.get(i).getUnpitched().getDisplaystep().equals("C")) {
+		    				y2 = 20;
+		    			}
+		    			else if(notes.get(i).getUnpitched().getDisplaystep().equals("F")){
+		    				y2 = 45;
+		    			}
+//		    			if(notes.get(i).getInstrument().getId().equals("P1-I36")) {
+//		    				drawCircle(count + 10, y2);
+//		    			}
+//		    			else {
+		    				drawCircle(count, y2);
+			    			drawVerticalLines(count +5, y2);
+//		    			}
+		    			
+		    			//drawNotes(count, y2,String.valueOf(notes.get(i).getNotations().getTechnical().getFret()));
+		    			count+=20;
+		    		}
+		    		}
+		    	}
+		    	for (int i = 1; i <= limit; i++) {
+		    		y=0;
+		    		instrumentMusicLines(instName, y);
+		      		//Draw TAB
+		      		instrumentMusicLines(instName, y);
+		      		//Draw Clef
+		        	drawClef(cleff, 6, 20+y);
+		        	//Draw Bar lines
+		        	if(limit!=1) {
+		        	barLines(barx, y, instName);
+		        	}
+		        	barLines(450, y, instName);
+		      		y += 120;
+		      		
+		      	}
+		    	
 		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
     }
