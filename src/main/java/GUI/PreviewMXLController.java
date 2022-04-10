@@ -163,11 +163,11 @@ public class PreviewMXLController {
 		        
 	        	double startx = 50;
 	        	double starty = 50;
-	        	double xInc = 20;
-	        	double yInc = 13;
+	        	double xInc = 24;
+	        	double yInc = 30;
 	        	double basexInc = 10;
-	        	int diffbwstaves = 10;
-	        	double font = 25;
+	        	int diffbwstaves = 6;
+	        	double font = 30;
 	        	double gracefont = font/2;
 	        	
 		        
@@ -193,10 +193,11 @@ public class PreviewMXLController {
 		        	yInc = font;
 		        	ArrayList<measureinfo> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
-		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
-		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
-		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
-		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
+//		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
+//		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
+//		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
+//		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
+//		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
 		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
 		        }
 		        

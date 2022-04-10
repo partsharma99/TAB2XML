@@ -8,15 +8,12 @@ import xml.to.sheet.converter.POJOClasses.NoteHead2;
 public class DrawDrumset {
 
 	public static void drawDrumNotesAndStems(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, double yInc, Pane pane) {
-		NoteAndPos prev = null;
 		NoteAndPos current = null;
 		double xcord = 0;
 		double ycord = 0;
 		double half = 0.5*yInc;
 		double three4 = 0.75*yInc;
-		double maxstemheight = 0;
 		NoteHead2 notehead = null;
-		
 		//(1)
 		//Drawing the note heads for each note.
 		//iterating through list of measures to draw note heads for each note.
@@ -345,6 +342,7 @@ public class DrawDrumset {
 		}
 	}
 	
+
 	public static void drawBeams(ArrayList<ArrayList<NoteAndPos>> beamlist, ArrayList<Double> maxbeami, double yInc, Pane pane) {
 		NoteAndPos first1 = null;
 		NoteAndPos last = null;
@@ -394,16 +392,20 @@ public class DrawDrumset {
 							//if types are the same then beam are drawn
 							if(current2.getType()==beamlist.get(i).get(temp).getType()) {
 								if(current2.getType()==((double)1/16)) {
-									double y = maxbeami.get(current.getStaffnum()-1) + (0.75*yInc);
+									double y = maxbeami.get(current.getStaffnum()-1) + (0.5*yInc);
 									DrawLine dl = new DrawLine(current2.getX()+half, y, beamlist.get(i).get(temp).getX()+half, y);
 									dl.setWidth(0.25*yInc);
 									pane.getChildren().add(dl.getLine());
 								}
 								else if(current2.getType()==((double)1/32)) {
-									double y = maxbeami.get(current.getStaffnum()-1) + (1.25*yInc);
-									DrawLine dl = new DrawLine(current2.getX()+half, y, beamlist.get(i).get(temp).getX()+half, y);
-									dl.setWidth(0.25*yInc);
-									pane.getChildren().add(dl.getLine());
+									double y1 = maxbeami.get(current.getStaffnum()-1) + (0.5*yInc);
+									DrawLine dl1 = new DrawLine(current2.getX()+half, y1, beamlist.get(i).get(temp).getX()+half, y1);
+									dl1.setWidth(0.25*yInc);
+									pane.getChildren().add(dl1.getLine());
+									double y2 = maxbeami.get(current.getStaffnum()-1) + (1*yInc);
+									DrawLine dl2 = new DrawLine(current2.getX()+half, y2, beamlist.get(i).get(temp).getX()+half, y2);
+									dl2.setWidth(0.25*yInc);
+									pane.getChildren().add(dl2.getLine());
 								}
 							}
 							else {

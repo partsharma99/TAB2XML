@@ -500,7 +500,7 @@ public class InstCordPos2 {
 		//(20.1)
 		//*Condiotional step*
 		//Helps draw the beam, and stems for guitar.
-		if(instName.equals("Guitar") || instName.equalsIgnoreCase("Bass")) {
+		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
 			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
 			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
 		}	
@@ -508,10 +508,10 @@ public class InstCordPos2 {
 		//(20.2)
 		//*Condiotional step*
 		//Helps draw the beam, notes, and stem for drumset.
-		else if(instName.equals("Drumset")) {
+		else if(instName.equalsIgnoreCase("Drumset")) {
 			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
 			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
-		}	
+		}
 		
 		partlist = null;
 		measurelist = null;
@@ -570,7 +570,7 @@ public class InstCordPos2 {
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
 			DrawGuitarOrBass.drawStems(listofmeasures, maxbeami, beamlist, lengthofbar, yInc, pane);
 		}
-		else if(instName.equalsIgnoreCase("Dumset")) {
+		else if(instName.equalsIgnoreCase("Drumset")) {
 			DrawDrumset.drawDrumNotesAndStems(listofmeasures, maxbeami, yInc, pane);
 		}
 	}
@@ -581,7 +581,7 @@ public class InstCordPos2 {
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
 			DrawGuitarOrBass.drawBeams(beamlist, maxbeami, yInc, pane);
 		}
-		else if(instName.equalsIgnoreCase("Dumset")) {
+		else if(instName.equalsIgnoreCase("Drumset")) {
 			DrawDrumset.drawBeams(beamlist, maxbeami, yInc, pane);
 		}
 	}
