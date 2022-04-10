@@ -9,6 +9,8 @@ import GUI.MainViewController;
 import utility.MusicXMLCreator;
 import utility.ValidationError;
 
+import models.ScorePartwise;
+
 public class Converter {
 	//variables
 	//HEY

@@ -231,25 +231,103 @@ public class DrawGuitarOrBass {
 			}
 		}
 	}
-
-
 	
+	public static void drawStems(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami,  ArrayList<ArrayList<NoteAndPos>> beamlist, double lengthofbar, double yInc, Pane pane) {
+		NoteAndPos current = null;
+//		for(int i=0; i<listofmeasures.size(); i++) {
+//			if(listofmeasures.get(i).getMeasure()!=null) {
+//				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+//					current = listofmeasures.get(i).getMeasure().get(j);
+//					if(current.getNote().getChord()==null && current.getNote().getStem()!=null && beamlist.get(i).contains(current)==false) {
+//						GeneralDrawing.drawLine(current.getX(), current.getTopofstaff()+lengthofbar+yInc, current.getX(), maxbeami.get(current.getStaffnum()-1),pane);
+//					}
+//				}
+//			}
+//		}
+		for(int i=0; i<beamlist.size(); i++) {
+			if(beamlist.get(i)!=null) {
+				for(int j=0; j<beamlist.get(i).size(); j++) {
+					current = beamlist.get(i).get(j);
+					if(current!=null) {
+						GeneralDrawing.drawLine(current.getX(), current.getTopofstaff()+lengthofbar+yInc, current.getX(), maxbeami.get(current.getStaffnum()-1),pane);
+					}
+				}
+			}
+		}
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static void drawBeams(ArrayList<ArrayList<NoteAndPos>> beamlist, ArrayList<Double> maxbeami, double yInc, Pane pane) {
+		NoteAndPos first1 = null;
+		NoteAndPos last = null;
+		int staffnum = 0;
+		int temp = 0;
+		
+		for(int i=0; i<beamlist.size(); i++) {
+			if(beamlist.get(i)!=null) {
+				for(int j=0; j<beamlist.get(i).size();) {
+					first1 = beamlist.get(i).get(j);
+					if(first1!=null) {
+						last = first1;
+						temp = j;
+						while(temp<beamlist.get(i).size() && beamlist.get(i).get(temp)!=null) {
+							temp++;
+						}
+						temp--;
+						last = beamlist.get(i).get(temp);
+						staffnum = beamlist.get(i).get(j).getStaffnum()-1;
+						if(temp!=j) {
+							DrawLine dl = new DrawLine(first1.getX(), maxbeami.get(staffnum), last.getX(), maxbeami.get(staffnum));
+							dl.setWidth(0.25*yInc);
+							pane.getChildren().add(dl.getLine());
+						}
+						j = temp + 2;
+					}
+					else {
+						j++;
+					}
+				}	
+			}
+		}
+		first1 = null;
+		last = null;
+		temp = 0;
+		NoteAndPos current = null;
+		NoteAndPos current2 = null;
+		for(int i=0; i<beamlist.size(); i++) {
+			if(beamlist.get(i)!=null) {
+				for(int j=0; j<beamlist.get(i).size(); j++) {
+					current = beamlist.get(i).get(j);
+					if(current!=null) {
+						current2 = current;
+						temp = j + 1;
+						while(temp<beamlist.get(i).size() && beamlist.get(i).get(temp)!=null) {
+							//if types are the same then beam are drawn
+							if(current2.getType()==beamlist.get(i).get(temp).getType()) {
+								if(current2.getType()==((double)1/16)) {
+									double y = maxbeami.get(current.getStaffnum()-1) - (0.75*yInc);
+									DrawLine dl = new DrawLine(current2.getX(), y, beamlist.get(i).get(temp).getX(), y);
+									dl.setWidth(0.25*yInc);
+									pane.getChildren().add(dl.getLine());
+								}
+								else if(current2.getType()==((double)1/32)) {
+									double y = maxbeami.get(current.getStaffnum()-1) - (1.25*yInc);
+									DrawLine dl = new DrawLine(current2.getX(), y, beamlist.get(i).get(temp).getX(), y);
+									dl.setWidth(0.25*yInc);
+									pane.getChildren().add(dl.getLine());
+								}
+							}
+							else {
+							}
+							current2 = beamlist.get(i).get(temp);
+							temp++;
+						}
+						j = temp;
+					}
+				}
+			}
+		}
+		
+	}
 	
 //	if(i!=0) {
 //		prev = gracelist.get(i-1);

@@ -12,7 +12,7 @@ public class InstCordPos2 {
 
 	public static ArrayList<measureinfo> getListofPositions(ScorePartwise2 sc, String instName, List<Note2> notelist, double xstart, double ystart, 
 																													  double xincrement, double yincrement, 
-																													  double baseincrement, int diffbwstaves, double maxX,
+																													  double baseincrement, int diffbwstaves, double maxX, double font,
 																													  Pane pane) {
 		//(1)
 		//Create and initialize the primary note positioning variables.
@@ -132,7 +132,8 @@ public class InstCordPos2 {
 							else if(scoreInstName.equalsIgnoreCase("P1-I46")) {
 								ycord = starty+yInc;
 							}
-							else if(scoreInstName.equalsIgnoreCase("P1-I39")) {
+							else if(scoreInstName.equalsIgnoreCase("P1-I39") || 
+									listofmeasures.get(i).getMeasure().get(j).getNote().getRest()!=null) {
 								ycord = starty+(1.5*yInc);
 							}
 							else if(scoreInstName.equalsIgnoreCase("P1-I44")) {
@@ -197,7 +198,7 @@ public class InstCordPos2 {
 					currentn = measurelist.get(j);
 					//do not know if staff is in perfect condition
 					//add to staff holder until case 2 or case 3 are met
-					if(measuremarker+xInc+(nctotal*xInc)+totaldurationI<=maxX) {
+					if(measuremarker+xInc+(nctotal*xInc)+totaldurationI<maxX) {
 						//first entity
 						if(!first) {
 							currentn.setX(measuremarker+xInc);
@@ -243,7 +244,7 @@ public class InstCordPos2 {
 						else {
 							resizestaff(staffholder, instName, startx, xInc, emptymeasuresize, maxX);
 						}
-						staffholder.clear();
+						staffholder = null;
 						staffholder = new ArrayList<measureinfo>();
 						measuremarker = startx;
 						staffcounter++;
@@ -269,7 +270,7 @@ public class InstCordPos2 {
 					}
 					else {
 						resizestaff(staffholder, instName, startx, xInc, emptymeasuresize, maxX);
-						staffholder.clear();
+						staffholder = null;
 						staffholder = new ArrayList<measureinfo>();
 						staffcounter++;
 						measuremarker = emptymeasuresize;
@@ -426,6 +427,7 @@ public class InstCordPos2 {
 				}
 			}
 		}
+		
 		//(14)
 		//Setting the y-cordinate for each bar line, given that there may be multiple staves.
 		for(int i=0; i<barlineholder.size(); i++) {
@@ -483,34 +485,6 @@ public class InstCordPos2 {
 			}
 		}		
 		
-    	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(listofmeasures, sc, instName, pane);
-		NoteAndPos first1 = null;
-		NoteAndPos last = null;
-		int staffnum = 0;
-		
-		for(int i=0; i<listofmeasures.size(); i++) {
-			if(beamlist.get(i)!=null) {
-				for(int j=0; j<beamlist.get(i).size();) {
-					first1 = beamlist.get(i).get(j);
- 					if(first1!=null) {
-						last = first1;
-						temp = j;
-						while(temp<beamlist.get(i).size() && beamlist.get(i).get(temp)!=null) {
-							temp++;
-						}
-						temp--;
-						last = beamlist.get(i).get(temp);
-						staffnum = beamlist.get(i).get(j).getStaffnum()-1;
-						GeneralDrawing.drawLine(first1.getX(), maxbeami.get(staffnum), last.getX(), maxbeami.get(staffnum), pane);
-						j = temp + 2;
-					}
-					else {
-						j++;
-					}
-				}
-			}
-		}
-		
 		//(17)
 		//Helps draw the instrument lines.
 		drawhelper1(barlineholder, instName, yInc, maxX, pane);
@@ -523,6 +497,22 @@ public class InstCordPos2 {
 		//Helps draw the measure number above the bar lines.
 		drawHelper3(barlineholder, yInc, maxX, pane);
 		
+		//(20.1)
+		//*Condiotional step*
+		//Helps draw the beam, and stems for guitar.
+		if(instName.equals("Guitar") || instName.equalsIgnoreCase("Bass")) {
+			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
+			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
+		}	
+		
+		//(20.2)
+		//*Condiotional step*
+		//Helps draw the beam, notes, and stem for drumset.
+		else if(instName.equals("Drumset")) {
+			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
+			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
+		}	
+		
 		partlist = null;
 		measurelist = null;
 		staffholder = null;
@@ -532,8 +522,8 @@ public class InstCordPos2 {
 		
 		return listofmeasures;
 	}
-	
-	//Hepler Method 1: Gets total duration of notes in a single measure.
+
+	//Hepler Method 0.1: Gets total duration of notes in a single measure.
 	private static double getTotalduration(ArrayList<NoteAndPos> currentMeasure) {
 		double total = 0;
 		for(int i=0; i<currentMeasure.size(); i++) {
@@ -544,7 +534,7 @@ public class InstCordPos2 {
 		return total;
 	}
 	
-	//Hepler Method 2: Gets total number of non-chorded notes in a single measure.
+	//Hepler Method 0.2: Gets total number of non-chorded notes in a single measure.
 	private static int getNumberofnonchorded(ArrayList<NoteAndPos> currentMeasure) {
 		int count = 0;
 		for(int i=0; i<currentMeasure.size(); i++) {
@@ -555,22 +545,44 @@ public class InstCordPos2 {
 		return count;
 	}
 	
-	//Helper Method 3: Helps draw instrument lines.
+	//Helper Method 1: Helps draw instrument lines.
 	private static void drawhelper1(ArrayList<barlineinfo> barlineholder, String instName, double yInc, double maxX, Pane pane) {
 		GeneralDrawing.drawInstLinesHelper(barlineholder, instName, yInc, maxX, pane);
 	}
 	
-	//Helper Method 4: Helps draw barlines.
+	//Helper Method 2: Helps draw barlines.
 	private static void drawhelper2(ArrayList<barlineinfo> barlineholder, double lengthofbar, Pane pane) {
 		GeneralDrawing.drawBarLinesHelper(barlineholder, lengthofbar, pane);
 	}
 	
-	//Helper Method 5: Helps draw measure numbers.
+	//Helper Method 3: Helps draw measure numbers.
 	private static void drawHelper3(ArrayList<barlineinfo> barlineholder, double yInc, double maxX, Pane pane) {
 		for(int i=0; i<barlineholder.size(); i++) {
 			if(barlineholder.get(i).getXpos()!=maxX) {
-				GeneralDrawing.drawNotes(barlineholder.get(i).getXpos()-2, barlineholder.get(i).getTopofstaff()-(0.5*yInc), Integer.toString(barlineholder.get(i).getMeasureNum()), 10, pane);
+				GeneralDrawing.drawNotes(barlineholder.get(i).getXpos()-2, barlineholder.get(i).getTopofstaff()-(0.5*yInc), Integer.toString(barlineholder.get(i).getMeasureNum()), 12, pane);
 			}
+		}
+	}
+	
+	//Helper method 4: Helps draw the stems for the guitar and the notes, stems, and beams for the drumset.
+	private static void drawhelper4(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, String instName, double lengthofbar, double yInc, ScorePartwise2 sc, Pane pane) {
+		ArrayList<ArrayList<NoteAndPos>> beamlist = new ArrayList<ArrayList<NoteAndPos>>(ComponentClass.getBeamList(listofmeasures, sc, instName, pane));
+		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
+			DrawGuitarOrBass.drawStems(listofmeasures, maxbeami, beamlist, lengthofbar, yInc, pane);
+		}
+		else if(instName.equalsIgnoreCase("Dumset")) {
+			DrawDrumset.drawDrumNotesAndStems(listofmeasures, maxbeami, yInc, pane);
+		}
+	}
+	
+	//Hekper Method 5: Helps draw beams for the guitar and drumset.
+	private static void drawhelper5(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, String instName, double yInc, ScorePartwise2 sc, Pane pane) {
+		ArrayList<ArrayList<NoteAndPos>> beamlist = new ArrayList<ArrayList<NoteAndPos>>(ComponentClass.getBeamList(listofmeasures, sc, instName, pane));
+		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
+			DrawGuitarOrBass.drawBeams(beamlist, maxbeami, yInc, pane);
+		}
+		else if(instName.equalsIgnoreCase("Dumset")) {
+			DrawDrumset.drawBeams(beamlist, maxbeami, yInc, pane);
 		}
 	}
 	

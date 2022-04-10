@@ -22,17 +22,17 @@ public class GeneralDrawing {
 		pane.getChildren().add(quad.getQuadcurve());
 	}
 
-	public static void drawX(double xcord, double ycord, Pane pane) {
-		double x1 = xcord - 5; 
-		double y1 = ycord - 5;
-		double x1end = xcord + 5;
-		double y1end = ycord + 5;
+	public static void drawX(double xcord, double ycord, double font, Pane pane) {
+		double x1 = xcord - font; 
+		double y1 = ycord - font;
+		double x1end = xcord + font;
+		double y1end = ycord + font;
 		drawLine(x1, y1, x1end, y1end, pane);
 
-		double x2 = xcord - 5;
-		double y2 = ycord + 5;
-		double x2end = xcord + 5;
-		double y2end = ycord - 5;
+		double x2 = xcord - font;
+		double y2 = ycord + font;
+		double x2end = xcord + font;
+		double y2end = ycord - font;
 		drawLine(x2, y2, x2end, y2end, pane);
 	}
 
@@ -41,8 +41,8 @@ public class GeneralDrawing {
 		pane.getChildren().add(linelast.getLine());
 	}
 
-	public static void drawCircle(double xcord, double ycord, Pane pane) {
-		DrawCircle circle = new DrawCircle(xcord, ycord); 
+	public static void drawCircle(double xcord, double ycord, double font, Pane pane) {
+		DrawCircle circle = new DrawCircle(xcord, ycord, font); 
 		pane.getChildren().add(circle.getCircle());
 	}
 
@@ -68,20 +68,9 @@ public class GeneralDrawing {
 				drawInstLines(barlineholder.get(i).getTopofstaff(), numoflines, yInc, maxX, pane);
 			}
 		}
-//		drawInstLines(barlineholder.get(barlineholder.size()-1).getTopofstaff()+
 	}
 
 	public static void drawBarLinesHelper(ArrayList<barlineinfo> barlineholder, double lengthofbar, Pane pane) {
-//		double lengthofbar = 0;
-//		if(instName.equalsIgnoreCase("Guitar")) {
-//			lengthofbar = 5*yInc;
-//		}
-//		else if(instName.equalsIgnoreCase("Bass")) {
-//			lengthofbar = 3*yInc;
-//		}
-//		else if(instName.equalsIgnoreCase("Drumset")) {
-//			lengthofbar = 4*yInc;
-//		}
 		for(int i=0; i<barlineholder.size(); i++) {
 			drawLine(barlineholder.get(i).getXpos(), 
 					barlineholder.get(i).getTopofstaff(), 
@@ -89,5 +78,10 @@ public class GeneralDrawing {
 					barlineholder.get(i).getTopofstaff()+lengthofbar, 
 					pane);
 		}
+	}
+
+	public static void drawRectangle(double x, double y, double width, double height, Pane pane) {
+		DrawRectangle rectangle = new DrawRectangle(x, y, width, height);
+		pane.getChildren().add(rectangle.getRectangle());
 	}
 }

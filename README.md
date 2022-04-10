@@ -11,8 +11,12 @@ This work is licensed under a
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png
 [cc-by-sa-shield]: https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg
 
+Where to find the documents:
+1. Under the TAB2XML package go to the "Documents" folder
+2. Under the Documents folder you can find the important documents
+
 How to Run The Application
-1. Open the project in Eclipse
+1. Open the project in Eclipse Java 17.0, Gradle 7.3
 2. Select the workspace in Eclipse where the TAB2XML_G14 project is located.
 3. Once the workbench opens, the Gradle Tasks section should be located on the right hand side.
 4. Under the Gradle Tasks section the TAB2XML_G14 folder should be located.
