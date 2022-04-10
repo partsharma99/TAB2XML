@@ -65,7 +65,12 @@ public class ListOfMeasureAndNote {
 	//returns an array-list of all notes in the "ith" measure
 	public static ArrayList<Note2> getNotesInMeasureI(ScorePartwise2 scorepart, int i) {
 		Measure2 measureI = scorepart.getListOfParts().get(0).getListOfMeasures().get(i);
-		ArrayList<Note2> result = new ArrayList<Note2>(measureI.getListOfNotes());
-		return result;
+		if(measureI.getListOfNotes()!=null) {
+			ArrayList<Note2> result = new ArrayList<Note2>(measureI.getListOfNotes());
+			return result;
+		}
+		else {
+			return null;
+		}
 	}
 }

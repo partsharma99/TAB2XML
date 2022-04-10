@@ -4,6 +4,8 @@ import xml.to.sheet.converter.POJOClasses.Note2;
 
 public class NoteAndPos {
 	
+	private double topofstaff;
+	private int measureNum;
 	private Note2 note;
 	private double x;
 	private double y;
@@ -11,10 +13,28 @@ public class NoteAndPos {
 	public NoteAndPos() {
 	}
 
-	public NoteAndPos(Note2 note, double x, double y) {
+	public NoteAndPos(double topofstaff, int measureNum, Note2 note, double x, double y) {
+		this.topofstaff = topofstaff;
+		this.measureNum = measureNum;
 		this.note = note;
 		this.x = x;
 		this.y = y;
+	}
+
+	public double getTopofstaff() {
+		return topofstaff;
+	}
+
+	public void setTopofstaff(double topofstaff) {
+		this.topofstaff = topofstaff;
+	}
+
+	public int getMeasureNum() {
+		return measureNum;
+	}
+
+	public void setMeasureNum(int measureNum) {
+		this.measureNum = measureNum;
 	}
 
 	public Note2 getNote() {
@@ -40,5 +60,4 @@ public class NoteAndPos {
 	public void setY(double y) {
 		this.y = y;
 	}
-	
 }
