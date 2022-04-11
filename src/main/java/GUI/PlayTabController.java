@@ -79,8 +79,8 @@ public class PlayTabController extends Thread{
     
     @FXML 
 	public void play() throws JAXBException {
-    	Thread player = new PlayThread(this, sc);
-    	player.start();
+    	Thread playThread = new PlayThread(this, sc);
+    	playThread.start();
 	}
 	
     private String getDurationLetter(String type) {
@@ -163,11 +163,7 @@ public class PlayTabController extends Thread{
     	return pattern;
     }
 	public void composeDrumset() {
-		
-		
-		
 		player.play(this.getDrumPattern());
-		    
 	}
 		
 
