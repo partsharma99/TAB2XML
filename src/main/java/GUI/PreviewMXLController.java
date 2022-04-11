@@ -82,12 +82,18 @@ Sample tab
  	
  	ScorePartwise2 sc;
     MainViewController mvc;
+    PlayTabController ptc;
  	
  //	@FXML
  //	public void printPDF() {
  //	}
  	
 
+    public PreviewMXLController(ScorePartwise2 inputSC, MainViewController inputmvc) {
+    	this.mvc = inputmvc;
+    	sc = inputSC;
+    	ptc = new PlayTabController(sc,mvc);
+    }
  	@FXML
  	public void savePDF() {}
  	public <printButtonPressed> void printPDF() {
@@ -115,131 +121,21 @@ Sample tab
  			sheetToPrint.endJob();
  		}
  	}
- 	
- 	private Pattern getDrumPattern() {
-    	Pattern pattern =new Pattern("V9");
-    	List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
-
-    	for(int i=0; i < allMeasures.size(); i++) {
-    		List<Note2> notes = allMeasures.get(i).getListOfNotes();
-    		int divisions = allMeasures.get(i).getAttributes().getDivisions();
-
-    		for(int j=0; j < notes.size(); j++) {
-    			String thisID = notes.get(j).getInstrument().getId();
-    			int lastNoteIndex = notes.size()-1;
-    			
-    			boolean lastNoteIsChord = false;
-				if(notes.get(notes.size()-1).getChord() != null) lastNoteIsChord=true;
-    			
-    			if( ((j!= lastNoteIndex) && (notes.get(j+1).getChord() != null)) || ((j== lastNoteIndex) && (lastNoteIsChord == true)) ){
-    				int k=j; String chord1=""; String chord="";
-    				
-    				while((k!= lastNoteIndex) && (notes.get(k+1).getChord() != null || notes.get(k).getChord() != null)) {
-    					chord1+=(getIDDigit(notes.get(k).getInstrument().getId()) + getDurationLetter(notes.get(k).getType()) + " ");
-    					k+=1;
-    				}
-    				if((k== lastNoteIndex) && (lastNoteIsChord == true) && (j!= lastNoteIndex)) {
-        				//append the note to the end of the last chord in the pattern 
-    					chord1+=(getIDDigit(notes.get(k).getInstrument().getId()) + getDurationLetter(notes.get(k).getType()) + " ");
-        				
-        			}
-    					 chord1=chord1.replace(' ', '+');
-    					 for(int l=0; l<chord1.length()-1; l++) chord+=chord1.charAt(l);
-    				
-    				pattern.add(chord);
-    			}
-    			 
-    			else if(notes.get(j).getChord() != null) continue;
-    			else{
-    				pattern.add(getIDDigit(thisID) + getDurationLetter(notes.get(j).getType()));		
-    			}
-
-    			/*
-				System.out.println("The string is: " + numStr);
-                System.out.println("THe instrument is " + notes.get(j).getInstrument().toString());
-    			 */	
-    		}
-    	}
-    	System.out.println("pattern from drum: " + pattern.getPattern());
-    	return pattern;
- 	}
- 	
- 	private String getDurationLetter(String type) {
-    	String duration="";
-    	switch(type) {
-    	case ("one-twenty-eighth"): duration="o";break;
-    	case ("128th"): duration="o";break;
-    	case ("sixty-fourth"): duration="x";break;
-    	case ("64th"): duration="x";break;
-    	case ("thirty-second"): duration="t";break;
-    	case ("32nd"): duration="t";break;
-    	case ("sixteenth"): duration="s";break;
-    	case ("16th"): duration="s";break;
-    	case ("eighth"): duration="i";break;
-    	case ("quarter"): duration="q";break;
-    	case ("half"): duration="h";break;
-    	case ("whole"): duration="w";break;
-    	}
-    	return duration;
-    }
-    private int getIDDigit(String thisID) {
-    	/*
-		 * usual ID is in the format P1-I[ID]
-		 * so the following code will get the integers 
-		 * from the last two characters in thisID
-		 */
-    	
-    	String numStr = "";
-		numStr += thisID.charAt(thisID.length()-2);
-		numStr += thisID.charAt(thisID.length()-1);
-		int note = Integer.parseInt(numStr);
-		
-		return note;
-    }
-    
 
  	@FXML
-	public void playMusic() {
- 		try {
- 	        sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
- 	    } catch (JAXBException e) {
- 	        e.printStackTrace();
- 	        System.out.println("Failed to unmarshall the musicXML file.");
- 	    }
-// 		Player player = new Player();
-// 		player.play(this.getDrumPattern()); 
+	public void playMusic() throws JAXBException {
+ 		ptc.play();
  		
- 		Thread playThread = new PlayThread(this, sc);
- 		playThread.start();
- 		//Screenshare with GL and get her to paste her code here, it works
- 		//She already completed the play and pause
 	}
 	
 	@FXML
 	public void pauseMusic() {
-		Player player = new Player();
-	 	ManagedPlayer mplayer = player.getManagedPlayer();
-	 	boolean pause = false;
+		ptc.pause();
 	 	
-	 	if(!pause) {
-
- 			mplayer.pause();
- 			pause = true;
-
- 		}else {
-
- 			mplayer.resume();
- 			pause = false;
-
- 		}
 		//Screenshare with GL and get her to paste her code here, it works
 	}
 
-	@FXML
-	public void composeDrumset() {
-		Player player = new Player();
- 		player.play(this.getDrumPattern()); 
-	}
+	
  	@FXML
 	public void handleGotoMeasure() {
 	}
@@ -498,10 +394,6 @@ Sample tab
 			e.printStackTrace();
 		} 
     }
-	public void composeGuitar() {
-		// Implement playing of guitar
-		
-	}
 }
 
 

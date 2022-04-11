@@ -5,10 +5,10 @@ import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 public class PlayThread extends Thread {
 
 	private ScorePartwise2 sc;
-	private PreviewMXLController controller;
+	private PlayTabController controller;
 	
     
-	public PlayThread(PreviewMXLController controller, ScorePartwise2 sc) {
+	public PlayThread(PlayTabController controller, ScorePartwise2 sc) {
 		this.sc = sc;
     	this.controller = controller;
 	}

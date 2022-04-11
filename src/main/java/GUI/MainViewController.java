@@ -334,10 +334,15 @@ public class MainViewController extends Application {
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 
 		Parent root;
+		ScorePartwise2 sc = null;
  		try {
+ 			sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
+ 			PreviewMXLController controller = new PreviewMXLController(sc, this);
+ 			
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
+ 			loader.setController(controller);
  			root = loader.load();
- 			PreviewMXLController controller = loader.getController();
+ 			
  			//controller.drawLines();
  			controller.setMainViewController(this);
 			controller.update();
@@ -348,145 +353,11 @@ public class MainViewController extends Application {
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
- 		}
-	}
-	
-	@FXML
-
-    private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-        //playing the music using the jaxb parser on a note-by-note basis
-        
-        ScorePartwise2 sc = null;
-        Synthesizer midiSynth = null;
-        try {
-            sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
-            midiSynth = MidiSystem.getSynthesizer();
-            midiSynth.open();
-        } catch (JAXBException e) {
+ 		} catch (JAXBException e) {
             e.printStackTrace();
             System.out.println("Failed to unmarshall the musicXML file.");
-        } catch (MidiUnavailableException e) {
-             e.printStackTrace();
-          }
-        
-        if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
-            /*get and load default instrument and channel list
-             * get the note
-             * for each note, get:
-             * - duration
-             * - instrument    id
-             * - voice
-             * - type
-             * - channel of its instrument
-             * 
-             * then:
-             * - load instrument(note[i].instr) into synthesizer
-             * - mChannels[instr.getChannel].turn note on( , duration)
-=======
-	private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-		StaccatoParserListener listener = new StaccatoParserListener();
-		MusicXmlParser parser = new MusicXmlParser();
-		parser.addParserListener(listener);
-		Converter conv = new Converter(this);
-		conv.update();
-		parser.parse(conv.getMusicXML());
-		
-		Player player = new Player();
-
-		org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
-
->>>>>>> branch 'Develop' of https://github.com/partsharma99/TAB2XML
-
-                }
-             */
-            MidiChannel thisChannel = midiSynth.getChannels()[9];
-            List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
-
-
-            for(int i=0; i < allMeasures.size(); i++) {
-                List<Note2> notes = allMeasures.get(i).getListOfNotes();
-                for(int j=0; j < notes.size(); j++) {
-                    //System.out.println(notes.get(i).getInstrument().getId());
-                    String thisID = notes.get(j).getInstrument().getId();
-
-                    /*
-                     * usual ID is in the format P1-I[ID]
-                     * so the following code will get the integer version 
-                     * of the last two characters in thisID
-                     */
-                    
-                    String numStr = "";
-                    numStr += thisID.charAt(thisID.length()-2);
-                    numStr += thisID.charAt(thisID.length()-1);
-
-                    int ID = Integer.parseInt(numStr);
-                    /*System.out.println("The string is: " + numStr);
-                    System.out.println("The actual instrument id is: " + (ID-1));
-                    System.out.println("THe instrument is " + notes.get(j).getInstrument().toString());
-                    */
-                    thisChannel.noteOn(ID-1, 78);
-                    try { Thread.sleep(100); // wait time in milliseconds to control duration
-                    } catch( InterruptedException e ) {
-                        e.printStackTrace();
-                    }
-                    numStr="";
-                }
-            }
-
-                thisChannel.allNotesOff();
-                
-        } else if(sc.getInstrumentName().equalsIgnoreCase("Guitar")) {
-//            StaccatoParserListener listener = new StaccatoParserListener();
-//            MusicXmlParser parser = new MusicXmlParser();
-//            parser.addParserListener(listener);
-//            Converter conv = new Converter(this);
-//            conv.update();
-//            parser.parse(conv.getMusicXML());
-//            Player player = new Player();
-//            org.jfugue.pattern.Pattern musicXMLPattern = listener.getPattern().setTempo(300).setInstrument("Guitar");
-//            player.play(musicXMLPattern);
-        
-            MidiChannel thisChannel = midiSynth.getChannels()[0];
-            List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
-            
-            for(int i=0; i < allMeasures.size(); i++) {
-                List<Note2> notes = allMeasures.get(i).getListOfNotes();
-                for(int j=0; j < notes.size(); j++) {
-                    int duration = notes.get(j).getDuration();
-                    int octave = notes.get(j).getPitch().getOctave();
-                    String step = notes.get(j).getPitch().getStep();
-                    String tone = step+(octave);
-                    
-                    
-                    
-                    for(int noteNum = 0; noteNum < 128; noteNum++) {
-                        if(tone.equals(Note.getToneString((byte) noteNum))) {
-                            noteNum+=1;
-                            /*
-                            System.out.println("got the note number " + noteNum + " from step: " + tone);
-                            System.out.println("octave: " + octave);
-                            System.out.println("tone: " + tone);
-                            */
-                            thisChannel.noteOn(noteNum, 78);
-                            try { Thread.sleep(500); // wait time in milliseconds to control duration
-                            } catch( InterruptedException e ) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    
-                
-                }
-            }
-            
-            thisChannel.allNotesOff();
-        
-        } 
-                      
-    }
-
-	
-
+        }
+	}
 	
 
 	public void refresh() {
@@ -544,14 +415,13 @@ public class MainViewController extends Application {
                 	saveMXLButton.setDisable(true);
                 	previewButton.setDisable(true);
                 	showMXLButton.setDisable(true);
-                	playTabMusic.setDisable(true);
+                	
                 }
                 else
                 {
                 	saveMXLButton.setDisable(false);
                 	previewButton.setDisable(false);
                 	showMXLButton.setDisable(false);
-                	playTabMusic.setDisable(false);
                 }
                 return highlighter.computeHighlighting(text);
             }
