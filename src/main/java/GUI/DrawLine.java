@@ -21,4 +21,9 @@ public class DrawLine {
   	public void setLine(Line line) {
   		this.line = line;
   	}
+  	
+  	public void setWidth(double width) {
+  		this.line.setStrokeWidth(width);
+  	}
+  	
 }

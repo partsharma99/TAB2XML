@@ -1,16 +1,12 @@
 package GUI;
 
-import javax.sound.midi.MidiChannel;
-import javax.sound.midi.Synthesizer;
-
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 
 public class PlayThread extends Thread {
 
 	private ScorePartwise2 sc;
-    private Synthesizer midiSynth;
-	private MidiChannel channel;
 	private PlayTabController controller;
+	
     
 	public PlayThread(PlayTabController controller, ScorePartwise2 sc) {
 		this.sc = sc;
@@ -18,7 +14,7 @@ public class PlayThread extends Thread {
 	}
 	
 	public void run() {
-		
+		//playing the music using the jaxb parser on a note-by-note basis
 		if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
 			controller.composeDrumset();
 

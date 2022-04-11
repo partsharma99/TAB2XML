@@ -3,6 +3,10 @@ package GUI;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.fxml.FXML;
+
 
 import javafx.fxml.FXMLLoader;
 import javafx.print.PageLayout;
@@ -25,13 +29,41 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
+
+ import javafx.fxml.FXMLLoader;
+ import javafx.print.PageLayout;
+ import javafx.print.PageOrientation;
+ import javafx.print.Paper;
+ import javafx.print.Printer;
+ import javafx.print.PrinterJob;
+
+ import javafx.scene.canvas.*;
+ import javafx.scene.control.Button;
+ import javafx.scene.control.TextField;
+ import javafx.scene.image.ImageView;
+ import javafx.scene.image.WritableImage;
+ import javafx.scene.layout.AnchorPane;
+ import javafx.scene.layout.Pane;
+ import javafx.scene.paint.Color;
+ import javafx.scene.text.Font;
+ 
+ import javafx.scene.text.Text;
+ import javafx.scene.transform.Scale;
+ import javafx.scene.transform.Translate;
+ import xml.to.sheet.converter.ListOfMeasureAndNote;
+import xml.to.sheet.converter.POJOClasses.Measure2;
+
 import xml.to.sheet.converter.POJOClasses.Note2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 import xml.to.sheet.converter.POJOClasses.XmlToJava;
-
 import java.io.IOException;
 import java.util.List;
 import javax.xml.bind.JAXBException;
+
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.ManagedPlayer;
+import org.jfugue.player.Player;
+
 /*
 Sample tab
 |-----------0-----|-0---------------|
@@ -41,54 +73,79 @@ Sample tab
 |---2-------------|-2---------------|
 |-0---------------|-0---------------|
 
+
 */
+ 
 public class PreviewMXLController {
-	@FXML 
-	private AnchorPane anchorPane;
-	@FXML private Canvas canvas;
-	@FXML TextField gotoMeasureField;
-	@FXML Button gotoMeasureButton;
-	public FXMLLoader loader;
-	@FXML 
-	Button printPDF;
-	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-	
-//	@FXML
-//	public void printPDF() {
-//	}
-	
-	@FXML
-	public <printButtonPressed> void printPDF() {
-		
-		Printer p = Printer.getDefaultPrinter();
-		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
-		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
-		WritableImage snap = anchorPane.snapshot(null, null);
-		ImageView view = new ImageView(snap);
 
-		double x = l.getPrintableWidth()/snap.getWidth();
-		double y = l.getPrintableHeight()/snap.getHeight();
-		
-		view.getTransforms().add(new Scale(x, x));
+ 	@FXML 
+ 	private AnchorPane anchorPane;
+ 	@FXML private Canvas canvas;
+ 	@FXML TextField gotoMeasureField;
+ 	@FXML Button gotoMeasureButton;
+ 	@FXML Button savePDF;
+ 	public FXMLLoader loader;
+ 	@FXML 
+ 	Button printPDF;
+ 	Button playMusic;
+ 	Button pauseMusic;
+ 	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
+ 	
+ 	ScorePartwise2 sc;
+    MainViewController mvc;
+    PlayTabController ptc;
+ 
 
-		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
-			Translate grid = new Translate(0, 0);
-			view.getTransforms().add(grid);
-			int currentPage = 0;
-			while(currentPage < Math.ceil(x/y)) {
-				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
-				sheetToPrint.printPage(l, view);
-				currentPage++;
-			}
-			sheetToPrint.endJob();
-		}
+    public PreviewMXLController(ScorePartwise2 inputSC, MainViewController inputmvc) {
+    	this.mvc = inputmvc;
+    	sc = inputSC;
+    	ptc = new PlayTabController(sc,mvc);
+    }
+ 	@FXML
+ 	public void savePDF() {}
+ 	public <printButtonPressed> void printPDF() {
+
+ 		Printer p = Printer.getDefaultPrinter();
+ 		PrinterJob sheetToPrint = PrinterJob.createPrinterJob();
+ 		PageLayout l = p.createPageLayout(Paper.A4, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
+ 		WritableImage snap = anchorPane.snapshot(null, null);
+ 		ImageView view = new ImageView(snap);
+
+ 		double x = l.getPrintableWidth()/snap.getWidth();
+ 		double y = l.getPrintableHeight()/snap.getHeight();
+
+ 		view.getTransforms().add(new Scale(x, x));
+
+ 		if (sheetToPrint.showPrintDialog(pane.getScene().getWindow()) && sheetToPrint != null) {
+ 			Translate grid = new Translate(0, 0);
+ 			view.getTransforms().add(grid);
+ 			int currentPage = 0;
+ 			while(currentPage < Math.ceil(x/y)) {
+ 				grid.setY(-currentPage * (l.getPrintableHeight()/ x));
+ 				sheetToPrint.printPage(l, view);
+ 				currentPage++;
+ 			}
+ 			sheetToPrint.endJob();
+ 		}
+ 	}
+
+ 	@FXML
+	public void playMusic() throws JAXBException {
+ 		ptc.play();
+ 		
 	}
 	
 	@FXML
+	public void pauseMusic() {
+		ptc.pause();
+	 	
+		//Screenshare with GL and get her to paste her code here, it works
+	}
+	
+ 	@FXML
 	public void handleGotoMeasure() {
 	}
-	
-    private MainViewController mvc;
+
 	@FXML 
     private Pane pane;
 	
@@ -126,7 +183,6 @@ public class PreviewMXLController {
         	}
      	}
  	}	
-
     public void drawSmallLine(int x) {
     	DrawLine dl = new DrawLine(x-5 , -5,x+10 , -5);
     	pane.getChildren().add(dl.getLine());
@@ -152,13 +208,11 @@ public class PreviewMXLController {
             }
         }
     }
-
     //Change the bar line length depending on the instrument
     private void barLines(double x, double y, String instrument) throws JAXBException {
     	if (instrument.equalsIgnoreCase("Guitar")) {
     		if(getlimit()!=1) {
     			System.out.println(getlimit());
-
     		DrawLine middleBar = new DrawLine(x, y, x, y + 64);
     		pane.getChildren().add(middleBar.getLine());
     		}
@@ -187,7 +241,7 @@ public class PreviewMXLController {
     	
     }
          public void drawCircle(double x, double y) {
-         DrawCircle circle = new DrawCircle(x, y); 
+         DrawCircle circle = new DrawCircle(x, y,1); 
     	pane.getChildren().add(circle.getCircle());
          }
          
@@ -200,13 +254,11 @@ public class PreviewMXLController {
     public double getlimit() throws JAXBException {
     	ScorePartwise2 sc;
 		sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
-
     	 int numMeasures = ListOfMeasureAndNote.getlistOfMeasures(sc).size();
     	 double limit = Math.ceil(numMeasures/2);
     			 if(limit==0) {
  	    			limit=1;
  	    		}
-
 		return limit;
     	
     	
@@ -227,7 +279,6 @@ public class PreviewMXLController {
 		    	if(instName.equals("Guitar")) {
 		    		y = 0;
 					int counter=1;
-
 		    		for(int i=0;i<notes.size();i++) {
 						int yy = notes.get(i).getNotations().getTechnical().getString();
 						int x;
@@ -241,7 +292,6 @@ public class PreviewMXLController {
 						}
 						else {
 							f=14;
-
 						}
 						double xpos=NoteInfo.notePos(notes,notes.get(i));
 						y=0+(yy-1)*13;
@@ -251,13 +301,11 @@ public class PreviewMXLController {
 					}
 		    	}
 		    	else if(instName.equals("Drumset")) {
-
 		    		int x = 50;
 		    		int y2 = 0;
 //		    		y = 0;
 		    		int count = 50;
 //		    		int x2 = x;
-
 		    		for(int i = 0; i < notes.size(); i++) {
 		    		if(notes.get(i).getNotehead() != null) {
 		    			if(notes.get(i).getInstrument().getId().equals("P1-I50")) {
@@ -299,17 +347,14 @@ public class PreviewMXLController {
 		    		y=0;
 		    		instrumentMusicLines(instName, y);
 		      		//Draw TAB
-
 		      		instrumentMusicLines(instName, y);
 		      		//Draw Clef
 		        	drawClef(cleff, 6, 20+y);
-
 		        	//Draw Bar lines
 		        	if(limit!=1) {
 		        	barLines(barx, y, instName);
 		        	}
 		        	barLines(450, y, instName);
-
 		      		y += 120;
 		      		
 		      	}
@@ -318,6 +363,7 @@ public class PreviewMXLController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-
     }
 }
+
+

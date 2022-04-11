@@ -60,6 +60,7 @@ import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 public class PlayTabController extends Thread{
     private MainViewController mvc;
     private ScorePartwise2 sc;
+    private Player player;
     
     @FXML AnchorPane tabPlayerPane;
     @FXML Button playButton;
@@ -69,6 +70,7 @@ public class PlayTabController extends Thread{
     public PlayTabController(ScorePartwise2 inputSC, MainViewController mvc) {
     	this.sc=inputSC;
     	this.mvc=mvc;
+    	player = new Player();
     }
     
     @FXML
@@ -162,20 +164,9 @@ public class PlayTabController extends Thread{
     }
 	public void composeDrumset() {
 		
-		Player player = new Player();
-		//apr10 create own pattern using actual note id and duration as parsed by pojo
+		
 		
 		player.play(this.getDrumPattern());
-	
-				
-		
-		Rhythm rhythm = new Rhythm()
-		        .addLayer("x                        x       ")
-		        .addLayer("  x x x x x x x                  ")
-		        .addLayer("    o       o    oooo            ")
-		        .addLayer("                     oo          ")
-		        .addLayer("                       oo        ")
-		        .addLayer("o       o        o       o       ");
 		    
 	}
 		
@@ -202,7 +193,20 @@ private void sleepFor(long millis) {
 	}
 	@FXML
 	public void pause() {
+		ManagedPlayer mplayer = player.getManagedPlayer();
+	 	boolean pause = false;
+	 	
+	 	if(!pause) {
 
+ 			mplayer.pause();
+ 			pause = true;
+
+ 		}else {
+
+ 			mplayer.resume();
+ 			pause = false;
+
+ 		}
 		
 	}
 

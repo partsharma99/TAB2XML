@@ -2,6 +2,7 @@ package GUI;
 
 //hers rafsdhfaksdfad
 import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -337,10 +338,15 @@ public class MainViewController extends Application {
 	private void previewButtonHandle() throws IOException, ParserConfigurationException {
 
 		Parent root;
+		ScorePartwise2 sc = null;
  		try {
+ 			sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
+ 			PreviewMXLController controller = new PreviewMXLController(sc, this);
+ 			
  			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/previewMXL.fxml"));
+ 			loader.setController(controller);
  			root = loader.load();
- 			PreviewMXLController controller = loader.getController();
+ 			
  			//controller.drawLines();
  			controller.setMainViewController(this);
 			controller.update();
@@ -348,37 +354,11 @@ public class MainViewController extends Application {
  		} catch (IOException e) {
  			Logger logger = Logger.getLogger(getClass().getName());
  			logger.log(Level.SEVERE, "Failed to create new Window.", e);
- 		}
+ 		} catch (JAXBException e) {
+			e.printStackTrace();
+			System.out.println("Failed to unmarshall the musicXML file.");
+		}
 	}
-	
-	@FXML
-
-    private void playTabMusic() throws ParserConfigurationException, ValidityException, ParsingException, IOException{
-        //playing the music using the jaxb parser on a note-by-note basis
-        Parent root;
-        ScorePartwise2 sc = null;
-        Synthesizer midiSynth = null;
-        try {
-            sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
-            midiSynth = MidiSystem.getSynthesizer();
-            midiSynth.open();
-            PlayTabController controller = new PlayTabController(sc, this);
-//            Misc controller = new Misc(sc, midiSynth, this);
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/tabPlayer.fxml"));
-            loader.setController(controller);
-            root = loader.load();
- 			
- 			convertWindow = this.openNewWindow(root, "Music Player");
-        } catch (JAXBException e) {
-            e.printStackTrace();
-            System.out.println("Failed to unmarshall the musicXML file.");
-        } catch (MidiUnavailableException e) {
-             e.printStackTrace();
-        }
-       	
-    }
-	
 
 	public void refresh() {
         mainText.replaceText(new IndexRange(0, mainText.getText().length()), mainText.getText()+" ");
@@ -435,14 +415,13 @@ public class MainViewController extends Application {
                 	saveMXLButton.setDisable(true);
                 	previewButton.setDisable(true);
                 	showMXLButton.setDisable(true);
-                	playTabMusic.setDisable(true);
+                	
                 }
                 else
                 {
                 	saveMXLButton.setDisable(false);
                 	previewButton.setDisable(false);
                 	showMXLButton.setDisable(false);
-                	playTabMusic.setDisable(false);
                 }
                 return highlighter.computeHighlighting(text);
             }
