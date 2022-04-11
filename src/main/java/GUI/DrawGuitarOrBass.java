@@ -232,7 +232,7 @@ public class DrawGuitarOrBass {
 		}
 	}
 	
-	public static void drawStems(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami,  ArrayList<ArrayList<NoteAndPos>> beamlist, double lengthofbar, double yInc, Pane pane) {
+	public static void drawStems(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami,  ArrayList<ArrayList<NoteAndPos>> beamlist, double lengthofbar, double xInc, double yInc, Pane pane) {
 		NoteAndPos current = null;
 		for(int i=0; i<beamlist.size(); i++) {
 			if(beamlist.get(i)!=null) {
@@ -244,9 +244,20 @@ public class DrawGuitarOrBass {
 				}
 			}
 		}
+		ArrayList<measureinfo> m = listofmeasures;
+		for(int i=0; i<m.size();  i++) {
+			if(m.get(i).getMeasure()!=null) {
+				for(int j=0; j<m.get(i).getMeasure().size(); j++) {
+					current = m.get(i).getMeasure().get(j);
+					if(current.getNote().getDot()!=null) {
+						GeneralDrawing.drawCircle(current.getX()+(xInc), current.getTopofstaff()+lengthofbar+yInc, 0.15*yInc, pane);
+					}
+				}
+			}
+		}
 	}
 	
-	public static void drawBeams(ArrayList<ArrayList<NoteAndPos>> beamlist, ArrayList<Double> maxbeami, double yInc, Pane pane) {
+	public static void drawBeams(ArrayList<measureinfo> listofmeasures, ArrayList<ArrayList<NoteAndPos>> beamlist, ArrayList<Double> maxbeami, double yInc, Pane pane) {
 		NoteAndPos first1 = null;
 		NoteAndPos last = null;
 		int staffnum = 0;
@@ -319,8 +330,33 @@ public class DrawGuitarOrBass {
 					}
 				}
 			}
-		}
-		
+		}		
+	}
+
+	public static void drawSlide(ArrayList<NoteAndPos> slidelist, double font, double xInc, double yInc,
+			double maxWidth, Pane pane) {
+		double half = yInc/2;
+		NoteAndPos current = null;
+		NoteAndPos prev = null;
+		int prevval = 0;
+		int currval = 0;
+		for(int i=0; i<slidelist.size(); i++) {
+			current = slidelist.get(i);
+			if(i!=0) {
+				prev = slidelist.get(i-1);
+				if(prev!=null && current!=null) {
+					prevval = prev.getNote().getNotations().getTechnical().getFret();
+					currval = current.getNote().getNotations().getTechnical().getFret();
+					if(prevval>=currval) {
+						GeneralDrawing.drawLine(prev.getX()+half, prev.getY()-half, current.getX()-half, current.getY()+half, pane);
+					}
+					else {
+						GeneralDrawing.drawLine(prev.getX()+half, prev.getY()+half, current.getX()-half, current.getY()-half, pane);
+					}
+				}
+				
+			}
+		}	
 	}
 	
 //	if(i!=0) {

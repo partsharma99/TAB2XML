@@ -28,9 +28,9 @@ import javax.xml.bind.JAXBException;
 public class PreviewMXLController {
 	
 	@FXML public Canvas canvas;
-	@FXML TextField gotoMeasureField;
-	@FXML Button gotoMeasureButton;
-	@FXML Button savePDF;
+	@FXML public TextField gotoMeasureField;
+	@FXML public Button gotoMeasureButton;
+	@FXML public Button savePDF;
 	public FXMLLoader loader;
 	
 	
@@ -161,13 +161,13 @@ public class PreviewMXLController {
 ////		              y += 120;
 //		          }
 		        
-	        	double startx = 50;
-	        	double starty = 50;
-	        	double xInc = 24;
-	        	double yInc = 30;
+	        	double startx = 55;
+	        	double starty = 55;
+	        	double xInc = 15;
+	        	double yInc = 15;
 	        	double basexInc = 10;
-	        	int diffbwstaves = 6;
-	        	double font = 30;
+	        	int diffbwstaves = 8;
+	        	double font = 15;
 	        	double gracefont = font/2;
 	        	
 		        
@@ -185,8 +185,12 @@ public class PreviewMXLController {
 		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
 		        	DrawGuitarOrBass.drawGBSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
 		        	slurlist = null;
-		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
-		        	beamlist = null;
+//		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
+		        	ArrayList<NoteAndPos> slidelist = ComponentClass.getSlidelist(gBNPlist);
+		        	DrawGuitarOrBass.drawSlide(slidelist, font, xInc, yInc,this.pane.getMaxWidth(), pane);
+		        	GeneralDrawing.drawemptymeasures(gBNPlist, instName, yInc, pane);
+		        	GeneralDrawing.draclefAndTime(sc, gBNPlist, instName, xInc, yInc, pane);
+//		        	beamlist = null;
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {
@@ -194,11 +198,13 @@ public class PreviewMXLController {
 		        	ArrayList<measureinfo> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
 		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
 //		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
-//		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
-//		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
-		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
+		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
+		        	DrawDrumset.drawDrumTies(tielist, font, yInc, this.pane.getMaxWidth(), pane);
+		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
+		        	DrawDrumset.drawDrumSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
+		        	DrawDrumset.drawdots(drumsetNPlist, xInc, yInc, pane);
+//		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
+		        	GeneralDrawing.drawemptymeasures(drumsetNPlist, instName, yInc, pane); 
 		        }
 		        
 //				else if(instName.equalsIgnoreCase("bass")) {

@@ -1,12 +1,15 @@
 package GUI;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import xml.to.sheet.converter.ListOfMeasureAndNote;
 import xml.to.sheet.converter.POJOClasses.Note2;
+import xml.to.sheet.converter.POJOClasses.Part2;
 import xml.to.sheet.converter.POJOClasses.ScorePartwise2;
 
 public class GeneralDrawing {
@@ -84,4 +87,67 @@ public class GeneralDrawing {
 		DrawRectangle rectangle = new DrawRectangle(x, y, width, height);
 		pane.getChildren().add(rectangle.getRectangle());
 	}
+
+	public static void drawemptymeasures(ArrayList<measureinfo> m, String instName, double yInc, Pane pane) {
+		double lengthofbar = 0;
+		if(instName.equalsIgnoreCase("Guitar")) {
+			lengthofbar = 5 * yInc;
+		}
+		else if(instName.equalsIgnoreCase("Drumset")) {
+			lengthofbar = 4 * yInc;
+		}
+		else if(instName.equalsIgnoreCase("Bass")) {
+			lengthofbar = 3 * yInc;
+		}
+		
+		
+		for(int i=0; i<m.size(); i++) {
+			if(m.get(i).getMeasure()==null) {
+				double xc = m.get(i).getStartof().getXpos() + ((m.get(i).getEndof().getXpos() - m.get(i).getStartof().getXpos())/2);
+				double yc = m.get(i).getStartof().getTopofstaff()+(lengthofbar/2);
+				DrawLine d1 = new DrawLine(xc-(0.5*yInc), yc, xc+(0.5*yInc), yc);
+				d1.setWidth(0.25*yInc);
+				d1.setFill(Color.GRAY);
+				pane.getChildren().add(d1.getLine());
+			}
+		}
+		
+	}
+
+	public static void draclefAndTime(ScorePartwise2 sc, ArrayList<measureinfo> m, String instName, double xInc, double yInc,
+			Pane pane) {
+		
+		List<Part2> partlist = sc.getListOfParts();
+		int val1 = 0;
+		int val2 = 0;
+		double lengthofbar = 0;
+		if(instName.equalsIgnoreCase("Guitar")) {
+			lengthofbar = 5 * yInc;
+		}
+		else if(instName.equalsIgnoreCase("Drumset")) {
+			lengthofbar = 4 * yInc;
+		}
+		else if(instName.equalsIgnoreCase("Bass")) {
+			lengthofbar = 3 * yInc;
+		}
+		
+		for(int i=0; i<partlist.size(); i++) {
+			if(partlist.get(i)!=null && partlist.get(i).getListOfMeasures()!=null) {
+				for(int j=0; j<partlist.get(i).getListOfMeasures().size(); j++) {
+					if(partlist.get(i).getListOfMeasures().get(j).getAttributes()!=null && partlist.get(i).getListOfMeasures().get(j).getAttributes().getTime()!=null) {
+						val1 = partlist.get(i).getListOfMeasures().get(j).getAttributes().getTime().getBeats();
+						val2 = partlist.get(i).getListOfMeasures().get(j).getAttributes().getTime().getBeattype();
+						drawclefAndtTimeH1(val1, m.get(j).getStartof().getXpos()+0.5*xInc, m.get(j).getStartof().getTopofstaff()+(0.25*lengthofbar), yInc, pane);
+						drawclefAndtTimeH1(val2, m.get(j).getStartof().getXpos()+0.5*xInc, m.get(j).getStartof().getTopofstaff()+(0.75*lengthofbar), yInc, pane);
+					}
+				}
+			}
+		}
+	}
+	public static void drawclefAndtTimeH1(int num, double x, double y, double size, Pane pane){
+		Text t = new Text(x, y, String.valueOf(num));
+		t.setFont(Font.font("impact", size));
+		pane.getChildren().add(t);
+	}
+
 }

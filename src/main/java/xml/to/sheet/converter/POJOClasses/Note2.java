@@ -1,5 +1,7 @@
 package xml.to.sheet.converter.POJOClasses;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 
 public class Note2 {
@@ -13,7 +15,7 @@ public class Note2 {
     private int voice;
     private String type;
     private TimeModification2 timemodification;
-    private Dot2 dot;
+    private List<Dot2> dot;
     private String stem;
     private NoteHead2 notehead;
     private Notations2 notations;
@@ -23,7 +25,7 @@ public class Note2 {
     }
 
     public Note2(Chord2 chord, Grace2 grace, Pitch2 pitch, Unpitched2 unpitched, int duration, Instrument2 instrument, int voice, String type,
-            TimeModification2 timemodification, Dot2 dot, String stem, NoteHead2 notehead, Notations2 notations, Rest2 rest) {
+            TimeModification2 timemodification, List<Dot2> dot, String stem, NoteHead2 notehead, Notations2 notations, Rest2 rest) {
         this.chord = chord;
         this.grace = grace;
         this.pitch = pitch;
@@ -122,11 +124,11 @@ public class Note2 {
     }
 
     @XmlElement
-    public Dot2 getDot() {
+    public List<Dot2> getDot() {
         return dot;
     }
 
-    public void setDot(Dot2 dot) {
+    public void setDot(List<Dot2> dot) {
         this.dot = dot;
     }
 
