@@ -28,7 +28,8 @@ package GUI;
  import javafx.scene.transform.Scale;
  import javafx.scene.transform.Translate;
  import xml.to.sheet.converter.ListOfMeasureAndNote;
- import xml.to.sheet.converter.POJOClasses.Note2;
+import xml.to.sheet.converter.POJOClasses.Measure2;
+import xml.to.sheet.converter.POJOClasses.Note2;
  //import javafx.scene.paint.*;
 //import javafx.scene.text.Font;
 //import javafx.stage.Stage;
@@ -40,6 +41,9 @@ import java.io.IOException;
 import java.util.List;
 //import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
+
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
 //import java.net.URL;
 //import java.util.ResourceBundle;
 //
@@ -71,11 +75,17 @@ Sample tab
  	public FXMLLoader loader;
  	@FXML 
  	Button printPDF;
+ 	Button playMusic;
+ 	Button pauseMusic;
  	BooleanProperty printButtonPressed = new SimpleBooleanProperty(false);
-
+ 	
+ 	ScorePartwise2 sc;
+    MainViewController mvc;
+ 	
  //	@FXML
  //	public void printPDF() {
  //	}
+ 	
 
  	@FXML
  	public void savePDF() {}
@@ -104,6 +114,107 @@ Sample tab
  			sheetToPrint.endJob();
  		}
  	}
+ 	
+ 	private Pattern getDrumPattern() {
+    	Pattern pattern =new Pattern("V9");
+    	List<Measure2> allMeasures = sc.getListOfParts().get(0).getListOfMeasures();
+
+    	for(int i=0; i < allMeasures.size(); i++) {
+    		List<Note2> notes = allMeasures.get(i).getListOfNotes();
+    		int divisions = allMeasures.get(i).getAttributes().getDivisions();
+
+    		for(int j=0; j < notes.size(); j++) {
+    			String thisID = notes.get(j).getInstrument().getId();
+    			int lastNoteIndex = notes.size()-1;
+    			
+    			boolean lastNoteIsChord = false;
+				if(notes.get(notes.size()-1).getChord() != null) lastNoteIsChord=true;
+    			
+    			if( ((j!= lastNoteIndex) && (notes.get(j+1).getChord() != null)) || ((j== lastNoteIndex) && (lastNoteIsChord == true)) ){
+    				int k=j; String chord1=""; String chord="";
+    				
+    				while((k!= lastNoteIndex) && (notes.get(k+1).getChord() != null || notes.get(k).getChord() != null)) {
+    					chord1+=(getIDDigit(notes.get(k).getInstrument().getId()) + getDurationLetter(notes.get(k).getType()) + " ");
+    					k+=1;
+    				}
+    				if((k== lastNoteIndex) && (lastNoteIsChord == true) && (j!= lastNoteIndex)) {
+        				//append the note to the end of the last chord in the pattern 
+    					chord1+=(getIDDigit(notes.get(k).getInstrument().getId()) + getDurationLetter(notes.get(k).getType()) + " ");
+        				
+        			}
+    					 chord1=chord1.replace(' ', '+');
+    					 for(int l=0; l<chord1.length()-1; l++) chord+=chord1.charAt(l);
+    				
+    				pattern.add(chord);
+    			}
+    			 
+    			else if(notes.get(j).getChord() != null) continue;
+    			else{
+    				pattern.add(getIDDigit(thisID) + getDurationLetter(notes.get(j).getType()));		
+    			}
+
+    			/*
+				System.out.println("The string is: " + numStr);
+                System.out.println("THe instrument is " + notes.get(j).getInstrument().toString());
+    			 */	
+    		}
+    	}
+    	System.out.println("pattern from drum: " + pattern.getPattern());
+    	return pattern;
+ 	}
+ 	
+ 	private String getDurationLetter(String type) {
+    	String duration="";
+    	switch(type) {
+    	case ("one-twenty-eighth"): duration="o";break;
+    	case ("128th"): duration="o";break;
+    	case ("sixty-fourth"): duration="x";break;
+    	case ("64th"): duration="x";break;
+    	case ("thirty-second"): duration="t";break;
+    	case ("32nd"): duration="t";break;
+    	case ("sixteenth"): duration="s";break;
+    	case ("16th"): duration="s";break;
+    	case ("eighth"): duration="i";break;
+    	case ("quarter"): duration="q";break;
+    	case ("half"): duration="h";break;
+    	case ("whole"): duration="w";break;
+    	}
+    	return duration;
+    }
+    private int getIDDigit(String thisID) {
+    	/*
+		 * usual ID is in the format P1-I[ID]
+		 * so the following code will get the integers 
+		 * from the last two characters in thisID
+		 */
+    	
+    	String numStr = "";
+		numStr += thisID.charAt(thisID.length()-2);
+		numStr += thisID.charAt(thisID.length()-1);
+		int note = Integer.parseInt(numStr);
+		
+		return note;
+    }
+    
+
+ 	@FXML
+	public void playMusic() {
+ 		try {
+ 	        sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
+ 	    } catch (JAXBException e) {
+ 	        e.printStackTrace();
+ 	        System.out.println("Failed to unmarshall the musicXML file.");
+ 	    }
+ 		Player player = new Player();
+ 		player.play(this.getDrumPattern()); 
+ 		//Screenshare with GL and get her to paste her code here, it works
+ 		//She already completed the play and pause
+	}
+	
+	@FXML
+	public void pauseMusic() {
+		//Screenshare with GL and get her to paste her code here, it works
+	}
 
  	@FXML
 	public void handleGotoMeasure() {
@@ -145,7 +256,6 @@ Sample tab
 //	public void start(Stage primaryStage) throws Exception {
 //	}
 	
-    private MainViewController mvc;
 	@FXML 
     private Pane pane;
 	
