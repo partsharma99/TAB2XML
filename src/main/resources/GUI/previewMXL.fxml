@@ -55,14 +55,14 @@
                         <Button fx:id="gotoMeasureButton" mnemonicParsing="false" onAction="#handleGotoMeasure" text="Go" />
                      	</children>
                      	<children>
-								<Label text="Space Between Notes">
-									<padding>
-										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-									</padding>
-								</Label>
-								<TextField fx:id="spaceBetweenNotes" prefWidth="50.0" />
-								<Button fx:id="handleSpaceBetweenNotes" mnemonicParsing="false" onAction="#handleSpaceBetweenNotes" prefHeight="25.0" prefWidth="42.0" text="Go" />
-							</children>
+                        <Label text="Space Between Notes" />
+                        <TextField fx:id="spaceBetweenNotesField" prefWidth="50.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="spaceBetweenNotesButton" mnemonicParsing="false" onAction="#handleSpaceBetweenNotes" text="Go" />
+                     	</children>
 						</HBox>
 					</children>
 				</AnchorPane>

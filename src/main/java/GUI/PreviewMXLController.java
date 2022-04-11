@@ -1,10 +1,7 @@
 package GUI;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -30,40 +27,52 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
 
-import org.fxmisc.richtext.CodeArea;
-
 public class PreviewMXLController {
 	
 	@FXML public Canvas canvas;
-	@FXML TextField gotoMeasureField2;
+	@FXML TextField gotoMeasureField;
 	@FXML Button gotoMeasureButton;
 	@FXML Button savePDF;
-	@FXML public CodeArea mainText;
-	@FXML public ScrollPane scrollPane;
 	public FXMLLoader loader;
-	
 	private ArrayList<measureinfo> notePositions;
-
-	public ArrayList<measureinfo> getNotePositions() {
-			return notePositions;
-		}
-
-		public void setNotePositions(ArrayList<measureinfo> notePositions) {
-			this.notePositions = notePositions;
-		}
-
-	
+	@FXML public ScrollPane scrollPane;
 	private MainViewController mvc;
+	@FXML TextField spaceBetweenNotesField;
 	@FXML private Pane pane;
+	@FXML TextField gotoMeasureField2;
+	private double font;
 	
+	public double getFont() {
+		return font;
+	}
+
+	public void setFont(double font) {
+		this.font = font;
+	}
+
 	@FXML
 	public void savePDF() {
 	}
 	
 	@FXML
 	private void handleSpaceBetweenNotes() {
-		
+
+		double space = Double.parseDouble( spaceBetweenNotesField.getText() );
+		spaceBetweenNotes(space);
+
 	}
+	
+	private void spaceBetweenNotes(double space) {
+		this.setFont(space);
+	}
+	public ArrayList<measureinfo> getNotePositions() {
+		return notePositions;
+	}
+
+	public void setNotePositions(ArrayList<measureinfo> notePositions) {
+		this.notePositions = notePositions;
+	}
+
 	
 	public boolean goToMeasure(int measureCount) {
 		int measure = 0;
@@ -183,10 +192,10 @@ public class PreviewMXLController {
         pane.getChildren().add(t);
     }
     
-    public void drawCircle(double x, double y) {
-        DrawCircle circle = new DrawCircle(x, y); 
-    	pane.getChildren().add(circle.getCircle());
-    }
+//    public void drawCircle(double x, double y) {
+//        DrawCircle circle = new DrawCircle(x, y); 
+//    	pane.getChildren().add(circle.getCircle());
+//    }
     
     public void drawQuad(double startX, double startY,  double controlX, double controlY, double endX, double endY) {
     	DrawQuad quad = new DrawQuad(startX, startY, controlX, controlY, endX, endY);
@@ -214,19 +223,21 @@ public class PreviewMXLController {
 ////		              y += 120;
 //		          }
 		        
-	        	double startx = 66;
-	        	double starty = 66;
-	        	double xInc = 20;
-	        	double yInc = 20;
+	        	double startx = 50;
+	        	double starty = 50;
+	        	double xInc = 24;
+	        	double yInc = 30;
 	        	double basexInc = 10;
 	        	int diffbwstaves = 6;
-	        	double font = 20;
+//	        	this.font = 20;
+	        	setFont(20);
 	        	double gracefont = font/2;
 	        	
 		        
 		        if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
+		        	yInc = font;
 		        	ArrayList<measureinfo> gBNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
-		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
+		        																	 startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
 		        	this.setNotePositions(gBNPlist);
 		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, font, gracefont, pane);
 		        	ArrayList<ArrayList<NoteAndPos>> gracelist = ComponentClass.getGracList(gBNPlist);
@@ -240,19 +251,19 @@ public class PreviewMXLController {
 		        	slurlist = null;
 		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
 		        	beamlist = null;
-		        	
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {
+		        	yInc = font;
 		        	ArrayList<measureinfo> drumsetNPlist = InstCordPos2.getListofPositions(sc, instName, notelist, 
-		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), pane);
+		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
+		        	this.setNotePositions(drumsetNPlist);
 //		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
 //		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
 //		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
 //		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
 //		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
 		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
-		        	System.out.println("x");
 		        }
 		        
 //				else if(instName.equalsIgnoreCase("bass")) {
