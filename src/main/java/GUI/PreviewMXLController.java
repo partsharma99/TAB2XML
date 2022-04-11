@@ -43,6 +43,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.jfugue.pattern.Pattern;
+import org.jfugue.player.ManagedPlayer;
 import org.jfugue.player.Player;
 //import java.net.URL;
 //import java.util.ResourceBundle;
@@ -205,17 +206,40 @@ Sample tab
  	        e.printStackTrace();
  	        System.out.println("Failed to unmarshall the musicXML file.");
  	    }
- 		Player player = new Player();
- 		player.play(this.getDrumPattern()); 
+// 		Player player = new Player();
+// 		player.play(this.getDrumPattern()); 
+ 		
+ 		Thread playThread = new PlayThread(this, sc);
+ 		playThread.start();
  		//Screenshare with GL and get her to paste her code here, it works
  		//She already completed the play and pause
 	}
 	
 	@FXML
 	public void pauseMusic() {
+		Player player = new Player();
+	 	ManagedPlayer mplayer = player.getManagedPlayer();
+	 	boolean pause = false;
+	 	
+	 	if(!pause) {
+
+ 			mplayer.pause();
+ 			pause = true;
+
+ 		}else {
+
+ 			mplayer.resume();
+ 			pause = false;
+
+ 		}
 		//Screenshare with GL and get her to paste her code here, it works
 	}
 
+	@FXML
+	public void composeDrumset() {
+		Player player = new Player();
+ 		player.play(this.getDrumPattern()); 
+	}
  	@FXML
 	public void handleGotoMeasure() {
 	}
@@ -474,6 +498,10 @@ Sample tab
 			e.printStackTrace();
 		} 
     }
+	public void composeGuitar() {
+		// Implement playing of guitar
+		
+	}
 }
 
 
