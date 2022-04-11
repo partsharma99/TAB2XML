@@ -362,8 +362,8 @@ public class MainViewController extends Application {
             sc = XmlToJava.unmarshal(this.converter.getMusicXML(), ScorePartwise2.class);
             midiSynth = MidiSystem.getSynthesizer();
             midiSynth.open();
-            PlayTabController controller = new PlayTabController(sc, midiSynth, this);
-            controller.start();
+            PlayTabController controller = new PlayTabController(sc, this);
+//            Misc controller = new Misc(sc, midiSynth, this);
             
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GUI/tabPlayer.fxml"));
             loader.setController(controller);
