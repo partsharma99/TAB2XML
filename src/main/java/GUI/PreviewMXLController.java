@@ -303,15 +303,19 @@ public class PreviewMXLController {
 		        	DrawGuitarOrBass.drawGBNotes(gBNPlist, font, gracefont, pane);
 		        	ArrayList<ArrayList<NoteAndPos>> gracelist = ComponentClass.getGracList(gBNPlist);
 		        	DrawGuitarOrBass.drawGBGraces(gracelist, font, gracefont, yInc, pane);
-		        	gracelist = null;
+		        	
 		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(gBNPlist, instName);
 		        	DrawGuitarOrBass.drawGBTies(tielist, font, yInc, this.pane.getMaxWidth(), pane);
-		        	tielist = null;
+		        	
 		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(gBNPlist, instName);
 		        	DrawGuitarOrBass.drawGBSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
-		        	slurlist = null;
+		       
 		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(gBNPlist, sc, instName, pane);
-		        	beamlist = null;
+
+		        	ArrayList<NoteAndPos> slidelist = ComponentClass.getSlidelist(gBNPlist);
+                    DrawGuitarOrBass.drawSlide(slidelist, font, xInc, yInc,this.pane.getMaxWidth(), pane);
+                    GeneralDrawing.drawemptymeasures(gBNPlist, instName, yInc, pane);
+                    GeneralDrawing.draclefAndTime(sc, gBNPlist, instName, xInc, yInc, pane);
 		        }
 		        
 		        else if(instName.equalsIgnoreCase("Drumset")) {
@@ -320,11 +324,11 @@ public class PreviewMXLController {
 		        																		  startx, starty, xInc, yInc, basexInc, diffbwstaves, this.pane.getMaxWidth(), font, pane);
 		        	this.setNotePositions(drumsetNPlist);
 //		        	DrawDrumset.drawDrumNotesAndStems(drumsetNPlist, pane);
-//		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumTies(tielist, this.pane.getMaxWidth(), pane);
-//		        	ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
-//		        	DrawDrumset.drawDrumSlurs(slurlist, this.pane.getMaxWidth(), pane);
-		        	ArrayList<ArrayList<NoteAndPos>> beamlist = ComponentClass.getBeamList(drumsetNPlist, sc, instName, pane);
+		        	ArrayList<NoteAndPos> tielist = ComponentClass.getTieList(drumsetNPlist, instName);
+                    DrawDrumset.drawDrumTies(tielist, font, yInc, this.pane.getMaxWidth(), pane);
+                    ArrayList<NoteAndPos> slurlist = ComponentClass.getSlurList(drumsetNPlist, instName);
+                    DrawDrumset.drawDrumSlurs(slurlist, font, yInc, this.pane.getMaxWidth(), pane);
+                    DrawDrumset.drawdots(drumsetNPlist, xInc, yInc, pane);
 		        }
 		        
 //				else if(instName.equalsIgnoreCase("bass")) {
