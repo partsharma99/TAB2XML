@@ -1,22 +1,21 @@
 package GUI;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.layout.Pane;
+import xml.to.sheet.converter.POJOClasses.Dot2;
 import xml.to.sheet.converter.POJOClasses.NoteHead2;
 
 public class DrawDrumset {
 
 	public static void drawDrumNotesAndStems(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, double yInc, Pane pane) {
-		NoteAndPos prev = null;
 		NoteAndPos current = null;
 		double xcord = 0;
 		double ycord = 0;
 		double half = 0.5*yInc;
 		double three4 = 0.75*yInc;
-		double maxstemheight = 0;
 		NoteHead2 notehead = null;
-		
 		//(1)
 		//Drawing the note heads for each note.
 		//iterating through list of measures to draw note heads for each note.
@@ -69,11 +68,11 @@ public class DrawDrumset {
 					}
 					
 					else if(notehead==null) {
-						//is a rest
 						if(current.getNote().getRest()!=null) {
-							GeneralDrawing.drawRectangle(current.getX(), current.getY(), yInc, half, pane);
+							DrawLine dl = new DrawLine(xcord-half, ycord, xcord+half, ycord);
+							dl.setWidth(0.25*yInc);
+							pane.getChildren().add(dl.getLine());
 						}
-						
 						else {
 							GeneralDrawing.drawCircle(xcord, ycord, half, pane);
 						}
@@ -187,7 +186,13 @@ public class DrawDrumset {
 			}
 		}
 		else {
-			GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			if(current.getNote().getRest()!=null) {
+				DrawLine d1 = new DrawLine((xcord-half), (ycord), (xcord+half), ycord);
+				d1.setWidth(0.25*yInc);
+			}
+			else {
+				GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			}
 		}
 		xcord = next.getX();
 		ycord = next.getY();
@@ -209,13 +214,20 @@ public class DrawDrumset {
 			}
 		}
 		else {
-			GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			if(current.getNote().getRest()!=null) {
+				DrawLine d1 = new DrawLine((xcord-half), (ycord), (xcord+half), ycord);
+				d1.setWidth(0.25*yInc);
+			}
+			else {
+				GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			}
 		}
 	}
 
-	public static void drawDrumTies(ArrayList<NoteAndPos> orderedtiedlist, double maxX, Pane pane) {
+	public static void drawDrumTies(ArrayList<NoteAndPos> orderedtiedlist, double font, double yInc, double maxX, Pane pane) {
 		NoteAndPos prev = null;
 		NoteAndPos current = null;
+		double half = font/2;
 		double middlex = 0;
 		double middley = 0;
 		double middledis = 0;
@@ -223,7 +235,7 @@ public class DrawDrumset {
 			current = orderedtiedlist.get(i);
 			if(i!=0) {
 				prev = orderedtiedlist.get(i-1);
-				if(prev!=null && current!=null) {
+				if(prev!=null && current!=null && prev.getNote().getGrace()==null && current.getNote().getGrace()==null) {
 					if(prev.getStaffnum()==current.getStaffnum()) {
 						if(prev.getNote().getInstrument().getId().equalsIgnoreCase("P1-I50") ||
 								prev.getNote().getInstrument().getId().equalsIgnoreCase("P1-I43") ||
@@ -233,14 +245,14 @@ public class DrawDrumset {
 								prev.getNote().getInstrument().getId().equalsIgnoreCase("P1-I39")) {
 							middledis = (current.getX() - prev.getX())/2;
 							middlex = prev.getX() + middledis;
-							middley = prev.getY() - 13;
-							GeneralDrawing.drawQuad(prev.getX(), prev.getY()-3.5, middlex, middley, current.getX(), current.getY()-3.5, pane);
+							middley = prev.getY() - yInc;
+							GeneralDrawing.drawQuad(prev.getX(), prev.getY()-half, middlex, middley, current.getX(), current.getY()-half, pane);
 						}
 						else {
 							middledis = (current.getX() - prev.getX())/2;
 							middlex = prev.getX() + middledis;
-							middley = prev.getY() + 13;
-							GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+							middley = prev.getY() + yInc;
+							GeneralDrawing.drawQuad(prev.getX(), prev.getY()+half, middlex, middley, current.getX(), current.getY()+half, pane);
 						}
 					}
 					else {
@@ -252,22 +264,22 @@ public class DrawDrumset {
 								prev.getNote().getInstrument().getId().equalsIgnoreCase("P1-I39")) {
 							middledis = (maxX - prev.getX())/2;
 							middlex = prev.getX() + middledis;
-							middley = prev.getY() - 13;
+							middley = prev.getY() - yInc;
 							GeneralDrawing.drawQuad(prev.getX(), prev.getY()-3.5, middlex, middley, maxX, prev.getY()-3.5, pane);
 							middledis = current.getX()/2;
 							middlex = 0 + middledis;
-							middley = current.getY() - 13;
+							middley = current.getY() - yInc;
 							GeneralDrawing.drawQuad(0, current.getY()-3.5, middlex, middley, current.getX(), current.getY()-3.5, pane);
 						}
 						else {
 							middledis = (maxX - prev.getX())/2;
 							middlex = prev.getX() + middledis;
-							middley = prev.getY() + 13;
-							GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, maxX, prev.getY()+3.5, pane);
+							middley = prev.getY() + yInc;
+							GeneralDrawing.drawQuad(prev.getX(), prev.getY()+font, middlex, middley, maxX, prev.getY()+font, pane);
 							middledis = current.getX()/2;
 							middlex = 0 + middledis;
-							middley = prev.getY() + 13;
-							GeneralDrawing.drawQuad(0, current.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+							middley = prev.getY() + yInc;
+							GeneralDrawing.drawQuad(0, current.getY()+font, middlex, middley, current.getX(), current.getY()+font, pane);
 						}
 					}
 				}
@@ -275,9 +287,10 @@ public class DrawDrumset {
 		}
 	}
 
-	public static void drawDrumSlurs(ArrayList<NoteAndPos> orderedslurlist, double maxX, Pane pane) {
+	public static void drawDrumSlurs(ArrayList<NoteAndPos> orderedslurlist, double font, double yInc, double maxX, Pane pane) {
 		NoteAndPos prev = null;
 		NoteAndPos current = null;
+		double half = font/2;
 		double middlex = 0;
 		double middley = 0;
 		double middledis = 0;
@@ -287,7 +300,7 @@ public class DrawDrumset {
 			current = orderedslurlist.get(i);
 			if(i!=0) {
 				prev = orderedslurlist.get(i-1);
-				if(prev!=null && current!=null) {
+				if(prev!=null && current!=null && prev.getNote().getGrace()==null && current.getNote().getGrace()==null) {
 					if(prev.getNote().getNotations().getListOfSlurs().size()==1 &&
 							prev.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start")) {
 						placement = prev.getNote().getNotations().getListOfSlurs().get(0).getPlacement();
@@ -303,39 +316,39 @@ public class DrawDrumset {
 							if(prev.getY()==current.getY()) {
 								middledis = (current.getX() - prev.getX())/2;
 								middlex = prev.getX() + middledis;
-								middley = prev.getY() + 13;
-								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+								middley = prev.getY() + yInc;
+								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+half, middlex, middley, current.getX(), current.getY()+half, pane);
 							}
 							else if(prev.getY()<current.getY()) {
 								middledis = (current.getX() - prev.getX())/2;
 								middlex = prev.getX() + middledis;
-								middley = current.getY() + 13;
-								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);	
+								middley = current.getY() + yInc;
+								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+half, middlex, middley, current.getX(), current.getY()+half, pane);	
 							}
 						}
 						else {
 							if(prev.getStaffnum()!=current.getStaffnum()) {
 								middledis = (maxX - prev.getX())/2;
 								middlex = prev.getX() + middledis;
-								middley = prev.getY() + 13;
-								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, maxX, prev.getY()+3.5, pane);
+								middley = prev.getY() + yInc;
+								GeneralDrawing.drawQuad(prev.getX(), prev.getY()+half, middlex, middley, maxX, prev.getY()+half, pane);
 								middledis = current.getX()/2;
 								middlex = 0 + middledis;
-								middley = current.getY() + 13;
-								GeneralDrawing.drawQuad(0, current.getY()+3.5, middlex, middley, current.getX(), prev.getY()+3.5, pane);
+								middley = current.getY() + yInc;
+								GeneralDrawing.drawQuad(0, current.getY()+half, middlex, middley, current.getX(), prev.getY()+half, pane);
 							}
 							else {
 								if(prev.getY()==current.getY()) {
 									middledis = (current.getX() - prev.getX())/2;
 									middlex = prev.getX() + middledis;
-									middley = prev.getY() + 13;
-									GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+									middley = prev.getY() + yInc;
+									GeneralDrawing.drawQuad(prev.getX(), prev.getY()+font, middlex, middley, current.getX(), current.getY()+font, pane);
 								}
 								else if(prev.getY()<current.getY()) {
 									middledis = (current.getX() - prev.getX())/2;
 									middlex = prev.getX() + middledis;
-									middley = current.getY() + 13;
-									GeneralDrawing.drawQuad(prev.getX(), prev.getY()+3.5, middlex, middley, current.getX(), current.getY()+3.5, pane);
+									middley = current.getY() + yInc;
+									GeneralDrawing.drawQuad(prev.getX(), prev.getY()+font, middlex, middley, current.getX(), current.getY()+font, pane);
 								}
 							}
 						}
@@ -345,6 +358,7 @@ public class DrawDrumset {
 		}
 	}
 	
+
 	public static void drawBeams(ArrayList<ArrayList<NoteAndPos>> beamlist, ArrayList<Double> maxbeami, double yInc, Pane pane) {
 		NoteAndPos first1 = null;
 		NoteAndPos last = null;
@@ -394,16 +408,20 @@ public class DrawDrumset {
 							//if types are the same then beam are drawn
 							if(current2.getType()==beamlist.get(i).get(temp).getType()) {
 								if(current2.getType()==((double)1/16)) {
-									double y = maxbeami.get(current.getStaffnum()-1) + (0.75*yInc);
+									double y = maxbeami.get(current.getStaffnum()-1) + (0.5*yInc);
 									DrawLine dl = new DrawLine(current2.getX()+half, y, beamlist.get(i).get(temp).getX()+half, y);
 									dl.setWidth(0.25*yInc);
 									pane.getChildren().add(dl.getLine());
 								}
 								else if(current2.getType()==((double)1/32)) {
-									double y = maxbeami.get(current.getStaffnum()-1) + (1.25*yInc);
-									DrawLine dl = new DrawLine(current2.getX()+half, y, beamlist.get(i).get(temp).getX()+half, y);
-									dl.setWidth(0.25*yInc);
-									pane.getChildren().add(dl.getLine());
+									double y1 = maxbeami.get(current.getStaffnum()-1) + (0.5*yInc);
+									DrawLine dl1 = new DrawLine(current2.getX()+half, y1, beamlist.get(i).get(temp).getX()+half, y1);
+									dl1.setWidth(0.25*yInc);
+									pane.getChildren().add(dl1.getLine());
+									double y2 = maxbeami.get(current.getStaffnum()-1) + (1*yInc);
+									DrawLine dl2 = new DrawLine(current2.getX()+half, y2, beamlist.get(i).get(temp).getX()+half, y2);
+									dl2.setWidth(0.25*yInc);
+									pane.getChildren().add(dl2.getLine());
 								}
 							}
 							else {
@@ -412,6 +430,27 @@ public class DrawDrumset {
 							temp++;
 						}
 						j = temp;
+					}
+				}
+			}
+		}
+	}
+
+	public static void drawdots(ArrayList<measureinfo> m, double xInc, double yInc, Pane pane) {
+		NoteAndPos current = null;
+		for(int i=0; i<m.size(); i++) {
+			if(m.get(i).getMeasure()!=null) {
+				for(int j=0; j<m.get(i).getMeasure().size(); j++) {
+					current = m.get(i).getMeasure().get(j);
+					if(current.getNote().getDot()!=null && current.getNote().getDot().size()>1) {
+						int temp=1;
+						while(temp<current.getNote().getDot().size()) {
+							GeneralDrawing.drawCircle(current.getX()+(0.5*yInc)+(temp+(0.25*xInc)), current.getY(), 0.15*yInc, pane);
+							temp++;
+						}
+					}
+					else if(current.getNote().getDot()!=null && current.getNote().getDot().size()==1){
+						GeneralDrawing.drawCircle(current.getX()+(0.5*yInc)+(1+(0.25*xInc)), current.getY(), 0.15*yInc, pane);
 					}
 				}
 			}

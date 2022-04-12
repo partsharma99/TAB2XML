@@ -18,7 +18,7 @@ public class PlayThread extends Thread {
 		if(sc.getInstrumentName().equalsIgnoreCase("drumset")) {
 			controller.composeDrumset();
 
-		} else if(sc.getInstrumentName().equalsIgnoreCase("Guitar")) {
+		} else if(sc.getInstrumentName().equalsIgnoreCase("Guitar") || sc.getInstrumentName().equalsIgnoreCase("Bass")) {
 			controller.composeGuitar();
 		}
 	}

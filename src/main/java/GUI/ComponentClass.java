@@ -357,5 +357,62 @@ public class ComponentClass {
 		else {
 			return true;
 		}
+	}
+
+	public static ArrayList<NoteAndPos> getSlidelist(ArrayList<measureinfo> listofmeasures) {
+		NoteAndPos current = null;
+		NoteAndPos next = null;
+		ArrayList<measureinfo> m = listofmeasures;
+		ArrayList<NoteAndPos> slidelistonly = new ArrayList<>();
+		ArrayList<NoteAndPos> orderedslidelist = new ArrayList<>();
+		for(int i=0; i<m.size(); i++) {
+			if(m.get(i).getMeasure()!=null) {
+				for(int j=0; j<m.get(i).getMeasure().size(); j++) {
+					current = m.get(i).getMeasure().get(j);
+					if(current.getNote().getNotations()!=null && current.getNote().getNotations().getSlide()!=null) {
+						slidelistonly.add(current);
+					}
+				}
+			}
+		}
+		for(int i=0; i<slidelistonly.size(); i++) {
+			current = slidelistonly.get(i);
+
+			//only checking for starting slurs
+			if(current.getNote().getNotations().getSlide().size()==1 &&
+					current.getNote().getNotations().getSlide().get(0).getType().equalsIgnoreCase("start")) {
+
+				orderedslidelist.add(current);
+
+				int temp = i + 1;
+				while(temp<slidelistonly.size()) {
+					next = slidelistonly.get(temp);
+
+					//if the next note has already been added to the ordered slur list then skip the check
+					if(orderedslidelist.contains(next)==false) {
+
+						//if next note is stop and start then add
+						//the search for the last note in the slur continues
+						if(next.getNote().getNotations().getSlide().size()==2 &&
+								next.getNote().getNotations().getSlide().get(0).getType().equalsIgnoreCase("start") &&
+								next.getNote().getNotations().getSlide().get(1).getType().equalsIgnoreCase("stop")){
+							orderedslidelist.add(next);
+						}
+						//if next note is a stop then add
+						//after this is reached that means that all the notes that are tied have been added in the same order
+						//break from the loop to then stop the check as it is completed
+						else if(next.getNote().getNotations().getSlide().size()==1 &&
+								next.getNote().getNotations().getSlide().get(0).getType().equalsIgnoreCase("stop")) {
+							orderedslidelist.add(next);
+							orderedslidelist.add(null);
+							break;		
+						}
+					}
+					temp++;
+				}	
+			}
+		}
+		
+		return orderedslidelist;
 	}	
 }

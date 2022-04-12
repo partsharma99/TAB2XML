@@ -35,6 +35,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jfugue.pattern.Pattern;
+import org.jfugue.pattern.PatternProducer;
 import org.jfugue.player.Player;
 import org.jfugue.theory.Chord;
 import org.jfugue.theory.ChordProgression;
@@ -169,9 +170,34 @@ public class PlayTabController extends Thread{
 
 	public void composeGuitar() {
 		Player player = new Player();
-		//player.play(pattern);
+		player.play(this.getGuitarPattern());
 	}
 		
+	private String getGuitarPattern() {
+		MusicXmlParserListener jfListener = new MusicXmlParserListener();
+		MusicXmlParser jfParser;
+		StaccatoParserListener staccListener = new StaccatoParserListener();
+		try {
+			jfParser = new MusicXmlParser();
+			jfParser.addParserListener(jfListener);
+			jfParser.addParserListener(staccListener);
+			jfParser.parse(mvc.converter.getMusicXML());
+			
+			
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (ValidityException e) {
+			e.printStackTrace();
+		} catch (ParsingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String pattern = staccListener.getPattern().toString();
+		
+    	return pattern;
+	}
+
 private void sleepFor(long millis) {
 		try { Thread.sleep(millis); // wait time in milliseconds to control duration
 		} catch( InterruptedException e ) {

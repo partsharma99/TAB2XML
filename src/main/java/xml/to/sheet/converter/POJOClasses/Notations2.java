@@ -8,14 +8,14 @@ public class Notations2 {
 	
 	private List<Tied2> listOfTieds;
 	private List<Slur2> listOfSlurs;
-	private Slide2 slide;
+	private List<Slide2> slide;
 	private Technicial2 technical;
 	private Ornaments2 ornaments;
 
 	public Notations2() {
 	}
 
-	public Notations2(List<Tied2> listOfTieds, List<Slur2> listOfSlurs, Slide2 slide, Technicial2 technical, Ornaments2 ornaments) {
+	public Notations2(List<Tied2> listOfTieds, List<Slur2> listOfSlurs, List<Slide2> slide, Technicial2 technical, Ornaments2 ornaments) {
 		this.listOfTieds = listOfTieds;
 		this.listOfSlurs = listOfSlurs;
 		this.slide = slide;
@@ -42,11 +42,11 @@ public class Notations2 {
 	}
 	
 	@XmlElement
-	public Slide2 getSlide() {
+	public List<Slide2> getSlide() {
 		return slide;
 	}
 
-	public void setSlide(Slide2 slide) {
+	public void setSlide(List<Slide2> slide) {
 		this.slide = slide;
 	}
 
