@@ -17,12 +17,17 @@ Where to find the documents:
 
 How to Run The Application
 1. Open the project in Eclipse Java 17.0, Gradle 7.3
-2. Select the workspace in Eclipse where the TAB2XML_G14 project is located.
-3. Once the workbench opens, the Gradle Tasks section should be located on the right hand side.
+2. Select the workspace in Eclipse where the TAB2XML_G14 project is located.![Screen Shot 2022-04-11 at 11 45 24 PM](https://user-images.githubusercontent.com/77511293/162876520-c982eafa-a93d-4655-8acf-709e145f1b07.png)
+
+3. Once the workbench opens, the Gradle Tasks section should be located on the right hand side.![Screen Shot 2022-04-11 at 11 46 12 PM](https://user-images.githubusercontent.com/77511293/162876599-1d4d2b63-87d8-4c4c-9dbc-45910fcf00e7.png)
+
 4. Under the Gradle Tasks section the TAB2XML_G14 folder should be located.
-5. Select the drop down icon where then a number of different folders will appear.
-6. Select the “application” folder that appears.
-7. Once the “application” folder is selected, two options should appear directly under it; “debug” and “run”.
+5. Select the drop down icon where then a number of different folders will appear.![Screen Shot 2022-04-11 at 11 45 58 PM](https://user-images.githubusercontent.com/77511293/162876697-386c4dbf-4069-4a30-abab-05aa9ea08fb0.png)
+
+6. Select the “application” folder that appears.![Screen Shot 2022-04-11 at 11 45 34 PM](https://user-images.githubusercontent.com/77511293/162876770-0e031ca1-96f8-4394-a17e-2e1f6925061e.png)
+
+7. Once the “application” folder is selected, two options should appear directly under it; “debug” and “run”.![Screen Shot 2022-04-11 at 11 45 34 PM](https://user-images.githubusercontent.com/77511293/162876895-9483eae9-a110-4eab-85a2-461f4ec4a1ea.png)
+
 8. Select “run” to run the application in Gradle Tasks.
 9. Paste the text tablature into the text field that appears to gain access to the following functionality.
 
