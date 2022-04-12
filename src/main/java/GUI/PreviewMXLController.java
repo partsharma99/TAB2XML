@@ -163,7 +163,7 @@ public class PreviewMXLController {
 		        
 	        	double startx = 55;
 	        	double starty = 55;
-	        	double xInc = 15;
+	        	double xInc = 25;
 	        	double yInc = 15;
 	        	double basexInc = 10;
 	        	int diffbwstaves = 8;

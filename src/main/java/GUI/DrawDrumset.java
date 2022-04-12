@@ -68,20 +68,13 @@ public class DrawDrumset {
 					}
 					
 					else if(notehead==null) {
-						//is a rest
 						if(current.getNote().getRest()!=null) {
-							GeneralDrawing.drawCircle(xcord, ycord, half, pane);
-//							GeneralDrawing.drawRectangle(current.getX(), current.getY(), yInc, half, pane);
+							DrawLine dl = new DrawLine(xcord-half, ycord, xcord+half, ycord);
+							dl.setWidth(0.25*yInc);
+							pane.getChildren().add(dl.getLine());
 						}
 						else {
-							if(current.getNote().getRest()!=null) {
-								DrawLine dl = new DrawLine(xcord-half, ycord, xcord+half, ycord);
-								dl.setWidth(0.25*yInc);
-								pane.getChildren().add(dl.getLine());
-							}
-							else {
-								GeneralDrawing.drawCircle(xcord, ycord, half, pane);
-							}
+							GeneralDrawing.drawCircle(xcord, ycord, half, pane);
 						}
 					}
 				}
@@ -193,7 +186,13 @@ public class DrawDrumset {
 			}
 		}
 		else {
-			GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			if(current.getNote().getRest()!=null) {
+				DrawLine d1 = new DrawLine((xcord-half), (ycord), (xcord+half), ycord);
+				d1.setWidth(0.25*yInc);
+			}
+			else {
+				GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			}
 		}
 		xcord = next.getX();
 		ycord = next.getY();
@@ -215,7 +214,13 @@ public class DrawDrumset {
 			}
 		}
 		else {
-			GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			if(current.getNote().getRest()!=null) {
+				DrawLine d1 = new DrawLine((xcord-half), (ycord), (xcord+half), ycord);
+				d1.setWidth(0.25*yInc);
+			}
+			else {
+				GeneralDrawing.drawCircle(xcord, ycord, half, pane);
+			}
 		}
 	}
 

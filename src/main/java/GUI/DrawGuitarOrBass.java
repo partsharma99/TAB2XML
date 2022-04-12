@@ -191,6 +191,7 @@ public class DrawGuitarOrBass {
 							prev.getNote().getNotations().getListOfSlurs().get(0).getType().equalsIgnoreCase("start")) {
 						placement = prev.getNote().getNotations().getListOfSlurs().get(0).getPlacement();
 					}
+					
 					if(placement==null || placement.equalsIgnoreCase("above")) {
 						if(prev.getStaffnum()!=current.getStaffnum()) {
 							middledis = (maxX - prev.getX())/2;
