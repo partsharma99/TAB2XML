@@ -132,8 +132,7 @@ public class InstCordPos2 {
 							else if(scoreInstName.equalsIgnoreCase("P1-I46")) {
 								ycord = starty+yInc;
 							}
-							else if(scoreInstName.equalsIgnoreCase("P1-I39") || 
-									listofmeasures.get(i).getMeasure().get(j).getNote().getRest()!=null) {
+							else if(scoreInstName.equalsIgnoreCase("P1-I39")) {
 								ycord = starty+(1.5*yInc);
 							}
 							else if(scoreInstName.equalsIgnoreCase("P1-I44")) {
@@ -150,10 +149,16 @@ public class InstCordPos2 {
 							}
 							listofmeasures.get(i).getMeasure().get(j).setY(ycord);
 						}
+						else {
+							listofmeasures.get(i).getMeasure().get(j).setY(starty+(2.5*yInc));
+						}
 					}
 				}
 			}
 		}
+		
+		
+		
 		
 		//(6)
 		//Setting the types for each of the notes.
@@ -250,6 +255,10 @@ public class InstCordPos2 {
 						staffcounter++;
 						currentn.setX(measuremarker+xInc);
 						listofmeasures.get(i).setStartof(new barlineinfo(0, staffcounter, i+1, "full", 0));
+						if(measurelist.size()==1) {
+							measuremarker = currentn.getX()+currentn.getNote().getDuration()+xInc;
+							listofmeasures.get(i).setEndof(new barlineinfo(0, staffcounter, i+1, "full", measuremarker));
+						}
 					}
 				}
 			}
@@ -501,7 +510,7 @@ public class InstCordPos2 {
 		//*Condiotional step*
 		//Helps draw the beam, and stems for guitar.
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
+			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, xInc, yInc, sc, pane);
 			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
 		}	
 		
@@ -509,8 +518,19 @@ public class InstCordPos2 {
 		//*Condiotional step*
 		//Helps draw the beam, notes, and stem for drumset.
 		else if(instName.equalsIgnoreCase("Drumset")) {
-			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, yInc, sc, pane);
+			drawhelper4(listofmeasures, maxbeami, instName, lengthofbar, xInc, yInc, sc, pane);
 			drawhelper5(listofmeasures, maxbeami, instName, yInc, sc, pane);
+		}
+		
+		for(int i=0; i<listofmeasures.size(); i++) {
+			if(listofmeasures.get(i).getMeasure()!=null) {
+				for(int j=0; j<listofmeasures.get(i).getMeasure().size(); j++) {
+					if(listofmeasures.get(i).getMeasure().get(j).getNote().getRest()!=null) {
+						System.out.println(listofmeasures.get(i).getMeasure().get(j).getX());
+						System.out.println(listofmeasures.get(i).getMeasure().get(j).getY());
+					}
+				}
+			}
 		}
 		
 		partlist = null;
@@ -558,17 +578,17 @@ public class InstCordPos2 {
 	//Helper Method 3: Helps draw measure numbers.
 	private static void drawHelper3(ArrayList<barlineinfo> barlineholder, double yInc, double maxX, Pane pane) {
 		for(int i=0; i<barlineholder.size(); i++) {
-			if(barlineholder.get(i).getXpos()!=maxX) {
+			if(barlineholder.get(i).getXpos()==0) {
 				GeneralDrawing.drawNotes(barlineholder.get(i).getXpos()-2, barlineholder.get(i).getTopofstaff()-(0.5*yInc), Integer.toString(barlineholder.get(i).getMeasureNum()), 12, pane);
 			}
 		}
 	}
 	
 	//Helper method 4: Helps draw the stems for the guitar and the notes, stems, and beams for the drumset.
-	private static void drawhelper4(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, String instName, double lengthofbar, double yInc, ScorePartwise2 sc, Pane pane) {
+	private static void drawhelper4(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, String instName, double lengthofbar, double xInc, double yInc, ScorePartwise2 sc, Pane pane) {
 		ArrayList<ArrayList<NoteAndPos>> beamlist = new ArrayList<ArrayList<NoteAndPos>>(ComponentClass.getBeamList(listofmeasures, sc, instName, pane));
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-			DrawGuitarOrBass.drawStems(listofmeasures, maxbeami, beamlist, lengthofbar, yInc, pane);
+			DrawGuitarOrBass.drawStems(listofmeasures, maxbeami, beamlist, lengthofbar, xInc, yInc, pane);
 		}
 		else if(instName.equalsIgnoreCase("Drumset")) {
 			DrawDrumset.drawDrumNotesAndStems(listofmeasures, maxbeami, yInc, pane);
@@ -579,7 +599,7 @@ public class InstCordPos2 {
 	private static void drawhelper5(ArrayList<measureinfo> listofmeasures, ArrayList<Double> maxbeami, String instName, double yInc, ScorePartwise2 sc, Pane pane) {
 		ArrayList<ArrayList<NoteAndPos>> beamlist = new ArrayList<ArrayList<NoteAndPos>>(ComponentClass.getBeamList(listofmeasures, sc, instName, pane));
 		if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")) {
-			DrawGuitarOrBass.drawBeams(beamlist, maxbeami, yInc, pane);
+			DrawGuitarOrBass.drawBeams(listofmeasures, beamlist, maxbeami, yInc, pane);
 		}
 		else if(instName.equalsIgnoreCase("Drumset")) {
 			DrawDrumset.drawBeams(beamlist, maxbeami, yInc, pane);

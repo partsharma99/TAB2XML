@@ -1,6 +1,7 @@
 package GUI;
 
 import javafx.fxml.FXML;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class DrawLine {
@@ -24,6 +25,9 @@ public class DrawLine {
   	
   	public void setWidth(double width) {
   		this.line.setStrokeWidth(width);
+  	}
+  	public void setFill(Color color) {
+  		this.line.setFill(color);
   	}
   	
 }
