@@ -40,8 +40,19 @@ public class PreviewMXLController {
 	@FXML TextField spaceBetweenNotesField;
 	@FXML private Pane pane;
 	@FXML TextField gotoMeasureField2;
-	private double font;
+	@FXML TextField xField;
+	private double font = 10;
+	private double xInc = 24;
 	
+	
+	public double getxInc() {
+		return xInc;
+	}
+
+	public void setxInc(double xInc) {
+		this.xInc = xInc;
+	}
+
 	public double getFont() {
 		return font;
 	}
@@ -58,13 +69,63 @@ public class PreviewMXLController {
 	private void handleSpaceBetweenNotes() {
 
 		double space = Double.parseDouble( spaceBetweenNotesField.getText() );
-		spaceBetweenNotes(space);
-
+		setFont(space);
+		try {
+			pane.getChildren().clear();
+			this.update();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	private void spaceBetweenNotes(double space) {
-		this.setFont(space);
+	@FXML
+	private void handlex() {
+		double x = Double.parseDouble(xField.getText());
+		
+		try {
+			ScorePartwise2 sc = XmlToJava.unmarshal(mvc.converter.getMusicXML(), ScorePartwise2.class);
+			String instName = sc.getPartlist().getScorepart().get(0).getPartname();
+			if(instName.equalsIgnoreCase("Drumset") && x < 45 && x > 0) {
+				setxInc(x);
+			}
+			else if(!instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass")){
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+		        alert.setTitle("Error");
+		        alert.setHeaderText("Out of bound");
+		        alert.setContentText("Please choose a number between 0 and 45");
+		        alert.showAndWait();
+			}
+			if(instName.equalsIgnoreCase("Guitar") || instName.equalsIgnoreCase("Bass") && x < 29 && x > 0) {
+				setxInc(x);
+			}
+			else if(!instName.equalsIgnoreCase("Drumset")){
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+		        alert.setTitle("Error");
+		        alert.setHeaderText("Out of bound");
+		        alert.setContentText("Please choose a number between 0 and 29");
+		        alert.showAndWait();
+			}
+			
+		} catch (JAXBException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+//		setxInc(x);
+		try {
+			pane.getChildren().clear();
+			this.update();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+//	private void spaceBetweenNotes(double space) {
+//		this.setFont(space);
+//	}
+	
 	public ArrayList<measureinfo> getNotePositions() {
 		return notePositions;
 	}
@@ -225,12 +286,12 @@ public class PreviewMXLController {
 		        
 	        	double startx = 50;
 	        	double starty = 50;
-	        	double xInc = 24;
+	        	
 	        	double yInc = 30;
 	        	double basexInc = 10;
 	        	int diffbwstaves = 6;
-//	        	this.font = 20;
-	        	setFont(20);
+//	        	font = 20;
+//	        	setFont(20);
 	        	double gracefont = font/2;
 	        	
 		        
